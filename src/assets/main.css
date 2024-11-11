@@ -1,0 +1,18 @@
+@import './base.css';
+
+#app {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  font-weight: normal;
+  background-image: linear-gradient(var(--bg-lila-hell), var(--bg-lila-dunkel));
+  display: gird;
+  grid-template-rows: 12rem auto;
+}
+
+a {
+  text-decoration: none;
+  transition: 0.4s;
+  padding: 3px;
+}
