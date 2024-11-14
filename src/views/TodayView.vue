@@ -1,6 +1,7 @@
 
 <template>
   <div class="container">
+    
     <h1>This is an tday page</h1>
   </div>
 </template>
@@ -16,8 +17,8 @@
 @media screen and (max-aspect-ratio: 1) {
   .container {
   width: 100vw;
-  height: calc(100vh - 4.6rem);
+  height: calc(100vh - 4rem);
   left: 0;
-}
+  }
 }
 </style>
