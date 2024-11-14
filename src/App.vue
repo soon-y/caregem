@@ -69,12 +69,15 @@ nav a.router-link-exact-active:hover {
 
 @media screen and (max-aspect-ratio: 1) {
   nav {
-    padding: 1rem 0 ;
+    padding: 0.6rem 0 ;
     bottom: 0;
     width: 100%;
-    height: 4.6rem;
+    height: 4rem;
     text-align: center; 
     grid-template-columns: auto auto auto auto;
+  }
+  nav a{
+  font-size: 0.7rem;
   }
 
   .flex {
