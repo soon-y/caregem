@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Tabs from '@/components/Tabs.vue';
-import Tab from '@/components/Tab.vue';
+import Tabs from '../components/Tabs.vue';
+import Tab from '../components/Tab.vue';
 
 </script>
 
