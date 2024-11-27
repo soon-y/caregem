@@ -1,5 +1,5 @@
 
-<script>
+<script lang="ts">
 import { ref, provide } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 export default {
