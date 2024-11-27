@@ -1,12 +1,16 @@
 
-<script>
-import { ref, provide } from 'vue'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-export default {
-  setup(props, { slots }){
-    const tabTitles = ref(slots.default().map((tab) => tab.props.title))
-    const selectedTitle = ref(tabTitles.value[0])
+<script lang="ts">
+import { ref, provide, defineComponent } from 'vue'
 
+export default defineComponent({
+  setup(props, { slots }) {
+    // Define the type for the `tabTitles` ref, which is an array of strings
+    const tabTitles = ref<string[]>(slots.default ? slots.default().map((tab: any) => tab.props.title) : [])
+    
+    // Define the type for `selectedTitle` as a string
+    const selectedTitle = ref<string>(tabTitles.value[0])
+
+    // Provide `selectedTitle` to descendant components
     provide("selectedTitle", selectedTitle)
 
     return {
@@ -14,9 +18,7 @@ export default {
       selectedTitle
     }
   }
-
-}
-
+})
 </script>
 
 <template>
