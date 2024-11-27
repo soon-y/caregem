@@ -7,25 +7,28 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
   <nav>
     <RouterLink to="/">
       <div class="flex">
-        <font-awesome-icon class="navIcon" icon="fa-solid fa-calendar-day" />
-        Today
+        <font-awesome-icon class="navIcon" icon="calendar-day" />
+      Today
       </div>
     </RouterLink>
+
     <RouterLink to="/pills">
       <div class="flex">
-        <font-awesome-icon class="navIcon" icon="fa-solid fa-pills" />
+        <font-awesome-icon class="navIcon" icon="pills" />
         Pills
-    </div>
+      </div>
     </RouterLink>
+
     <RouterLink to="/records">
       <div class="flex">
-        <font-awesome-icon class="navIcon" icon="fa-solid fa-chart-column" />
+        <font-awesome-icon class="navIcon" icon="chart-column" />
         Records
       </div>
     </RouterLink>
+
     <RouterLink to="/account">
       <div class="flex">
-        <font-awesome-icon class="navIcon" icon="fa-solid fa-chart-column" />
+        <font-awesome-icon class="navIcon" icon="chart-column" />
         Account
       </div>
     </RouterLink>
@@ -34,33 +37,33 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
   <RouterView />
 </template>
 
-<style>
+<style scoped>
 nav {
   position: absolute;
-  background-color: rgba(255, 255, 255, 0.1);
   height: 100vh;
   display: grid;
   grid-template-rows: 3rem 3rem 3rem 3rem;
   padding: 1rem;
   align-items: center;
-  width: 11rem;
+  width: 10rem;
+  z-index: 100;
+  border-right: 1px solid var(--divider-light-2);
 }
 
 .navIcon{
-  margin-right: 0.6rem;
+  margin-right: 0.4rem;
   font-size: 1.4rem;
   }
 
 nav a {
   display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-  color: rgba(255, 255, 255, 0.5);
+  padding: 0 0.8rem;
+  color: var(--divider-light-1);
   font-size: 1rem;
 }
 
 nav a.router-link-exact-active {
-  color: white;
+  color: var(--main-lila-hell);
 }
 
 nav a.router-link-exact-active:hover {
@@ -75,9 +78,12 @@ nav a.router-link-exact-active:hover {
     height: 4rem;
     text-align: center; 
     grid-template-columns: auto auto auto auto;
+    border: none;
+    border-top: 1px solid var(--divider-light-2);
   }
+
   nav a{
-  font-size: 0.7rem;
+    font-size: 0.7rem;
   }
 
   .flex {

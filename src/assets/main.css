@@ -6,7 +6,7 @@
   height: 100vh;
   margin: 0;
   font-weight: normal;
-  background-image: linear-gradient(var(--bg-lila-hell), var(--bg-lila-dunkel));
+  background-color: white;
   display: gird;
   grid-template-rows: 12rem auto;
 }
