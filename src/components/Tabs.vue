@@ -4,18 +4,52 @@ import { ref, provide, defineComponent } from 'vue'
 
 export default defineComponent({
   setup(props, { slots }) {
+    const gap: number = 0.2;
+    const margin: number = 0.6;
+
     // Define the type for the `tabTitles` ref, which is an array of strings
-    const tabTitles = ref<string[]>(slots.default ? slots.default().map((tab: any) => tab.props.title) : [])
-    
+    const tabTitles = ref<string[]>(slots.default ? slots.default().map((tab: any) => tab.props.title) : [])  
+
     // Define the type for `selectedTitle` as a string
     const selectedTitle = ref<string>(tabTitles.value[0])
 
     // Provide `selectedTitle` to descendant components
     provide("selectedTitle", selectedTitle)
 
+    const selectionBarLeft = () => {
+      switch(selectedTitle.value) {
+        case "heart-pulse":
+          return 0
+        case "shoe-prints":
+          return 25
+        case "person-walking-dashed-line-arrow-right":
+          return 50
+        case "bed":
+          return 75
+      }
+    };
+
+    const selectionBarOffset = () => {
+      switch(selectedTitle.value) {
+        case "heart-pulse":
+          return gap + margin
+        case "shoe-prints":
+          return 0
+        case "person-walking-dashed-line-arrow-right":
+          return 0
+        case "bed":
+          return -margin-gap
+      }
+    };
+
+    console.log(selectedTitle.value === "heart-pulse")
+
     return {
+      gap, margin,
       tabTitles,
-      selectedTitle
+      selectedTitle,
+      selectionBarLeft,
+      selectionBarOffset,
     }
   }
 })
@@ -28,8 +62,12 @@ export default defineComponent({
       :key="title"
       class="tab"
       @click="selectedTitle = title">
-        <font-awesome-icon :icon="title" class="icon"/>
+        <font-awesome-icon :icon="title" class="icon"
+          :class="selectedTitle === title ? title : 'icon'">
+        </font-awesome-icon>
+        <!-- {{ title }} -->
       </li>
+      <div class="selectionBar" :style="{left: `calc(${selectionBarLeft()}% + ${selectionBarOffset()}rem )`}"></div>
     </ul>
     <slot></slot>
   </div>
@@ -37,53 +75,84 @@ export default defineComponent({
 
 <style scoped>
 .tabs {
+  --gap: 0.5rem;
+  --line-offset: calc(var(--gap) / 2);
+  --height: 3rem;
+  --block-size: 1.6rem;
+  --marginTop: calc(var(--height)/2 - var(--block-size)/2);
+  --margin: 0.6rem;
   list-style: none;
-  width: 94%;
-  margin: 1rem auto;
+  width: calc(100% - var(--marginTop)*2);
+  margin: var(--margin) auto;
   padding: 0;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  height: 3rem;
-  border-radius: 1rem;
-  background-color: rgba(239, 239, 239, 0.8);
-  gap: 1rem;
+  height: var(--height);
+  border-radius: 0.8rem;
+  background-color: rgb(218, 218, 218, 0.5);
+  gap: var(--gap);
   overflow: hidden;
-}
-
-.heart {
-  background-color: var(--heart);
+  align-items: center;
+  cursor: pointer;
 }
 
 .tab {
   width: 100%;
-  margin: auto;
+  margin: 0;
   display: flex;
   justify-content: center;
   border: none;
   position: relative;
 }
 
-.tab::before{
+/* .tab::before{
   content: '';
   background-color: var(--divider-light-1);
   z-index: 1;
   position: absolute;
-  margin: auto;
   inline-size: 1px;
-  block-size: 2rem;
+  block-size: var(--block-size);
   inset-block-start: 0;
-  inset-inline-start: calc(0.5rem * -1);
-}
+  inset-inline-start: calc(var(--line-offset) * -1);
+} */
 
 .icon{
   color: var(--divider-light-1);
   font-size: 1.4rem;
-  padding: auto 0;
+  z-index: 10;
+  transition-duration: 500ms;
 }
 
+.heart-pulse {
+  color: var(--heart);
+}
 
+.shoe-prints {
+  color: var(--steps);
+}
 
-@media (min-width: 1024px) {
+.person-walking-dashed-line-arrow-right {
+  color: var(--speed);
+}
 
+.bed {
+  color: var(--sleep);
+}
+
+.selectionBar {
+  background-color: rgb(255, 255, 255);
+  width: calc(25% - 0.4rem);
+  margin: 0 0.2rem;
+  height: calc( var(--height) - 0.6rem);
+  position: absolute;
+  top: calc(var(--gap) + 0);
+  border-radius: 0.6rem;
+  transition-duration: 500ms;
+}
+
+@media screen and (max-aspect-ratio: 1) {
+  .selectionBar {
+  width: calc(25% - 0.4rem);
+  }
 }
 </style>
