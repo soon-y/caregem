@@ -39,7 +39,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 <style scoped>
 nav {
-  position: absolute;
+  position: fixed;
   height: 100vh;
   display: grid;
   grid-template-rows: 3rem 3rem 3rem 3rem;
