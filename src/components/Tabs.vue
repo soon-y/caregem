@@ -42,8 +42,6 @@ export default defineComponent({
       }
     };
 
-    console.log(selectedTitle.value === "heart-pulse")
-
     return {
       gap, margin,
       tabTitles,
@@ -56,40 +54,41 @@ export default defineComponent({
 </script>
 
 <template>
-  <div>
+  <div class="tabWrapper">
     <ul class="tabs">
-      <li v-for="title in tabTitles" 
-      :key="title"
-      class="tab"
-      @click="selectedTitle = title">
-        <font-awesome-icon :icon="title" class="icon"
-          :class="selectedTitle === title ? title : 'icon'">
-        </font-awesome-icon>
-        <!-- {{ title }} -->
+      <li v-for="title in tabTitles" :key="title" class="tab" @click="selectedTitle = title">
+        <font-awesome-icon :icon="title" class="icon" :class="selectedTitle === title ? title : 'icon'"></font-awesome-icon>
       </li>
-      <div class="selectionBar" :style="{left: `calc(${selectionBarLeft()}% + ${selectionBarOffset()}rem )`}"></div>
+      <div class="selectionBar" :style="{left: `calc(${selectionBarLeft()}% + ${selectionBarOffset()}rem )`}">
+      </div>
     </ul>
     <slot></slot>
   </div>
 </template>
 
 <style scoped>
-.tabs {
+.tabWrapper {
   --gap: 0.5rem;
   --line-offset: calc(var(--gap) / 2);
   --height: 3rem;
   --block-size: 1.6rem;
   --marginTop: calc(var(--height)/2 - var(--block-size)/2);
   --margin: 0.6rem;
-  list-style: none;
+
   width: calc(100% - var(--marginTop)*2);
   margin: var(--margin) auto;
+}
+
+.tabs {
+  list-style: none;
+  width: 100%;
+  margin: auto auto 1rem auto;
   padding: 0;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   height: var(--height);
   border-radius: 0.8rem;
-  background-color: rgb(218, 218, 218, 0.5);
+  background-color: var(--divider-light-2);
   gap: var(--gap);
   overflow: hidden;
   align-items: center;
@@ -151,8 +150,6 @@ export default defineComponent({
 }
 
 @media screen and (max-aspect-ratio: 1) {
-  .selectionBar {
-  width: calc(25% - 0.4rem);
-  }
+
 }
 </style>
