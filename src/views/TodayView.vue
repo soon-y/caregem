@@ -1,6 +1,55 @@
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
 import Tabs from '../components/Tabs.vue';
 import Tab from '../components/Tab.vue';
+import {
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  BarElement,LineElement,PointElement,
+  CategoryScale,
+  LinearScale,
+  ChartData
+} from 'chart.js'
+
+import { Bar } from 'vue-chartjs'
+import { Line } from 'vue-chartjs'
+import * as heartToday from '../chart/heartToday'
+import * as stepsToday from '../chart/stepsToday'
+import * as speedToday from '../chart/speedToday'
+import * as sleepToday from '../chart/sleepToday'
+
+ChartJS.register(Title, Tooltip, Legend, PointElement, LineElement, BarElement, CategoryScale, LinearScale)
+
+let dataMounted: boolean = false 
+const optionsHeart = heartToday.options
+const optionsSteps = stepsToday.options
+const optionsSpeed = speedToday.options
+const optionsSleep = sleepToday.options
+const dataHeart = ref<ChartData<'line'>>({ datasets: [] })
+const dataSteps = ref<ChartData<'bar'>>({ datasets: [] })
+const dataSpeed = ref<ChartData<'bar'>>({ datasets: [] })
+const dataSleep = ref<ChartData<'line'>>({ datasets: [] })
+const arraySpeed = speedToday.array()
+
+let myStyles = {
+  height: window.innerWidth/window.innerHeight > 1? `calc(100vh - 10rem)` :  `calc(100vh - 17rem)`,
+}
+
+let currentBPM = ref(74)
+
+onMounted(() => {
+  dataHeart.value = heartToday.datasets()
+  dataSteps.value = stepsToday.datasets()
+  dataSpeed.value = speedToday.datasets()
+  dataSleep.value = sleepToday.datasets()
+  dataMounted = true
+
+  setInterval(() => {
+    currentBPM.value = heartToday.getRandomNumber(70,100)
+  }, 5000)
+})
 
 </script>
 
@@ -8,16 +57,113 @@ import Tab from '../components/Tab.vue';
   <div class="container"> 
     <Tabs>
       <Tab title="heart-pulse">
-        this is tab1
+        <div class="infoContainer" v-if="dataMounted">
+          <table class="infoComp"><tbody><tr><th>
+            <p class="head">Current <br> <span class="unit">bpm</span></p></th>
+          <td>
+            <p class="value heart-pulse">{{ currentBPM }}</p>
+          </td></tr></tbody></table>
+          <table class="infoComp"><tbody><tr><th>
+            <p class="head">Highest <br> <span class="unit">bpm</span></p></th>
+          <td>
+            <p class="value">{{ Math.max(...dataHeart.datasets[0].data) }}</p>
+          </td></tr></tbody></table>
+          <table class="infoComp"><tbody><tr><th>
+            <p class="head">Lowest <br> <span class="unit">bpm</span></p></th>
+          <td>
+            <p class="value">{{ Math.min(...dataHeart.datasets[0].data) }}</p>
+          </td></tr></tbody></table>
+          <table class="infoComp"><tbody><tr><th>
+            <p class="head">Average <br> <span class="unit">bpm</span></p></th>
+          <td>
+            <p class="value">{{ Math.round(dataHeart.datasets[0].data.reduce((a,b) => a+b, 0 ) / dataHeart.datasets[0].data.length) }}</p>
+          </td></tr></tbody></table>
+        </div>
+        <div class="graph">
+          <Line :data="dataHeart" :options="optionsHeart" :style="myStyles"/>
+        </div>
       </Tab>
       <Tab title="shoe-prints">
-        this is tab2
+        <div class="infoContainer" v-if="dataMounted">
+          <table class="infoComp"><tbody><tr><th>
+            <p class="head">Total <br> <span class="unit">steps</span></p></th>
+          <td>
+            <p class="value shoe-prints">{{ Math.round(dataSteps.datasets[0].data.reduce((a,b) => a+b, 0 )) }}</p>
+          </td></tr></tbody></table>
+          <table class="infoComp"><tbody><tr><th>
+            <p class="head">Climbed <br> <span class="unit">floor</span></p></th>
+          <td>
+            <p class="value">{{ 1 }}</p>
+            
+          </td></tr></tbody></table>
+          <table class="infoComp"><tbody><tr><th>
+            <p class="head">Lowest <br> <span class="unit">steps</span></p></th>
+          <td>
+            <p class="value">{{ Math.min(...dataHeart.datasets[0].data) }}</p>
+          </td></tr></tbody></table>
+          <table class="infoComp"><tbody><tr><th>
+            <p class="head">Average <br> <span class="unit">steps</span></p></th>
+          <td>
+            <p class="value">{{  }}</p>
+          </td></tr></tbody></table>
+        </div>
+        <div class="graph">
+          <Bar :data="dataSteps" :options="optionsSteps" :style="myStyles"/>
+        </div>
       </Tab>
       <Tab title="person-walking-dashed-line-arrow-right">
-        this is tab3
+        <div class="infoContainer" v-if="dataMounted">
+          <table class="infoComp"><tbody><tr><th>
+            <p class="head">Latest <br> <span class="unit">km/h</span></p></th>
+          <td>
+            <p class="value person-walking-dashed-line-arrow-right">{{ (arraySpeed[arraySpeed.length-1]).toFixed(1) }}</p>
+          </td></tr></tbody></table>
+          <table class="infoComp"><tbody><tr><th>
+            <p class="head">Highest <br> <span class="unit">km/h</span></p></th>
+          <td>
+            <p class="value">{{ Math.max(...arraySpeed).toFixed(1) }}</p>
+          </td></tr></tbody></table>
+          <table class="infoComp"><tbody><tr><th>
+            <p class="head">Lowest <br> <span class="unit">km/h</span></p></th>
+          <td>
+            <p class="value">{{ Math.min(...arraySpeed).toFixed(1) }}</p>
+          </td></tr></tbody></table>
+          <table class="infoComp"><tbody><tr><th>
+            <p class="head">Average <br> <span class="unit">km/h</span></p></th>
+          <td>
+            <p class="value">{{ (arraySpeed.reduce((a,b) => a+b, 0 ) / arraySpeed.length).toFixed(1) }}</p>
+          </td></tr></tbody></table>
+        </div>
+        <div class="graph">
+          <Bar :data="dataSpeed" :options="optionsSpeed" :style="myStyles"/>
+        </div>
       </Tab>
       <Tab title="bed">
-        this is tab4
+        <div class="infoContainer" v-if="dataMounted">
+          <table class="infoComp"><tbody><tr><th>
+            <p class="head">Total <br> <span class="unit">minutes</span></p></th>
+          <td>
+            <p class="value bed">{{ (arraySpeed[arraySpeed.length-1]).toFixed(1) }}</p>
+          </td></tr></tbody></table>
+          <table class="infoComp"><tbody><tr><th>
+            <p class="head">REM <br> <span class="unit">minutes</span></p></th>
+          <td>
+            <p class="value">{{ Math.max(...arraySpeed).toFixed(1) }}</p>
+          </td></tr></tbody></table>
+          <table class="infoComp"><tbody><tr><th>
+            <p class="head">Core <br> <span class="unit">minutes</span></p></th>
+          <td>
+            <p class="value">{{ Math.min(...arraySpeed).toFixed(1) }}</p>
+          </td></tr></tbody></table>
+          <table class="infoComp"><tbody><tr><th>
+            <p class="head">Deep <br> <span class="unit">minutes</span></p></th>
+          <td>
+            <p class="value">{{ (arraySpeed.reduce((a,b) => a+b, 0 ) / arraySpeed.length).toFixed(1) }}</p>
+          </td></tr></tbody></table>
+        </div>
+        <div class="graph">
+          <Line :data="dataSleep" :options="optionsSleep" :style="myStyles"/>
+        </div>
       </Tab>
     </Tabs>    
 
@@ -32,14 +178,83 @@ import Tab from '../components/Tab.vue';
   left: 10rem;
 }
 
+.infoContainer {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0.6rem 0
+}
+
+.infoComp {
+  width: 100%;
+  height: 3rem;
+  border-radius: 1rem;
+  display: flex;
+  margin: 0 0.4rem;
+  align-items: center;
+  color: var(--black-mute)
+}
+
+.infoComp th {
+  text-align: left;
+  width: 5rem;
+}
+
+.infoComp .head{
+  font-weight: 600; 
+  line-height: 1rem;
+}
+
+.infoComp .unit{
+  font-size: 0.8rem;
+}
+
+.infoComp .value{
+  font-weight: 600; 
+  font-size: 2.5rem;
+  margin: 0
+}
+
+.graph{
+  width: calc(100% - 3rem);
+  margin:auto;
+  position: absolute;
+  top: 8rem;
+}
+
+.heart-pulse {
+  color: var(--heart);
+}
+
+.shoe-prints {
+  color: var(--steps);
+}
+
+.person-walking-dashed-line-arrow-right {
+  color: var(--speed);
+}
+
+.bed {
+  color: var(--sleep);
+}
+
 @media screen and (max-aspect-ratio: 1) {
   .container {
-  width: 100vw;content: '';
+  width: 100vw;
+  content: '';
   position: absolute;
   background-color: var(--line-color);
   z-index: 1;
   height: calc(100vh - 4rem);
   left: 0;
+  }
+
+  .infoContainer{
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .graph{
+  top: 12rem;
   }
 }
 </style>
