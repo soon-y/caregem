@@ -150,6 +150,8 @@ export default defineComponent({
 }
 
 @media screen and (max-aspect-ratio: 1) {
-
+  .selectionBar {
+  position: fixed;
+  }
 }
 </style>
