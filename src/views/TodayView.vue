@@ -10,8 +10,9 @@ import {
   BarElement,LineElement,PointElement,
   CategoryScale,
   LinearScale,
-  ChartData
 } from 'chart.js'
+
+import { ChartData } from 'chart.js'
 
 import { Bar } from 'vue-chartjs'
 import { Line } from 'vue-chartjs'
@@ -76,7 +77,7 @@ onMounted(() => {
           <table class="infoComp"><tbody><tr><th>
             <p class="head">Average <br> <span class="unit">bpm</span></p></th>
           <td>
-            <p class="value">{{ Math.round(dataHeart.datasets[0].data.reduce((a,b) => a+b, 0 ) / dataHeart.datasets[0].data.length) }}</p>
+            <p class="value">{{ Math.round(dataHeart.datasets[0].data.reduce((a:number, b:number) => a+b, 0 ) / dataHeart.datasets[0].data.length) }}</p>
           </td></tr></tbody></table>
         </div>
         <div class="graph">
@@ -88,7 +89,7 @@ onMounted(() => {
           <table class="infoComp"><tbody><tr><th>
             <p class="head">Total <br> <span class="unit">steps</span></p></th>
           <td>
-            <p class="value shoe-prints">{{ Math.round(dataSteps.datasets[0].data.reduce((a,b) => a+b, 0 )) }}</p>
+            <p class="value shoe-prints">{{ Math.round(dataSteps.datasets[0].data.reduce((a:number, b:number) => a+b, 0 )) }}</p>
           </td></tr></tbody></table>
           <table class="infoComp"><tbody><tr><th>
             <p class="head">Climbed <br> <span class="unit">floor</span></p></th>
@@ -240,21 +241,25 @@ onMounted(() => {
 
 @media screen and (max-aspect-ratio: 1) {
   .container {
-  width: 100vw;
-  content: '';
-  position: absolute;
-  background-color: var(--line-color);
-  z-index: 1;
-  height: calc(100vh - 4rem);
-  left: 0;
+    width: 100vw;
+    content: '';
+    position: absolute;
+    background-color: var(--line-color);
+    z-index: 1;
+    height: calc(100vh - 4rem);
+    left: 0;
   }
 
   .infoContainer{
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .infoComp th {
+    width: 4rem;
   }
 
   .graph{
-  top: 12rem;
+    top: 12rem;
   }
 }
 </style>
