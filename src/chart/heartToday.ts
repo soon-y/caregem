@@ -52,6 +52,7 @@ export const datasets = () => ({
 export const options = {
   responsive: true,
   maintainAspectRatio: false,
+  animation: false,
   plugins: {
     legend: {
       display: false,
@@ -59,87 +60,96 @@ export const options = {
     tooltip: {
       enabled: false,
       position: 'nearest',
-      external: function(context){
+      external: function(context: { chart: any, tooltip: any }){
         const {chart, tooltip} = context
         const tooltipEl = getOrCreateTooltip(chart)
+        const lineHeight: string  = '20px'
 
         // Hide if no tooltip
-        if (tooltip.opacity === 0) {
-          tooltipEl.style.opacity = 0
-          return
-        }
+        // if (tooltip.opacity === 0) {
+        //   tooltipEl.style.opacity = '0'
+        //   return
+        // }
 
         // Set Text
         if (tooltip.body) {
           const titleLines = tooltip.title || []
-          const bodyLines = tooltip.body.map(b => b.lines)
+          const bodyLines = tooltip.body.map((b: any) => b.lines)
 
           const tableHead = document.createElement('thead')
-
-          titleLines.forEach(title => {
+          titleLines.forEach((title: string) => {
             const tr = document.createElement('tr')
-            tr.style.borderWidth = 0
+            tr.style.borderWidth = '0'
+            tr.style.lineHeight = lineHeight
 
             const th = document.createElement('th')
-            th.style.borderWidth = 0
+            th.style.borderWidth = '0'
             th.style.textAlign = 'left'
-            const text = document.createTextNode(title)
+            th.style.fontSize = '14px'
+            th.style.letterSpacing = '-0.5px'
 
+            const text = document.createTextNode(title)
             th.appendChild(text);
             tr.appendChild(th);
             tableHead.appendChild(tr);
-          });
+          })
 
-      const tableBody = document.createElement('tbody');
-      bodyLines.forEach((body, i) => {
-      const colors = tooltip.labelColors[i];
+          const tableBody = document.createElement('tbody');
+          bodyLines.forEach((body: string, i: number) => {
+            const tr = document.createElement('tr')
+            tr.style.backgroundColor = 'inherit'
+            tr.style.borderWidth = '0'
+            tr.style.lineHeight = lineHeight
 
-      // const span = document.createElement('span');
-      // span.style.background = colors.backgroundColor;
-      // span.style.borderColor = colors.borderColor;
-      // span.style.borderWidth = '2px';
-      // span.style.marginRight = '10px';
-      // span.style.height = '20px';
-      // span.style.width = '20px';
-      // span.style.display = 'inline-block';
+            const td = document.createElement('td')
+            td.style.borderWidth = '0'
+            td.style.fontSize = '30px'
+            td.style.letterSpacing = '-0.8px'
+            td.style.color = '#4b4b4b'
+            td.style.fontWeight = '600'    
 
-      const tr = document.createElement('tr');
-      tr.style.backgroundColor = 'inherit';
-      tr.style.borderWidth = 0;
+            const text = document.createTextNode(body)     
+            td.appendChild(text)
+            tr.appendChild(td)
+            tableBody.appendChild(tr)
+          })
 
-      const td = document.createElement('td');
-      td.style.borderWidth = 0;
+          const tableUnit = document.createElement('tbody')
 
-      const text = document.createTextNode(body + " bpm");
+          const tr = document.createElement('tr')
+          tr.style.backgroundColor = 'inherit'
+          tr.style.borderWidth = '0'
+          tr.style.lineHeight = lineHeight
 
-      td.style.fontSize = '20px'
-      td.style.margin = 0
+          const td = document.createElement('td')
+          td.style.borderWidth = '0'
+          td.style.fontSize = '12px'
 
-      td.appendChild(text);
-      tr.appendChild(td);
-      tableBody.appendChild(tr);
-      });
+          const unit = document.createTextNode(" bpm")
+          td.appendChild(unit)
+          tr.appendChild(td)
+          tableUnit.appendChild(tr)
 
-      const tableRoot = tooltipEl.querySelector('table');
+          const tableRoot = tooltipEl.querySelector('table') as HTMLTableElement
 
-      // Remove old children
-      while (tableRoot.firstChild) {
-        tableRoot.firstChild.remove();
+          // Remove old children
+          while (tableRoot.firstChild) {
+            tableRoot.firstChild.remove()
+          }
+
+          // Add new children
+          tableRoot.appendChild(tableHead)
+          tableRoot.appendChild(tableBody)
+          tableRoot.appendChild(tableUnit)
       }
 
-      // Add new children
-      tableRoot.appendChild(tableHead);
-      tableRoot.appendChild(tableBody);
-    }
-
-    const {offsetLeft: positionX, offsetTop: positionY} = chart.canvas;
-
-      // Display, position, and set styles for font
-      tooltipEl.style.opacity = 1
-      tooltipEl.style.left = positionX + tooltip.caretX + 'px'
-      tooltipEl.style.top = positionY 
-      tooltipEl.style.font = tooltip.options.bodyFont.string
-      tooltipEl.style.padding = tooltip.options.padding + 'px ' + tooltip.options.padding + 'px'
+      const { offsetLeft: positionX, offsetTop: positionY } = chart.canvas
+        // Display, position, and set styles for font
+        tooltipEl.style.opacity = '1'
+        tooltipEl.style.left = positionX + tooltip.caretX + 'px'
+        tooltipEl.style.top = positionY + 'px'
+        tooltipEl.style.font = tooltip.options.bodyFont.string
+        tooltipEl.style.padding = tooltip.options.padding + 'px ' + tooltip.options.padding + 'px'
       }
     },
   },
@@ -147,7 +157,7 @@ export const options = {
     x: {
       ticks: {
         maxRotation: 0,
-        callback: function(value, index, ticks){
+        callback: function(index: number){
           if (index % 3 != 0){
             return ''
           }
@@ -170,25 +180,25 @@ export const options = {
   }
 }
 
-const getOrCreateTooltip = (chart) => {
-  let tooltipEl = chart.canvas.parentNode.querySelector('div');
+const getOrCreateTooltip = (chart: any): HTMLElement => {
+  let tooltipEl = chart.canvas.parentNode.querySelector('div')
 
   if (!tooltipEl) {
-    tooltipEl = document.createElement('div');
-    tooltipEl.style.background = 'rgba(255, 255, 255, 0.5)';
-    tooltipEl.style.color = 'black';
-    tooltipEl.style.opacity = 1;
+    tooltipEl = document.createElement('div')
+    tooltipEl.style.background = 'rgba(200,200,200,0.3)'
+    tooltipEl.style.borderRadius = '10px'
+    tooltipEl.style.color = 'black'
+    tooltipEl.style.opacity = 1
     tooltipEl.style.pointerEvents = 'none';
-    tooltipEl.style.position = 'absolute';
-    tooltipEl.style.transform = 'translate(-50%, 0)';
-    tooltipEl.style.transition = 'all .1s ease';
+    tooltipEl.style.position = 'absolute'
+    tooltipEl.style.transform = 'translate(-50%, 0)'
+    tooltipEl.style.transition = 'all .1s ease'
 
-    const table = document.createElement('table');
-    table.style.margin = '0px';
+    const table = document.createElement('table')
+    table.style.margin = '0px'
 
-    tooltipEl.appendChild(table);
-    chart.canvas.parentNode.appendChild(tooltipEl);
+    tooltipEl.appendChild(table)
+    chart.canvas.parentNode.appendChild(tooltipEl)
   }
-
-  return tooltipEl;
-};
+  return tooltipEl
+}
