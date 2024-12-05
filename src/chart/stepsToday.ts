@@ -76,7 +76,7 @@ export const options = {
     },
     tooltip: {
       enabled: false,
-      position: "nearst" as const,
+      position: "nearest" as const,
       external: function(context: { chart: any, tooltip: any }){
         const {chart, tooltip} = context
         const tooltipEl = getOrCreateTooltip(chart)
