@@ -188,20 +188,13 @@ for (let i: number = 415; i <= 421; i++) {
 
 for (let i: number = sleep; i <= awake+23; i++) {
   for (let j: number = 0; j < 60; j++) {
-    
-    let hour: number = i > 24 ? i-24 : i-12
-    let min: string = j < 10 ? "0" + j : j.toString()
-    let text: string = i > 24 ? " AM" : " PM" 
+    let hour: number = i > 23 ? i-24 : i
+    let min: string = j < 10 ? "0" + j : j.toString() 
 
-    if(j === 0) {
-      labelArray.push(hour.toString() + text) 
-    } else {
-      labelArray.push(hour.toString() + ":" + min + text)
-    }
+    labelArray.push(hour.toString() + ":" + min)
   }
 }
-
-labelArray.push(awake.toString() + " AM") 
+labelArray.push(awake.toString() + ":00") 
 
 export const totalHour: number = Math.floor(array.length/60)
 export const totalMins: number = Math.floor(((array.length/60) - totalHour)*60)
@@ -279,7 +272,11 @@ export const options = {
             th.style.fontSize = '14px'
             th.style.letterSpacing = '-0.5px'
 
-            const text = document.createTextNode(title)
+            let hour: number = Number(title.split(':')[0])
+            if (hour === 0) hour = 12
+            let min: string = title.split(':')[1]
+            let newTitle: string = hour > 12 ? (hour-12).toString() +":"+ min + ' pm' : hour +":"+ min + ' am' 
+            const text = document.createTextNode(newTitle)
             th.appendChild(text);
             tr.appendChild(th);
             tableHead.appendChild(tr);
@@ -367,6 +364,7 @@ export const options = {
       ticks: {
         maxRotation: 0,
         maxTicksLimit: 5,
+        color: 'rgba(190,190,190,1)',
       },
       grid: {
         display: true,
@@ -378,6 +376,7 @@ export const options = {
       min: 0,
       max: 3,
       ticks: {
+        color: 'rgba(190,190,190,1)',
         stepSize: 1,
         callback: function(value: string | number, index: number, ticks: any): string | number {
           return yLabels[index];
@@ -401,7 +400,7 @@ const getOrCreateTooltip = (chart: any): HTMLElement => {
     tooltipEl.style.opacity = 1
     tooltipEl.style.pointerEvents = 'none'
     tooltipEl.style.position = 'absolute'
-    tooltipEl.style.transform = 'translate(-70%, -130%)'
+    tooltipEl.style.transform = 'translate(-70%, -110%)'
     tooltipEl.style.transition = 'all .1s ease'
     tooltipEl.style.width = '5rem'
 

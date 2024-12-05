@@ -2,32 +2,31 @@ const array: number[] = [];
 const currentHour: number = new Date().getHours();
 const sleep: number = 22;
 const awake: number = 6;
-const labelArray: string[] = [
-  '12 AM',
-  '1 AM',
-  '2 AM',
-  '3 AM',
-  '4 AM',
-  '5 AM',
-  '6 AM',
-  '7 AM',
-  '8 AM',
-  '9 AM',
-  '10 AM',
-  '11 AM',
-  '12 PM',
-  '1 PM',
-  '2 PM',
-  '3 PM',
-  '4 PM',
-  '5 PM',
-  '6 PM',
-  '7 PM',
-  '8 PM',
-  '9 PM',
-  '10 PM',
-  '11 PM',
-  '12 AM',
+const labelArray: number[] = [
+  0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12,
+  13,
+  14,
+  15,
+  16,
+  17,
+  18,
+  19,
+  20,
+  21,
+  22,
+  23,
 ]
 
 for (let i: number = 0; i < awake; i++) {
@@ -59,7 +58,7 @@ export const datasets = () => ({
     {
       label: '',
       backgroundColor: 'rgb(19, 163, 3)',
-      borderRadius: 10,
+      borderRadius: 6,
       data: array,
       borderSkipped: false,
     }
@@ -104,7 +103,10 @@ export const options = {
             th.style.fontSize = '14px'
             th.style.letterSpacing = '-0.5px'
 
-            const text = document.createTextNode(title)
+            let number = Number(title)
+            let newTitle: string = number > 12 ? (number-12).toString() + ' pm' : number + ' am' 
+            if (number === 0) newTitle = '12 pm'
+            const text = document.createTextNode(newTitle)
             th.appendChild(text);
             tr.appendChild(th);
             tableHead.appendChild(tr);
@@ -173,11 +175,12 @@ export const options = {
     x: {
       ticks: {
         maxRotation: 0,
+        color: 'rgba(190,190,190,1)',
         callback: function(value: string | number, index: number, ticks: any): string | number {
-          if (index % 3 != 0){
+          if (index % 6 != 0){
             return ''
           }
-          return labelArray[index]
+          return labelArray[index] < 10 ? "0" + labelArray[index] : labelArray[index]
         }
       },
       grid: {
@@ -185,11 +188,19 @@ export const options = {
         color: 'rgba(200,200,200,0.3)'
       }
     },
-
     y: {
       beginAtZero: false,
       min: 0,
       max: 1000,
+      ticks: {
+        color: 'rgba(190,190,190,1)',
+        callback: function(value: string | number, index: number, ticks: any): string | number {
+          if (index % 2 != 0){
+            return ''
+          }
+          return value
+        },
+      },
       grid: {
         display: true,
       },
@@ -208,7 +219,7 @@ const getOrCreateTooltip = (chart: any): HTMLElement => {
     tooltipEl.style.opacity = 1
     tooltipEl.style.pointerEvents = 'none'
     tooltipEl.style.position = 'absolute'
-    tooltipEl.style.transform = 'translate(-70%, -130%)'
+    tooltipEl.style.transform = 'translate(-70%, -110%)'
     tooltipEl.style.transition = 'all .1s ease'
     tooltipEl.style.width = '5rem'
 
