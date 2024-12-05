@@ -47,7 +47,8 @@ nav {
   align-items: center;
   width: 10rem;
   z-index: 100;
-  border-right: 1px solid var(--divider-light-2);
+  border-right: 1px solid rgba(239,226,242, 0.5);
+  background-color: rgba(239,226,242,0.1)
 }
 
 .navIcon{
@@ -79,7 +80,7 @@ nav a.router-link-exact-active:hover {
     text-align: center; 
     grid-template-columns: auto auto auto auto;
     border: none;
-    border-top: 1px solid var(--divider-light-2);
+    border-top: 1px solid rgba(239,226,242, 0.5);
   }
 
   nav a{
