@@ -21,11 +21,11 @@ export default defineComponent({
         case "heart-pulse":
           return 0
         case "shoe-prints":
-          return 25
+          return 26
         case "person-walking-dashed-line-arrow-right":
           return 50
         case "bed":
-          return 75
+          return 76
       }
     };
 
@@ -140,11 +140,11 @@ export default defineComponent({
 
 .selectionBar {
   background-color: rgb(255, 255, 255);
-  width: calc(25% - 0.4rem);
+  width: calc(24% - 0.4rem);
   margin: 0 0.2rem;
   height: calc( var(--height) - 0.6rem);
   position: absolute;
-  top: calc(var(--gap) + 0);
+  top: 0.34rem;
   border-radius: 0.6rem;
   transition-duration: 500ms;
 }
@@ -152,6 +152,7 @@ export default defineComponent({
 @media screen and (max-aspect-ratio: 1) {
   .selectionBar {
   position: fixed;
+  top: 0.91rem;
   }
 }
 </style>
