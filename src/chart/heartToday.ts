@@ -1,4 +1,4 @@
-const array: number[] = [];
+const array: Array<number> = [];
 const currentHour: number = new Date().getHours();
 const labelArray: string[] = [
   '12 AM',
@@ -36,6 +36,10 @@ export function getRandomNumber(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+export const minValue: number = Math.min(...array)
+export const maxValue: number = Math.max(...array)
+export const avgValue: number = Math.round(array.reduce((a:number, b:number) => a+b, 0 ) / array.length)
+
 export const datasets = () => ({
   labels: labelArray,
   datasets: [
@@ -44,7 +48,7 @@ export const datasets = () => ({
       backgroundColor: 'rgb(243, 5, 148)',
       borderColor: 'rgb(243, 5, 148)',
       lineTension: 0.4,
-      data: array
+      data: array,
     }
   ]
 })
@@ -52,14 +56,13 @@ export const datasets = () => ({
 export const options = {
   responsive: true,
   maintainAspectRatio: false,
-  animation: false,
+  animation: false as const,
   plugins: {
     legend: {
       display: false,
     },
     tooltip: {
       enabled: false,
-      position: 'nearest',
       external: function(context: { chart: any, tooltip: any }){
         const {chart, tooltip} = context
         const tooltipEl = getOrCreateTooltip(chart)
@@ -157,12 +160,7 @@ export const options = {
     x: {
       ticks: {
         maxRotation: 0,
-        callback: function(index: number){
-          if (index % 3 != 0){
-            return ''
-          }
-          return labelArray[index]
-        }
+        maxTicksLimit: 10,
       },
       grid: {
         display: true,

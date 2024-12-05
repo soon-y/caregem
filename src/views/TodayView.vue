@@ -12,7 +12,7 @@ import {
   LinearScale,
 } from 'chart.js'
 
-import { ChartData } from 'chart.js'
+import type { ChartData } from 'chart.js'
 
 import { Bar } from 'vue-chartjs'
 import { Line } from 'vue-chartjs'
@@ -67,17 +67,17 @@ onMounted(() => {
           <table class="infoComp"><tbody><tr><th>
             <p class="head">Highest <br> <span class="unit">bpm</span></p></th>
           <td>
-            <p class="value">{{ Math.max(...dataHeart.datasets[0].data) }}</p>
+            <p class="value">{{ heartToday.maxValue }}</p>
           </td></tr></tbody></table>
           <table class="infoComp"><tbody><tr><th>
             <p class="head">Lowest <br> <span class="unit">bpm</span></p></th>
           <td>
-            <p class="value">{{ Math.min(...dataHeart.datasets[0].data) }}</p>
+            <p class="value">{{ heartToday.minValue }}</p>
           </td></tr></tbody></table>
           <table class="infoComp"><tbody><tr><th>
             <p class="head">Average <br> <span class="unit">bpm</span></p></th>
           <td>
-            <p class="value">{{ Math.round(dataHeart.datasets[0].data.reduce((a:number, b:number) => a+b, 0 ) / dataHeart.datasets[0].data.length) }}</p>
+            <p class="value">{{ heartToday.avgValue }}</p>
           </td></tr></tbody></table>
         </div>
         <div class="graph">
@@ -89,23 +89,23 @@ onMounted(() => {
           <table class="infoComp"><tbody><tr><th>
             <p class="head">Total <br> <span class="unit">steps</span></p></th>
           <td>
-            <p class="value shoe-prints">{{ Math.round(dataSteps.datasets[0].data.reduce((a:number, b:number) => a+b, 0 )) }}</p>
+            <p class="value shoe-prints">{{ stepsToday.totalValue }}</p>
           </td></tr></tbody></table>
           <table class="infoComp"><tbody><tr><th>
             <p class="head">Climbed <br> <span class="unit">floor</span></p></th>
           <td>
-            <p class="value">{{ 1 }}</p>
+            <p class="value">{{ stepsToday.getRandomNumber(0,10) }}</p>
             
           </td></tr></tbody></table>
           <table class="infoComp"><tbody><tr><th>
-            <p class="head">Lowest <br> <span class="unit">steps</span></p></th>
+            <p class="head">Distance <br> <span class="unit">km</span></p></th>
           <td>
-            <p class="value">{{ Math.min(...dataHeart.datasets[0].data) }}</p>
+            <p class="value">{{ stepsToday.distanceValue }}</p>
           </td></tr></tbody></table>
           <table class="infoComp"><tbody><tr><th>
-            <p class="head">Average <br> <span class="unit">steps</span></p></th>
+            <p class="head">Duration <br> <span class="unit">hour</span></p></th>
           <td>
-            <p class="value">{{  }}</p>
+            <p class="value">{{ stepsToday.durationHour +":"+ stepsToday.durationMins }}</p>
           </td></tr></tbody></table>
         </div>
         <div class="graph">
@@ -142,24 +142,24 @@ onMounted(() => {
       <Tab title="bed">
         <div class="infoContainer" v-if="dataMounted">
           <table class="infoComp"><tbody><tr><th>
-            <p class="head">Total <br> <span class="unit">minutes</span></p></th>
+            <p class="head">Total <br> <span class="unit">hour</span></p></th>
           <td>
-            <p class="value bed">{{ (arraySpeed[arraySpeed.length-1]).toFixed(1) }}</p>
+            <p class="value bed">{{ sleepToday.totalHour +":"+ sleepToday.totalMins }}</p>
           </td></tr></tbody></table>
           <table class="infoComp"><tbody><tr><th>
-            <p class="head">REM <br> <span class="unit">minutes</span></p></th>
+            <p class="head">REM <br> <span class="unit">hour</span></p></th>
           <td>
-            <p class="value">{{ Math.max(...arraySpeed).toFixed(1) }}</p>
+            <p class="value">{{ sleepToday.remHour +":"+ sleepToday.remMins }}</p>
           </td></tr></tbody></table>
           <table class="infoComp"><tbody><tr><th>
-            <p class="head">Core <br> <span class="unit">minutes</span></p></th>
+            <p class="head">Core <br> <span class="unit">hour</span></p></th>
           <td>
-            <p class="value">{{ Math.min(...arraySpeed).toFixed(1) }}</p>
+            <p class="value">{{ sleepToday.coreHour +":0"+ sleepToday.coreMins }}</p>
           </td></tr></tbody></table>
           <table class="infoComp"><tbody><tr><th>
-            <p class="head">Deep <br> <span class="unit">minutes</span></p></th>
+            <p class="head">Deep <br> <span class="unit">hour</span></p></th>
           <td>
-            <p class="value">{{ (arraySpeed.reduce((a,b) => a+b, 0 ) / arraySpeed.length).toFixed(1) }}</p>
+            <p class="value">{{ "0:" + sleepToday.deepMins }}</p>
           </td></tr></tbody></table>
         </div>
         <div class="graph">

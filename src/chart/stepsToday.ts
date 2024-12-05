@@ -42,9 +42,16 @@ for (let i: number = awake; i <= currentHour; i++) {
   }
 }
 
-function getRandomNumber(min: number, max: number): number {
+export function getRandomNumber(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
+
+export const totalValue: number = array.reduce((a:number, b:number) => a+b, 0 )
+const durationValue: number = parseFloat((totalValue / 6000).toFixed(1))
+export const durationHour: number = Math.floor(durationValue)
+const mins: number = Math.floor((durationValue - durationHour) * 60)
+export const durationMins: string = mins < 10? "0" + mins.toString() : mins.toString()
+export const distanceValue: number = parseFloat(((totalValue*7.5)/10000).toFixed(1))
 
 export const datasets = () => ({
   labels: labelArray,
@@ -62,14 +69,14 @@ export const datasets = () => ({
 export const options = {
   responsive: true,
   maintainAspectRatio: false,
-  animation: false,
+  animation: false as const,
   plugins: {
     legend: {
       display: false,
     },
     tooltip: {
       enabled: false,
-      position: 'nearest',
+      position: "nearst" as const,
       external: function(context: { chart: any, tooltip: any }){
         const {chart, tooltip} = context
         const tooltipEl = getOrCreateTooltip(chart)
@@ -167,12 +174,7 @@ export const options = {
     x: {
       ticks: {
         maxRotation: 0,
-        callback: function(index: number){
-          if (index % 3 != 0){
-            return ''
-          }
-          return labelArray[index]
-        }
+        maxTicksLimit: 10,
       },
       grid: {
         display: true,

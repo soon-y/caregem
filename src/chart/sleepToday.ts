@@ -1,18 +1,192 @@
-const array: number[] = [];
+export const array: number[] = [];
 const labelArray: string[] = [];
 const sleep: number = 22;
 const awake: number = 6;
-
-
+const awakeColor: string = 'rgb(255, 200, 0)'
+const remColor: string = '#bc7cff'
+const coreColor: string = '#7d00ff'
+const deepColor: string = '#4a0493'
+let numAwake: number = 0
+let numREM: number = 0
+let numCore: number = 0
+let numDeep: number = 0
 const yLabels = ["Deep", "Core", "REM", "Awake", ""]
 
-for (let i: number = sleep; i <= awake+23; i++) {
-  for (let j: number = 1; j <= 60; j++) {
-    array.push(getRandomNumber(0, 3)) 
-  }
+for (let i: number = 1; i <= 10; i++) {
+  let num: number = 2
+  numREM++
+  array.push(num)
 }
 
-for (let i: number = sleep; i <= awake+23; i++) {
+for (let i: number = 11; i <= 100; i++) {
+  let num: number = 1
+  numCore++
+  array.push(num) 
+}
+
+for (let i: number = 101; i <= 110; i++) {
+  let num: number = 2
+  numREM++
+  array.push(num) 
+}
+
+for (let i: number = 111; i <= 150; i++) {
+  let num: number = 1
+  numCore++
+  array.push(num) 
+}
+
+for (let i: number = 151; i <= 155; i++) {
+  let num: number = 0
+  numDeep++
+  array.push(num) 
+}
+
+for (let i: number = 156; i <= 165; i++) {
+  let num: number = 1
+  numCore++
+  array.push(num) 
+}
+
+for (let i: number = 166; i <= 170; i++) {
+  let num: number = 0
+  numDeep++
+  array.push(num) 
+}
+
+for (let i: number = 171; i <= 240; i++) {
+  let num: number = 1
+  numCore++
+  array.push(num) 
+}
+
+for (let i: number = 241; i <= 250; i++) {
+  let num: number = 2
+  numREM++
+  array.push(num) 
+}
+
+for (let i: number = 251; i <= 255; i++) {
+  let num: number = 3
+  numAwake++
+  array.push(num) 
+}
+
+for (let i: number = 256; i <= 260; i++) {
+  let num: number = 2
+  numREM++
+  array.push(num) 
+}
+
+for (let i: number = 261; i <= 278; i++) {
+  let num: number = 1
+  numCore++
+  array.push(num) 
+}
+
+for (let i: number = 279; i <= 290; i++) {
+  let num: number = 2
+  numREM++
+  array.push(num) 
+}
+
+for (let i: number = 291; i <= 300; i++) {
+  let num: number = 1
+  numCore++
+  array.push(num) 
+}
+
+for (let i: number = 301; i <= 306; i++) {
+  let num: number = 0
+  numDeep++
+  array.push(num) 
+}
+
+for (let i: number = 307; i <= 310; i++) {
+  let num: number = 1
+  numCore++
+  array.push(num) 
+}
+
+for (let i: number = 311; i <= 320; i++) {
+  let num: number = 2
+  numREM++
+  array.push(num) 
+}
+
+for (let i: number = 321; i <= 325; i++) {
+  let num: number = 3
+  numAwake++
+  array.push(num) 
+}
+
+for (let i: number = 326; i <= 340; i++) {
+  let num: number = 2
+  numREM++
+  array.push(num) 
+}
+
+for (let i: number = 341; i <= 355; i++) {
+  let num: number = 1
+  numCore++
+  array.push(num) 
+}
+
+for (let i: number = 356; i <= 360; i++) {
+  let num: number = 2
+  numREM++
+  array.push(num) 
+}
+
+for (let i: number = 361; i <= 370; i++) {
+  let num: number = 1
+  numCore++
+  array.push(num) 
+}
+
+for (let i: number = 371; i <= 378; i++) {
+  let num: number = 2
+numREM++
+  array.push(num) 
+}
+
+for (let i: number = 379; i <= 385; i++) {
+  let num: number = 1
+  numCore++
+  array.push(num) 
+}
+
+for (let i: number = 386; i <= 390; i++) {
+  let num: number = 0
+  numDeep++
+  array.push(num) 
+}
+
+for (let i: number = 391; i <= 400; i++) {
+  let num: number = 1
+numCore++
+  array.push(num) 
+}
+
+for (let i: number = 401; i <= 430; i++) {
+  let num: number = 2
+  numREM++
+  array.push(num) 
+}
+
+for (let i: number = 431; i <= 450; i++) {
+  let num: number = 1
+  numCore++
+  array.push(num) 
+}
+
+for (let i: number = 451; i <= 470; i++) {
+  let num: number = 2
+  numREM++
+  array.push(num) 
+}
+
+for (let i: number = sleep; i <= awake+22; i++) {
   for (let j: number = 0; j < 60; j++) {
     
     let hour: number = i > 24 ? i-24 : i-12
@@ -27,7 +201,15 @@ for (let i: number = sleep; i <= awake+23; i++) {
   }
 }
 
-labelArray.push(awake.toString())
+export const totalHour: number = Math.floor(array.length/60)
+export const totalMins: number = Math.floor(((array.length/60) - totalHour)*60)
+export const awakeMins: number = numAwake
+export const remHour: number = Math.floor(numREM/60)
+export const remMins: number = numREM - remHour*60
+export const coreHour: number = Math.floor(numCore/60)
+export const coreMins: number = numCore - coreHour*60
+export const deepHour: number = Math.floor(numDeep/60)
+export const deepMins: number = numDeep - deepHour*60
 
 export function getRandomNumber(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1) + min);
@@ -40,19 +222,19 @@ export const datasets = () => ({
       label: '',
       backgroundColor: 'rgb(243, 5, 148)',
       data: array,
-      pointStyle: false,
+      pointStyle: false as const,
       borderColor: function(context: { chart: any }){
         const chart = context.chart
         const {ctx, chartArea} = chart
         const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top)
-        gradient.addColorStop(.66, 'rgb(255, 200, 0)')
-        gradient.addColorStop(.5, '#bc7cff')
-        gradient.addColorStop(.25, '#7d00ff')
-        gradient.addColorStop(0, '#4a0493') 
+        gradient.addColorStop(.75, awakeColor)
+        gradient.addColorStop(.5, remColor)
+        gradient.addColorStop(.25, coreColor)
+        gradient.addColorStop(0, deepColor) 
         return gradient;
       },
-      stepped: 'right',
-      clip:5,
+      stepped: true,
+      clip: 5,
     }
   ]
 })
@@ -60,14 +242,13 @@ export const datasets = () => ({
 export const options = {
   responsive: true,
   maintainAspectRatio: false,
-  animation: false,
+  animation: false as const,
   plugins: {
     legend: {
       display: false,
     },
     tooltip: {
       enabled: false,
-      position: 'nearest',
       external: function(context: { chart: any, tooltip: any }){
         const {chart, tooltip} = context
         const tooltipEl = getOrCreateTooltip(chart)
@@ -114,26 +295,45 @@ export const options = {
             td.style.fontSize = '20px'
             td.style.letterSpacing = '-0.8px'
             td.style.color = '#4b4b4b'
-            td.style.fontWeight = '600'    
+            td.style.fontWeight = '600' 
+
+            const span = document.createElement('span');
+            span.style.borderWidth = '2px';
+            span.style.marginTop = '5px';
+            span.style.height = '14px';
+            span.style.width = '14px';
+            span.style.borderRadius = '50%';
+            span.style.display = 'inline-block';
 
             let newBody: string = ""
             switch (body[0]) {
               case "3":
                 newBody = "Awake"
+                span.style.background = awakeColor
+                span.style.borderColor = awakeColor
                 break;
               case "2":
                 newBody = "REM"
+                span.style.background = remColor
+                span.style.borderColor = remColor
                 break;
               case "1":
                 newBody = "Core"
+                span.style.background = coreColor
+                span.style.borderColor = coreColor
                 break;
               case "0":
                 newBody = "Deep"
+                span.style.background = deepColor
+                span.style.borderColor = deepColor
                 break;
             }
 
             const text = document.createTextNode(newBody)   
             td.appendChild(text)
+            var br = document.createElement('br')
+            td.appendChild(br)
+            td.appendChild(span)
             tr.appendChild(td)
             tableBody.appendChild(tr)
           })
@@ -164,12 +364,7 @@ export const options = {
     x: {
       ticks: {
         maxRotation: 0,
-        callback: function(index: number){
-          if (index % 3 != 0){
-            return ''
-          }
-          return labelArray[index]
-        }
+        maxTicksLimit: 10,
       },
       grid: {
         display: true,
@@ -182,7 +377,7 @@ export const options = {
       max: 4,
       ticks: {
         stepSize: 1,
-        callback: function(index: number) {
+        callback: function(index: number): string {
           return yLabels[index];
         },
       },

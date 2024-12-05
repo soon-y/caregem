@@ -38,7 +38,7 @@ for (let i: number = 0; i < awake; i++) {
 
 for (let i: number = awake; i <= currentHour; i++) {
   if(i <= sleep){
-    let random: number[] = [getRandomNumber(0, 5),getRandomNumber(0, 5)]
+    let random: number[] = [getRandomNumber(2, 5),getRandomNumber(2, 5)]
     let data: number[] = [Math.min(...random), Math.max(...random)]
     array2.push(data)
   }else {
@@ -46,6 +46,13 @@ for (let i: number = awake; i <= currentHour; i++) {
     array2.push(data)
   }
 }
+
+const tupleArray: (number | [number, number] | null)[] = array2.map(subArray => {
+  if (subArray.length === 2) {
+      return [subArray[0], subArray[1]]; // Convert sub-array to tuple
+  }
+  return null; // Or handle cases where sub-array length is not 2
+});
 
 export const array = () => {
   let arrayNum: number[] = [];
@@ -61,6 +68,8 @@ function getRandomNumber(min: number, max: number): number {
   return parseFloat(((Math.random() * (max - min + 1)) + min).toFixed(1))
 }
 
+
+
 export const datasets = () => ({
   labels: labelArray,
   datasets: [
@@ -68,7 +77,7 @@ export const datasets = () => ({
       label: '',
       backgroundColor: 'rgb(20, 165, 255)',
       borderRadius: 8,
-      data: array2,
+      data: tupleArray,
       borderSkipped: false,
     }
   ]
@@ -77,14 +86,14 @@ export const datasets = () => ({
 export const options = {
   responsive: true,
   maintainAspectRatio: false,
-  animation: false,
+  animation: false as const,
   plugins: {
     legend: {
       display: false,
     },
     tooltip: {
       enabled: false,
-      position: 'nearest',
+      position: "nearst" as const,
       external: function(context: { chart: any, tooltip: any }){
         const {chart, tooltip} = context
         const tooltipEl = getOrCreateTooltip(chart)
@@ -185,12 +194,7 @@ export const options = {
     x: {
       ticks: {
         maxRotation: 0,
-        callback: function(index: number){
-          if (index % 3 != 0){
-            return ''
-          }
-          return labelArray[index]
-        }
+        maxTicksLimit: 10,
       },
       grid: {
         display: true,
