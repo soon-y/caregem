@@ -36,10 +36,10 @@ const arrayHeart = heartToday.array()
 const arraySpeed = speedToday.array()
 
 let myStyles = {
-  height: window.innerWidth/window.innerHeight > 1? `calc(100vh - 10rem)` :  `calc(100vh - 17rem)`,
+  height: window.innerWidth/window.innerHeight > 1? `calc(100vh - 17rem)` :  `calc(100vh - 24rem)`,
 }
 
-let currentBPM = ref(74)
+let currentBPM = ref(arrayHeart[arrayHeart.length-1])
 
 onMounted(() => {
   dataHeart.value = heartToday.datasets()
@@ -49,7 +49,7 @@ onMounted(() => {
   dataMounted = true
 
   setInterval(() => {
-    currentBPM.value = heartToday.getRandomNumber(70,100)
+    currentBPM.value = heartToday.getRandomNumber(arrayHeart[arrayHeart.length-2],arrayHeart[arrayHeart.length-1])
   }, 5000)
 })
 
@@ -104,7 +104,7 @@ onMounted(() => {
             <p class="value">{{ stepsToday.distanceValue }}</p>
           </td></tr></tbody></table>
           <table class="infoComp"><tbody><tr><th>
-            <p class="head">Duration <br> <span class="unit">hour</span></p></th>
+            <p class="head">Active <br> <span class="unit">hour</span></p></th>
           <td>
             <p class="value">{{ stepsToday.durationHour +":"+ stepsToday.durationMins }}</p>
           </td></tr></tbody></table>
@@ -213,15 +213,18 @@ onMounted(() => {
 
 .infoComp .value{
   font-weight: 600; 
-  font-size: 2.5rem;
+  font-size: 2.4rem;
   margin: 0
 }
 
 .graph{
-  width: calc(100% - 3rem);
-  margin:auto;
+  width: calc(100% - 2rem);
+  margin-left: 0.3rem;
   position: absolute;
-  top: 8rem;
+  top: 13.6rem;
+  background-color: rgba(250, 250, 250, 1);
+  padding: 0.8rem 1rem;
+  border-radius: 2rem;
 }
 
 .heart-pulse {
@@ -260,7 +263,7 @@ onMounted(() => {
   }
 
   .graph{
-    top: 12rem;
+    top: 17.4rem;
   }
 }
 </style>
