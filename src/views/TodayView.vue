@@ -28,10 +28,11 @@ const optionsHeart = heartToday.options
 const optionsSteps = stepsToday.options
 const optionsSpeed = speedToday.options
 const optionsSleep = sleepToday.options
-const dataHeart = ref<ChartData<'line'>>({ datasets: [] })
+const dataHeart = ref<ChartData<'bar'>>({ datasets: [] })
 const dataSteps = ref<ChartData<'bar'>>({ datasets: [] })
 const dataSpeed = ref<ChartData<'bar'>>({ datasets: [] })
 const dataSleep = ref<ChartData<'line'>>({ datasets: [] })
+const arrayHeart = heartToday.array()
 const arraySpeed = speedToday.array()
 
 let myStyles = {
@@ -67,21 +68,21 @@ onMounted(() => {
           <table class="infoComp"><tbody><tr><th>
             <p class="head">Highest <br> <span class="unit">bpm</span></p></th>
           <td>
-            <p class="value">{{ heartToday.maxValue }}</p>
+            <p class="value">{{ Math.max(...arrayHeart) }}</p>
           </td></tr></tbody></table>
           <table class="infoComp"><tbody><tr><th>
             <p class="head">Lowest <br> <span class="unit">bpm</span></p></th>
           <td>
-            <p class="value">{{ heartToday.minValue }}</p>
+            <p class="value">{{ Math.min(...arrayHeart) }}</p>
           </td></tr></tbody></table>
           <table class="infoComp"><tbody><tr><th>
             <p class="head">Average <br> <span class="unit">bpm</span></p></th>
           <td>
-            <p class="value">{{ heartToday.avgValue }}</p>
+            <p class="value">{{ Math.round(arrayHeart.reduce((a:number, b:number) => a+b, 0 ) / arrayHeart.length) }}</p>
           </td></tr></tbody></table>
         </div>
         <div class="graph">
-          <Line :data="dataHeart" :options="optionsHeart" :style="myStyles"/>
+          <Bar :data="dataHeart" :options="optionsHeart" :style="myStyles"/>
         </div>
       </Tab>
       <Tab title="shoe-prints">
@@ -144,7 +145,7 @@ onMounted(() => {
           <table class="infoComp"><tbody><tr><th>
             <p class="head">Total <br> <span class="unit">hour</span></p></th>
           <td>
-            <p class="value bed">{{ sleepToday.totalHour +":"+ sleepToday.totalMins }}</p>
+            <p class="value bed">{{ sleepToday.totalHour +":0"+ sleepToday.totalMins }}</p>
           </td></tr></tbody></table>
           <table class="infoComp"><tbody><tr><th>
             <p class="head">REM <br> <span class="unit">hour</span></p></th>
@@ -154,7 +155,7 @@ onMounted(() => {
           <table class="infoComp"><tbody><tr><th>
             <p class="head">Core <br> <span class="unit">hour</span></p></th>
           <td>
-            <p class="value">{{ sleepToday.coreHour +":0"+ sleepToday.coreMins }}</p>
+            <p class="value">{{ sleepToday.coreHour +":"+ sleepToday.coreMins }}</p>
           </td></tr></tbody></table>
           <table class="infoComp"><tbody><tr><th>
             <p class="head">Deep <br> <span class="unit">hour</span></p></th>
