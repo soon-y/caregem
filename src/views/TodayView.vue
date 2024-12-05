@@ -95,7 +95,7 @@ onMounted(() => {
           <table class="infoComp"><tbody><tr><th>
             <p class="head">Climbed <br> <span class="unit">floor</span></p></th>
           <td>
-            <p class="value">{{ stepsToday.getRandomNumber(0,10) }}</p>
+            <p class="value">{{ stepsToday.totalValue > 100 ? stepsToday.getRandomNumber(1,10) : 0 }}</p>
             
           </td></tr></tbody></table>
           <table class="infoComp"><tbody><tr><th>
@@ -118,22 +118,22 @@ onMounted(() => {
           <table class="infoComp"><tbody><tr><th>
             <p class="head">Latest <br> <span class="unit">km/h</span></p></th>
           <td>
-            <p class="value person-walking-dashed-line-arrow-right">{{ (arraySpeed[arraySpeed.length-1]).toFixed(1) }}</p>
+            <p class="value person-walking-dashed-line-arrow-right">{{ arraySpeed[arraySpeed.length-1] > 0 ? (arraySpeed[arraySpeed.length-1]).toFixed(1) : 0 }}</p>
           </td></tr></tbody></table>
           <table class="infoComp"><tbody><tr><th>
             <p class="head">Highest <br> <span class="unit">km/h</span></p></th>
           <td>
-            <p class="value">{{ Math.max(...arraySpeed).toFixed(1) }}</p>
+            <p class="value">{{ arraySpeed[arraySpeed.length-1] > 0 ? Math.max(...arraySpeed).toFixed(1) : 0 }}</p>
           </td></tr></tbody></table>
           <table class="infoComp"><tbody><tr><th>
             <p class="head">Lowest <br> <span class="unit">km/h</span></p></th>
           <td>
-            <p class="value">{{ Math.min(...arraySpeed).toFixed(1) }}</p>
+            <p class="value">{{ arraySpeed[arraySpeed.length-1] > 0 ? Math.min(...arraySpeed).toFixed(1) : 0 }}</p>
           </td></tr></tbody></table>
           <table class="infoComp"><tbody><tr><th>
             <p class="head">Average <br> <span class="unit">km/h</span></p></th>
           <td>
-            <p class="value">{{ (arraySpeed.reduce((a,b) => a+b, 0 ) / arraySpeed.length).toFixed(1) }}</p>
+            <p class="value">{{ arraySpeed[arraySpeed.length-1] > 0 ? ((arraySpeed.reduce((a,b) => a+b, 0 ) / arraySpeed.length).toFixed(1)) : 0 }}</p>
           </td></tr></tbody></table>
         </div>
         <div class="graph">
