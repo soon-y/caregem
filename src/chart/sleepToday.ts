@@ -377,9 +377,6 @@ export const options = {
       max: 4,
       ticks: {
         stepSize: 1,
-        callback: function(index: number): string {
-          return yLabels[index];
-        },
       },
       grid: {
         display: false,
