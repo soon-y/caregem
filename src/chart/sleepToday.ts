@@ -10,7 +10,7 @@ let numAwake: number = 0
 let numREM: number = 0
 let numCore: number = 0
 let numDeep: number = 0
-const yLabels = ["Deep", "Core", "REM", "Awake", ""]
+const yLabels = ["Deep", "Core", "REM", "Awake"]
 
 for (let i: number = 1; i <= 10; i++) {
   let num: number = 2
@@ -229,9 +229,9 @@ export const datasets = () => ({
         const chart = context.chart
         const {ctx, chartArea} = chart
         const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top)
-        gradient.addColorStop(.75, awakeColor)
-        gradient.addColorStop(.5, remColor)
-        gradient.addColorStop(.25, coreColor)
+        gradient.addColorStop(1, awakeColor)
+        gradient.addColorStop(.66, remColor)
+        gradient.addColorStop(.33, coreColor)
         gradient.addColorStop(0, deepColor) 
         return gradient;
       },
@@ -254,7 +254,7 @@ export const options = {
       external: function(context: { chart: any, tooltip: any }){
         const {chart, tooltip} = context
         const tooltipEl = getOrCreateTooltip(chart)
-        const lineHeight: string  = '16px'
+        const lineHeight: string  = '18px'
 
         // Hide if no tooltip
         // if (tooltip.opacity === 0) {
@@ -366,12 +366,7 @@ export const options = {
     x: {
       ticks: {
         maxRotation: 0,
-        callback: function(value: string | number, index: number, ticks: any): string | number {
-          if (index % 60 != 0){
-            return ''
-          }
-          return labelArray[index]
-        }
+        maxTicksLimit: 5,
       },
       grid: {
         display: true,
@@ -381,7 +376,7 @@ export const options = {
     y: {
       beginAtZero: false,
       min: 0,
-      max: 4,
+      max: 3,
       ticks: {
         stepSize: 1,
         callback: function(value: string | number, index: number, ticks: any): string | number {
@@ -389,7 +384,7 @@ export const options = {
         },
       },
       grid: {
-        display: false,
+        display: true,
       },
     }
   }
@@ -404,10 +399,11 @@ const getOrCreateTooltip = (chart: any): HTMLElement => {
     tooltipEl.style.borderRadius = '10px'
     tooltipEl.style.color = 'black'
     tooltipEl.style.opacity = 1
-    tooltipEl.style.pointerEvents = 'none';
+    tooltipEl.style.pointerEvents = 'none'
     tooltipEl.style.position = 'absolute'
-    tooltipEl.style.transform = 'translate(-50%, 0)'
+    tooltipEl.style.transform = 'translate(-70%, -130%)'
     tooltipEl.style.transition = 'all .1s ease'
+    tooltipEl.style.width = '5rem'
 
     const table = document.createElement('table')
     table.style.margin = '0px'

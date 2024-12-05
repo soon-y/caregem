@@ -59,7 +59,7 @@ export const datasets = () => ({
     {
       label: '',
       backgroundColor: 'rgb(19, 163, 3)',
-      borderRadius: 8,
+      borderRadius: 10,
       data: array,
       borderSkipped: false,
     }
@@ -76,11 +76,10 @@ export const options = {
     },
     tooltip: {
       enabled: false,
-      position: "nearest" as const,
       external: function(context: { chart: any, tooltip: any }){
         const {chart, tooltip} = context
         const tooltipEl = getOrCreateTooltip(chart)
-        const lineHeight: string  = '20px'
+        const lineHeight: string  = '18px'
 
         // Hide if no tooltip
         // if (tooltip.opacity === 0) {
@@ -120,7 +119,7 @@ export const options = {
 
             const td = document.createElement('td')
             td.style.borderWidth = '0'
-            td.style.fontSize = '30px'
+            td.style.fontSize = '24px'
             td.style.letterSpacing = '-0.8px'
             td.style.color = '#4b4b4b'
             td.style.fontWeight = '600'    
@@ -186,12 +185,13 @@ export const options = {
         color: 'rgba(200,200,200,0.3)'
       }
     },
+
     y: {
       beginAtZero: false,
       min: 0,
       max: 1000,
       grid: {
-        display: false,
+        display: true,
       },
     }
   }
@@ -206,10 +206,11 @@ const getOrCreateTooltip = (chart: any): HTMLElement => {
     tooltipEl.style.borderRadius = '10px'
     tooltipEl.style.color = 'black'
     tooltipEl.style.opacity = 1
-    tooltipEl.style.pointerEvents = 'none';
+    tooltipEl.style.pointerEvents = 'none'
     tooltipEl.style.position = 'absolute'
-    tooltipEl.style.transform = 'translate(-50%, 0)'
+    tooltipEl.style.transform = 'translate(-70%, -130%)'
     tooltipEl.style.transition = 'all .1s ease'
+    tooltipEl.style.width = '5rem'
 
     const table = document.createElement('table')
     table.style.margin = '0px'
