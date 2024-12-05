@@ -174,7 +174,12 @@ export const options = {
     x: {
       ticks: {
         maxRotation: 0,
-        maxTicksLimit: 10,
+        callback: function(value: string | number, index: number, ticks: any): string | number {
+          if (index % 3 != 0){
+            return ''
+          }
+          return labelArray[index]
+        }
       },
       grid: {
         display: true,

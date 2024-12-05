@@ -2,7 +2,6 @@ const array2: number[][] = [];
 const currentHour: number = new Date().getHours();
 const sleep: number = 22;
 const awake: number = 6;
-
 const labelArray: string[] = [
   '12 AM',
   '1 AM',
@@ -194,7 +193,12 @@ export const options = {
     x: {
       ticks: {
         maxRotation: 0,
-        maxTicksLimit: 10,
+        callback: function(value: string | number, index: number, ticks: any): string | number {
+          if (index % 3 != 0){
+            return ''
+          }
+          return labelArray[index]
+        }
       },
       grid: {
         display: true,

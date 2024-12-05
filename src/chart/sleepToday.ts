@@ -1,7 +1,7 @@
 export const array: number[] = [];
 const labelArray: string[] = [];
 const sleep: number = 22;
-const awake: number = 6;
+const awake: number = 5;
 const awakeColor: string = 'rgb(255, 200, 0)'
 const remColor: string = '#bc7cff'
 const coreColor: string = '#7d00ff'
@@ -162,31 +162,31 @@ for (let i: number = 386; i <= 390; i++) {
   array.push(num) 
 }
 
-for (let i: number = 391; i <= 400; i++) {
+for (let i: number = 391; i <= 398; i++) {
   let num: number = 1
 numCore++
   array.push(num) 
 }
 
-for (let i: number = 401; i <= 430; i++) {
+for (let i: number = 399; i <= 410; i++) {
   let num: number = 2
   numREM++
   array.push(num) 
 }
 
-for (let i: number = 431; i <= 450; i++) {
+for (let i: number = 411; i <= 414; i++) {
   let num: number = 1
   numCore++
   array.push(num) 
 }
 
-for (let i: number = 451; i <= 470; i++) {
+for (let i: number = 415; i <= 421; i++) {
   let num: number = 2
   numREM++
   array.push(num) 
 }
 
-for (let i: number = sleep; i <= awake+22; i++) {
+for (let i: number = sleep; i <= awake+23; i++) {
   for (let j: number = 0; j < 60; j++) {
     
     let hour: number = i > 24 ? i-24 : i-12
@@ -200,6 +200,8 @@ for (let i: number = sleep; i <= awake+22; i++) {
     }
   }
 }
+
+labelArray.push(awake.toString() + " AM") 
 
 export const totalHour: number = Math.floor(array.length/60)
 export const totalMins: number = Math.floor(((array.length/60) - totalHour)*60)
@@ -364,7 +366,12 @@ export const options = {
     x: {
       ticks: {
         maxRotation: 0,
-        maxTicksLimit: 10,
+        callback: function(value: string | number, index: number, ticks: any): string | number {
+          if (index % 60 != 0){
+            return ''
+          }
+          return labelArray[index]
+        }
       },
       grid: {
         display: true,
@@ -377,6 +384,9 @@ export const options = {
       max: 4,
       ticks: {
         stepSize: 1,
+        callback: function(value: string | number, index: number, ticks: any): string | number {
+          return yLabels[index];
+        },
       },
       grid: {
         display: false,
