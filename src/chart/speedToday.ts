@@ -38,6 +38,9 @@ for (let i: number = 0; i < awake; i++) {
 for (let i: number = awake; i <= currentHour; i++) {
   if(i <= sleep){
     let random: number[] = [getRandomNumber(2, 5),getRandomNumber(2, 5)]
+    while (random[0] === random[1]){
+      random = [getRandomNumber(70, 110),getRandomNumber(70, 110)]
+    }
     let data: number[] = [Math.min(...random), Math.max(...random)]
     array2.push(data)
   }else {

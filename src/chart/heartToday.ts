@@ -30,6 +30,10 @@ const labelArray: string[] = [
 
 for (let i: number = 0; i <= currentHour; i++) {
   let random: number[] = [getRandomNumber(70, 110),getRandomNumber(70, 110)]
+  while (random[0] === random[1]){
+    random = [getRandomNumber(70, 110),getRandomNumber(70, 110)]
+    break
+  }
   let data: number[] = [Math.min(...random), Math.max(...random)]
   array2.push(data)
 }
