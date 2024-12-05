@@ -1,4 +1,4 @@
-const array: Array<number> = [];
+const array2: number[][] = [];
 const currentHour: number = new Date().getHours();
 const labelArray: string[] = [
   '12 AM',
@@ -29,16 +29,31 @@ const labelArray: string[] = [
 ]
 
 for (let i: number = 0; i <= currentHour; i++) {
-  array.push(getRandomNumber(70, 100))
+  let random: number[] = [getRandomNumber(70, 110),getRandomNumber(70, 110)]
+  let data: number[] = [Math.min(...random), Math.max(...random)]
+  array2.push(data)
+}
+
+const tupleArray: (number | [number, number] | null)[] = array2.map(subArray => {
+  if (subArray.length === 2) {
+      return [subArray[0], subArray[1]]; // Convert sub-array to tuple
+  }
+  return null; // Or handle cases where sub-array length is not 2
+});
+
+export const array = () => {
+  let arrayNum: number[] = [];
+  for (let i: number = 0; i < array2.length; i++) {
+    for (let j: number = 0; j < array2[i].length; j++) {
+      arrayNum.push(array2[i][j])
+    }
+  }
+  return arrayNum
 }
 
 export function getRandomNumber(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
-
-export const minValue: number = Math.min(...array)
-export const maxValue: number = Math.max(...array)
-export const avgValue: number = Math.round(array.reduce((a:number, b:number) => a+b, 0 ) / array.length)
 
 export const datasets = () => ({
   labels: labelArray,
@@ -47,8 +62,9 @@ export const datasets = () => ({
       label: '',
       backgroundColor: 'rgb(243, 5, 148)',
       borderColor: 'rgb(243, 5, 148)',
-      lineTension: 0.4,
-      data: array,
+      borderRadius: 8,
+      borderSkipped: false,
+      data: tupleArray,
     }
   ]
 })
@@ -111,7 +127,10 @@ export const options = {
             td.style.color = '#4b4b4b'
             td.style.fontWeight = '600'    
 
-            const text = document.createTextNode(body)     
+            let newBody: string = body[0].replace("[", "")
+            newBody = newBody.replace("]", "")
+            newBody = newBody.replace(", ", "-")
+            const text = document.createTextNode(newBody)       
             td.appendChild(text)
             tr.appendChild(td)
             tableBody.appendChild(tr)
@@ -160,7 +179,12 @@ export const options = {
     x: {
       ticks: {
         maxRotation: 0,
-        maxTicksLimit: 10,
+        callback: function(value: string | number, index: number, ticks: any): string | number {
+          if (index % 3 != 0){
+            return ''
+          }
+          return labelArray[index]
+        }
       },
       grid: {
         display: true,
