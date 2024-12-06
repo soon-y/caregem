@@ -219,7 +219,7 @@ const getOrCreateTooltip = (chart: any): HTMLElement => {
     tooltipEl.style.opacity = 1
     tooltipEl.style.pointerEvents = 'none'
     tooltipEl.style.position = 'absolute'
-    tooltipEl.style.transform = 'translate(-70%, -110%)'
+    tooltipEl.style.transform = 'translate(-70%, -100%)'
     tooltipEl.style.transition = 'all .1s ease'
     tooltipEl.style.width = '5rem'
 
