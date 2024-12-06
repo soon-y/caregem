@@ -110,7 +110,7 @@ export const options = {
 
             let number = Number(title)
             let newTitle: string = number > 12 ? (number-12).toString() + ' pm' : number + ' am' 
-            if (number === 0) newTitle = '12 pm'
+            if (number === 0) newTitle = '12 am'
             const text = document.createTextNode(newTitle)
             th.appendChild(text);
             tr.appendChild(th);
