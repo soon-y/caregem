@@ -144,7 +144,7 @@ export default defineComponent({
   margin: 0 0.2rem;
   height: calc( var(--height) - 0.6rem);
   position: absolute;
-  top: 0.34rem;
+  top: 0.3rem;
   border-radius: 0.6rem;
   transition-duration: 500ms;
 }
