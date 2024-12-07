@@ -1,33 +1,10 @@
+import { today } from './global_label'
+
 const array2: number[][] = [];
 const currentHour: number = new Date().getHours();
 const sleep: number = 22;
 const awake: number = 6;
-const labelArray: number[] = [
-  0,
-  1,
-  2,
-  3,
-  4,
-  5,
-  6,
-  7,
-  8,
-  9,
-  10,
-  11,
-  12,
-  13,
-  14,
-  15,
-  16,
-  17,
-  18,
-  19,
-  20,
-  21,
-  22,
-  23,
-]
+const labelArray: number[] = today
 
 for (let i: number = 0; i < awake; i++) {
   let data: number[] = [0,0]
@@ -38,7 +15,7 @@ for (let i: number = awake; i <= currentHour; i++) {
   if(i <= sleep){
     let random: number[] = [getRandomNumber(2, 5),getRandomNumber(2, 5)]
     while (random[0] === random[1]){
-      random = [getRandomNumber(70, 110),getRandomNumber(70, 110)]
+      random = [getRandomNumber(2, 5),getRandomNumber(2, 5)]
     }
     let data: number[] = [Math.min(...random), Math.max(...random)]
     array2.push(data)

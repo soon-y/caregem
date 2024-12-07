@@ -1,10 +1,9 @@
-import { today } from './global_label'
+import { week } from './global_label'
 
 const array2: number[][] = [];
-const currentHour: number = new Date().getHours();
-const labelArray: number[] = today
+const labelArray: string[] = week
 
-for (let i: number = 0; i <= currentHour; i++) {
+for (let i: number = 0; i < week.length; i++) {
   let random: number[] = [getRandomNumber(70, 110),getRandomNumber(70, 110)]
   while (random[0] === random[1]){
     random = [getRandomNumber(70, 110),getRandomNumber(70, 110)]
@@ -85,9 +84,23 @@ export const options = {
             th.style.fontSize = '14px'
             th.style.letterSpacing = '-0.5px'
 
-            let number = Number(title)
-            let newTitle: string = number > 12 ? (number-12).toString() + ' pm' : number + ' am' 
-            if (number === 0) newTitle = '12 am'
+            let newTitle: string = ""
+            if (title === "Mon"){
+              newTitle = "Monday"
+            } else if (title ==="Tue"){
+              newTitle = "Tuesday"
+            } else if (title ==="Wed"){
+              newTitle = "Wednesday"
+            } else if (title ==="Thu"){
+              newTitle = "Thursday"
+            } else if (title ==="Fri"){
+              newTitle = "Friday"
+            } else if (title ==="Sat"){
+              newTitle = "Saturday" 
+            } else if (title ==="Sun"){
+              newTitle = "Sunday"
+            }
+
             const text = document.createTextNode(newTitle)
             th.appendChild(text);
             tr.appendChild(th);
@@ -161,12 +174,6 @@ export const options = {
       ticks: {
         maxRotation: 0,
         color: 'rgba(190,190,190,1)',
-        callback: function(value: string | number, index: number, ticks: any): string | number {
-          if (index % 6 != 0){
-            return ''
-          }
-          return labelArray[index] < 10 ? "0" + labelArray[index] : labelArray[index]
-        }
       },
       grid: {
         display: true,
