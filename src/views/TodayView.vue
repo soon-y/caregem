@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import Tabs from '../components/Tabs.vue';
-import Tab from '../components/Tab.vue';
+import Tabs from '../components/Tabs.vue'
+import Tab from '../components/Tab.vue'
 import {
   Chart as ChartJS,
   Title,
@@ -172,7 +172,7 @@ onMounted(() => {
   </div>
 </template>
 
-<style>
+<style scoped>
 .container {
   width: calc(100vw - 10rem);
   height: 100vh;
@@ -246,7 +246,7 @@ onMounted(() => {
   .container {
     width: 100vw;
     content: '';
-    position: absolute;
+    position: fixed;
     background-color: var(--line-color);
     z-index: 1;
     height: calc(100vh - 4rem);
