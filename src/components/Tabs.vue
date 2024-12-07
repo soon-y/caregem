@@ -4,8 +4,8 @@ import { ref, provide, defineComponent } from 'vue'
 
 export default defineComponent({
   setup(props, { slots }) {
-    const gap: number = 0.2;
-    const margin: number = 0.6;
+    const gap: number = 0.2
+    const margin: number = 0.6
 
     // Define the type for the `tabTitles` ref, which is an array of strings
     const tabTitles = ref<string[]>(slots.default ? slots.default().map((tab: any) => tab.props.title) : [])  
@@ -27,7 +27,7 @@ export default defineComponent({
         case "bed":
           return 76
       }
-    };
+    }
 
     const selectionBarOffset = () => {
       switch(selectedTitle.value) {
@@ -40,7 +40,7 @@ export default defineComponent({
         case "bed":
           return -margin-gap
       }
-    };
+    }
 
     return {
       gap, margin,
