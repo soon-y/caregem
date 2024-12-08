@@ -1,5 +1,5 @@
 import { week } from './global_label'
-import { array } from './speedToday'
+import {  array as arrayToday } from './speedToday'
 
 const array2: number[][] = [];
 const labelArray: string[] = week
@@ -8,7 +8,7 @@ for (let i: number = 0; i < week.length-1; i++) {
   let random: number[] = [getRandomNumber(2, 3),getRandomNumber(4, 5)]
   array2.push(random)
 }
-array2.push([Math.min(...array()), Math.max(...array())])
+array2.push([Math.min(...arrayToday()), Math.max(...arrayToday())])
 
 const tupleArray: (number | [number, number] | null)[] = array2.map(subArray => {
   if (subArray.length === 2) {
@@ -17,7 +17,7 @@ const tupleArray: (number | [number, number] | null)[] = array2.map(subArray => 
   return null; // Or handle cases where sub-array length is not 2
 });
 
-export const arrayflat = () => {
+export const array = () => {
   let arrayNum: number[] = [];
   for (let i: number = 0; i < array2.length; i++) {
     for (let j: number = 0; j < array2[i].length; j++) {
@@ -97,6 +97,9 @@ export const options = {
               newTitle = "Saturday" 
             } else if (title ==="Sun"){
               newTitle = "Sunday"
+            }
+            if (title == week[week.length-1]){
+              newTitle = "Today"
             }
 
             const text = document.createTextNode(newTitle)

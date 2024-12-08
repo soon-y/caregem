@@ -1,46 +1,38 @@
-import { week } from './global_label'
-import { array as arrayToday } from './heartToday'
+import { year, monthArray } from './global_label'
+import { array as arrayMonth6 } from './stepsMonth6'
 
-const array2: number[][] = [];
-const labelArray: string[] = week
+const array: number[] = [];
+const labelArray: string[] = year
+export const climbed: number = getRandomNumber(5,10)
 
-for (let i: number = 0; i < week.length-1; i++) {
-  let random: number[] = [getRandomNumber(70, 80),getRandomNumber(90, 110)]
-  array2.push(random)
+for (let i: number = 0; i < year.length/2; i++) {
+  array.push(getRandomNumber(3000, 10000))
 }
-array2.push( [Math.min(...arrayToday()), Math.max(...arrayToday())] )
 
-const tupleArray: (number | [number, number] | null)[] = array2.map(subArray => {
-  if (subArray.length === 2) {
-      return [subArray[0], subArray[1]]; // Convert sub-array to tuple
-  }
-  return null; // Or handle cases where sub-array length is not 2
-});
-
-export const array = () => {
-  let arrayNum: number[] = [];
-  for (let i: number = 0; i < array2.length; i++) {
-    for (let j: number = 0; j < array2[i].length; j++) {
-      arrayNum.push(array2[i][j])
-    }
-  }
-  return arrayNum
+for (let i: number = 0; i < year.length/2; i++) {
+  array.push(arrayMonth6[i])
 }
 
 export function getRandomNumber(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+export const avgValue: number = Math.floor(array.reduce((a:number, b:number) => a+b, 0 )/array.length)
+const durationValue: number = parseFloat((avgValue / 6000).toFixed(1))
+export const durationHour: number = Math.floor(durationValue)
+const mins: number = Math.floor((durationValue - durationHour) * 60)
+export const durationMins: string = mins < 10? "0" + mins.toString() : mins.toString()
+export const distanceValue: number = parseFloat(((avgValue*7.5)/10000).toFixed(1))
+
 export const datasets = () => ({
   labels: labelArray,
   datasets: [
     {
       label: '',
-      backgroundColor: 'rgb(243, 5, 148)',
-      borderColor: 'rgb(243, 5, 148)',
+      backgroundColor: 'rgb(19, 163, 3)',
       borderRadius: 6,
+      data: array,
       borderSkipped: false,
-      data: tupleArray,
     }
   ]
 })
@@ -60,9 +52,11 @@ export const options = {
         const tooltipEl = getOrCreateTooltip(chart)
         const lineHeight: string  = '18px'
 
-        if (tooltip.opacity === 0) {
-          tooltipEl.style.opacity = '1'
-        }
+        // Hide if no tooltip
+        // if (tooltip.opacity === 0) {
+        //   tooltipEl.style.opacity = '0'
+        //   return
+        // }
 
         // Set Text
         if (tooltip.body) {
@@ -82,25 +76,31 @@ export const options = {
             th.style.letterSpacing = '-0.5px'
 
             let newTitle: string = ""
-            if (title === "Mon"){
-              newTitle = "Monday"
-            } else if (title ==="Tue"){
-              newTitle = "Tuesday"
-            } else if (title ==="Wed"){
-              newTitle = "Wednesday"
-            } else if (title ==="Thu"){
-              newTitle = "Thursday"
-            } else if (title ==="Fri"){
-              newTitle = "Friday"
-            } else if (title ==="Sat"){
-              newTitle = "Saturday" 
-            } else if (title ==="Sun"){
-              newTitle = "Sunday"
+            if (title === monthArray[0]){
+              newTitle = "January"
+            } else if (title === monthArray[1]){
+              newTitle = "February"
+            } else if (title === monthArray[2]){
+              newTitle = "March"
+            } else if (title === monthArray[3]){
+              newTitle = "April"
+            } else if (title === monthArray[4]){
+              newTitle = "May"
+            } else if (title === monthArray[5]){
+              newTitle = "June" 
+            } else if (title === monthArray[6]){
+              newTitle = "July"
+            } else if (title === monthArray[7]){
+              newTitle = "August"
+            } else if (title === monthArray[8]){
+              newTitle = "September"
+            } else if (title === monthArray[9]){
+              newTitle = "October"
+            } else if (title === monthArray[10]){
+              newTitle = "November"
+            } else if (title === monthArray[11]){
+              newTitle = "December"
             } 
-            if (title == week[week.length-1]){
-              newTitle = "Today"
-            }
-
             const text = document.createTextNode(newTitle)
             th.appendChild(text);
             tr.appendChild(th);
@@ -121,10 +121,7 @@ export const options = {
             td.style.color = '#4b4b4b'
             td.style.fontWeight = '600'    
 
-            let newBody: string = body[0].replace("[", "")
-            newBody = newBody.replace("]", "")
-            newBody = newBody.replace(", ", "-")
-            const text = document.createTextNode(newBody)       
+            const text = document.createTextNode(body)     
             td.appendChild(text)
             tr.appendChild(td)
             tableBody.appendChild(tr)
@@ -141,7 +138,7 @@ export const options = {
           td.style.borderWidth = '0'
           td.style.fontSize = '12px'
 
-          const unit = document.createTextNode(" bpm")
+          const unit = document.createTextNode(" steps")
           td.appendChild(unit)
           tr.appendChild(td)
           tableUnit.appendChild(tr)
@@ -182,21 +179,21 @@ export const options = {
     },
     y: {
       beginAtZero: false,
-      min: 60,
-      max: 120,
+      min: 0,
+      max: 10000,
       ticks: {
         color: 'rgba(190,190,190,1)',
         callback: function(value: string | number, index: number, ticks: any): string | number {
           if (index % 2 != 0){
             return ''
           }
-          return value + " bpm"
-        }
+          return value
+        },
       },
       grid: {
         display: true,
       },
-    },
+    }
   }
 }
 
@@ -213,7 +210,7 @@ const getOrCreateTooltip = (chart: any): HTMLElement => {
     tooltipEl.style.position = 'absolute'
     tooltipEl.style.transform = 'translate(-70%, -100%)'
     tooltipEl.style.transition = 'all .1s ease'
-    tooltipEl.style.width = '6.9rem'
+    tooltipEl.style.width = '5.5rem'
 
     const table = document.createElement('table')
     table.style.margin = '0px'

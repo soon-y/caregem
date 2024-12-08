@@ -3,6 +3,7 @@ import { totalValue } from './stepsToday'
 
 const array: number[] = [];
 const labelArray: string[] = week
+export const climbed: number = getRandomNumber(5,10)
 
 for (let i: number = 0; i < week.length-1; i++) {
   array.push(getRandomNumber(3000, 10000))
@@ -86,6 +87,9 @@ export const options = {
               newTitle = "Saturday" 
             } else if (title ==="Sun"){
               newTitle = "Sunday"
+            }
+            if (title == week[week.length-1]){
+              newTitle = "Today"
             }
 
             const text = document.createTextNode(newTitle)
@@ -197,7 +201,7 @@ const getOrCreateTooltip = (chart: any): HTMLElement => {
     tooltipEl.style.position = 'absolute'
     tooltipEl.style.transform = 'translate(-70%, -100%)'
     tooltipEl.style.transition = 'all .1s ease'
-    tooltipEl.style.width = '5rem'
+    tooltipEl.style.width = '5.5rem'
 
     const table = document.createElement('table')
     table.style.margin = '0px'

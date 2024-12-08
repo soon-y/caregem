@@ -1,6 +1,6 @@
 import { today } from './global_label'
 
-const array2: number[][] = [];
+export const array2: number[][] = [];
 const currentHour: number = new Date().getHours();
 const labelArray: number[] = today
 

@@ -1,14 +1,31 @@
-import { week } from './global_label'
-import { array as arrayToday } from './heartToday'
+import { month, month6, monthArray, date, NumOfDays } from './global_label'
+import { array as arrayMonth } from './speedMonth'
 
-const array2: number[][] = [];
-const labelArray: string[] = week
+export const array2: number[][] = [];
+const labelArray: string[] = month6
+const lastMonth: number = Number(month[0]) === 1? month6.length-1 : month6.length-2
 
-for (let i: number = 0; i < week.length-1; i++) {
-  let random: number[] = [getRandomNumber(70, 80),getRandomNumber(90, 110)]
+for (let i: number = 0; i < lastMonth; i++) {
+  let random: number[] = [getRandomNumber(2, 3),getRandomNumber(4, 5)]
   array2.push(random)
 }
-array2.push( [Math.min(...arrayToday()), Math.max(...arrayToday())] )
+
+if(lastMonth === month6.length-1){
+  array2.push( [Math.min(...arrayMonth()), Math.max(...arrayMonth())] )
+}else {
+  let firstArray: number[] = []
+  let lastArray: number[] = []
+
+  for (let i: number = 0; i < (NumOfDays-date)*2; i++) {
+    firstArray.push(arrayMonth()[i])
+  }
+  array2.push( [Math.min(...firstArray), Math.max(...firstArray)] )
+
+  for (let i: number = 1; i <= date*2; i++) {
+    lastArray.push(arrayMonth()[arrayMonth().length - i])
+  }
+  array2.push( [Math.min(...lastArray), Math.max(...lastArray)] )
+}
 
 const tupleArray: (number | [number, number] | null)[] = array2.map(subArray => {
   if (subArray.length === 2) {
@@ -21,14 +38,14 @@ export const array = () => {
   let arrayNum: number[] = [];
   for (let i: number = 0; i < array2.length; i++) {
     for (let j: number = 0; j < array2[i].length; j++) {
-      arrayNum.push(array2[i][j])
+      if(array2[i][j] > 0) arrayNum.push(array2[i][j])
     }
   }
   return arrayNum
 }
 
-export function getRandomNumber(min: number, max: number): number {
-  return Math.floor(Math.random() * (max - min + 1) + min);
+function getRandomNumber(min: number, max: number): number {
+  return parseFloat(((Math.random() * (max - min + 1)) + min).toFixed(1))
 }
 
 export const datasets = () => ({
@@ -36,11 +53,10 @@ export const datasets = () => ({
   datasets: [
     {
       label: '',
-      backgroundColor: 'rgb(243, 5, 148)',
-      borderColor: 'rgb(243, 5, 148)',
+      backgroundColor: 'rgb(20, 165, 255)',
       borderRadius: 6,
-      borderSkipped: false,
       data: tupleArray,
+      borderSkipped: false,
     }
   ]
 })
@@ -60,9 +76,11 @@ export const options = {
         const tooltipEl = getOrCreateTooltip(chart)
         const lineHeight: string  = '18px'
 
-        if (tooltip.opacity === 0) {
-          tooltipEl.style.opacity = '1'
-        }
+        // Hide if no tooltip
+        // if (tooltip.opacity === 0) {
+        //   tooltipEl.style.opacity = '0'
+        //   return
+        // }
 
         // Set Text
         if (tooltip.body) {
@@ -80,27 +98,33 @@ export const options = {
             th.style.textAlign = 'left'
             th.style.fontSize = '14px'
             th.style.letterSpacing = '-0.5px'
-
+            
             let newTitle: string = ""
-            if (title === "Mon"){
-              newTitle = "Monday"
-            } else if (title ==="Tue"){
-              newTitle = "Tuesday"
-            } else if (title ==="Wed"){
-              newTitle = "Wednesday"
-            } else if (title ==="Thu"){
-              newTitle = "Thursday"
-            } else if (title ==="Fri"){
-              newTitle = "Friday"
-            } else if (title ==="Sat"){
-              newTitle = "Saturday" 
-            } else if (title ==="Sun"){
-              newTitle = "Sunday"
+            if (title === monthArray[0]){
+              newTitle = "January"
+            } else if (title === monthArray[1]){
+              newTitle = "February"
+            } else if (title === monthArray[2]){
+              newTitle = "March"
+            } else if (title === monthArray[3]){
+              newTitle = "April"
+            } else if (title === monthArray[4]){
+              newTitle = "May"
+            } else if (title === monthArray[5]){
+              newTitle = "June" 
+            } else if (title === monthArray[6]){
+              newTitle = "July"
+            } else if (title === monthArray[7]){
+              newTitle = "August"
+            } else if (title === monthArray[8]){
+              newTitle = "September"
+            } else if (title === monthArray[9]){
+              newTitle = "October"
+            } else if (title === monthArray[10]){
+              newTitle = "November"
+            } else if (title === monthArray[11]){
+              newTitle = "December"
             } 
-            if (title == week[week.length-1]){
-              newTitle = "Today"
-            }
-
             const text = document.createTextNode(newTitle)
             th.appendChild(text);
             tr.appendChild(th);
@@ -124,7 +148,7 @@ export const options = {
             let newBody: string = body[0].replace("[", "")
             newBody = newBody.replace("]", "")
             newBody = newBody.replace(", ", "-")
-            const text = document.createTextNode(newBody)       
+            const text = document.createTextNode(newBody)     
             td.appendChild(text)
             tr.appendChild(td)
             tableBody.appendChild(tr)
@@ -141,7 +165,7 @@ export const options = {
           td.style.borderWidth = '0'
           td.style.fontSize = '12px'
 
-          const unit = document.createTextNode(" bpm")
+          const unit = document.createTextNode(" km/h")
           td.appendChild(unit)
           tr.appendChild(td)
           tableUnit.appendChild(tr)
@@ -182,21 +206,21 @@ export const options = {
     },
     y: {
       beginAtZero: false,
-      min: 60,
-      max: 120,
+      min: 0,
+      max: 8,
       ticks: {
         color: 'rgba(190,190,190,1)',
         callback: function(value: string | number, index: number, ticks: any): string | number {
           if (index % 2 != 0){
             return ''
           }
-          return value + " bpm"
-        }
+          return value + " km/h"
+        },
       },
       grid: {
         display: true,
       },
-    },
+    }
   }
 }
 
@@ -213,7 +237,7 @@ const getOrCreateTooltip = (chart: any): HTMLElement => {
     tooltipEl.style.position = 'absolute'
     tooltipEl.style.transform = 'translate(-70%, -100%)'
     tooltipEl.style.transition = 'all .1s ease'
-    tooltipEl.style.width = '6.9rem'
+    tooltipEl.style.width = '6.3rem'
 
     const table = document.createElement('table')
     table.style.margin = '0px'

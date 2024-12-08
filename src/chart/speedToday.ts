@@ -42,6 +42,8 @@ export const array = () => {
   return arrayNum
 }
 
+export const latest: number = getRandomNumber(Math.min(...array()), Math.max(...array()))
+
 function getRandomNumber(min: number, max: number): number {
   return parseFloat(((Math.random() * (max - min + 1)) + min).toFixed(1))
 }

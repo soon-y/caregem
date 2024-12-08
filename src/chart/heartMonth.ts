@@ -1,12 +1,12 @@
-import { week } from './global_label'
+import { month, monthNum, date, monthArray  } from './global_label'
 import { array as arrayToday } from './heartToday'
 
 const array2: number[][] = [];
-const labelArray: string[] = week
+const labelArray: string[] = month
 
-for (let i: number = 0; i < week.length-1; i++) {
-  let random: number[] = [getRandomNumber(70, 80),getRandomNumber(90, 110)]
-  array2.push(random)
+for (let i: number = 0; i < month.length-1; i++) {
+  let data: number[] = [getRandomNumber(60, 80),getRandomNumber(90, 110)]
+  array2.push(data)
 }
 array2.push( [Math.min(...arrayToday()), Math.max(...arrayToday())] )
 
@@ -81,27 +81,13 @@ export const options = {
             th.style.fontSize = '14px'
             th.style.letterSpacing = '-0.5px'
 
-            let newTitle: string = ""
-            if (title === "Mon"){
-              newTitle = "Monday"
-            } else if (title ==="Tue"){
-              newTitle = "Tuesday"
-            } else if (title ==="Wed"){
-              newTitle = "Wednesday"
-            } else if (title ==="Thu"){
-              newTitle = "Thursday"
-            } else if (title ==="Fri"){
-              newTitle = "Friday"
-            } else if (title ==="Sat"){
-              newTitle = "Saturday" 
-            } else if (title ==="Sun"){
-              newTitle = "Sunday"
-            } 
-            if (title == week[week.length-1]){
-              newTitle = "Today"
+            let month: number = 0
+            if(Number(title) <= date) {
+              month = monthNum
+            }else {
+              month = monthNum - 1 < 0 ? monthNum - 1 + 12 : monthNum - 1
             }
-
-            const text = document.createTextNode(newTitle)
+            const text = document.createTextNode(monthArray[month] + " " + title)
             th.appendChild(text);
             tr.appendChild(th);
             tableHead.appendChild(tr);

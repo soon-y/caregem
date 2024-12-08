@@ -1,14 +1,14 @@
-import { week } from './global_label'
-import { array as arrayToday } from './heartToday'
+import { month, monthNum, date, monthArray  } from './global_label'
+import { array as arrayWeek } from './speedToday'
 
 const array2: number[][] = [];
-const labelArray: string[] = week
+const labelArray: string[] = month
 
-for (let i: number = 0; i < week.length-1; i++) {
-  let random: number[] = [getRandomNumber(70, 80),getRandomNumber(90, 110)]
+for (let i: number = 0; i < month.length-1; i++) {
+  let random: number[] = [getRandomNumber(2, 3),getRandomNumber(4, 5)]
   array2.push(random)
 }
-array2.push( [Math.min(...arrayToday()), Math.max(...arrayToday())] )
+array2.push([Math.min(...arrayWeek()), Math.max(...arrayWeek())])
 
 const tupleArray: (number | [number, number] | null)[] = array2.map(subArray => {
   if (subArray.length === 2) {
@@ -21,14 +21,14 @@ export const array = () => {
   let arrayNum: number[] = [];
   for (let i: number = 0; i < array2.length; i++) {
     for (let j: number = 0; j < array2[i].length; j++) {
-      arrayNum.push(array2[i][j])
+      if(array2[i][j] > 0) arrayNum.push(array2[i][j])
     }
   }
   return arrayNum
 }
 
-export function getRandomNumber(min: number, max: number): number {
-  return Math.floor(Math.random() * (max - min + 1) + min);
+function getRandomNumber(min: number, max: number): number {
+  return parseFloat(((Math.random() * (max - min + 1)) + min).toFixed(1))
 }
 
 export const datasets = () => ({
@@ -36,11 +36,10 @@ export const datasets = () => ({
   datasets: [
     {
       label: '',
-      backgroundColor: 'rgb(243, 5, 148)',
-      borderColor: 'rgb(243, 5, 148)',
+      backgroundColor: 'rgb(20, 165, 255)',
       borderRadius: 6,
-      borderSkipped: false,
       data: tupleArray,
+      borderSkipped: false,
     }
   ]
 })
@@ -60,9 +59,11 @@ export const options = {
         const tooltipEl = getOrCreateTooltip(chart)
         const lineHeight: string  = '18px'
 
-        if (tooltip.opacity === 0) {
-          tooltipEl.style.opacity = '1'
-        }
+        // Hide if no tooltip
+        // if (tooltip.opacity === 0) {
+        //   tooltipEl.style.opacity = '0'
+        //   return
+        // }
 
         // Set Text
         if (tooltip.body) {
@@ -80,28 +81,14 @@ export const options = {
             th.style.textAlign = 'left'
             th.style.fontSize = '14px'
             th.style.letterSpacing = '-0.5px'
-
-            let newTitle: string = ""
-            if (title === "Mon"){
-              newTitle = "Monday"
-            } else if (title ==="Tue"){
-              newTitle = "Tuesday"
-            } else if (title ==="Wed"){
-              newTitle = "Wednesday"
-            } else if (title ==="Thu"){
-              newTitle = "Thursday"
-            } else if (title ==="Fri"){
-              newTitle = "Friday"
-            } else if (title ==="Sat"){
-              newTitle = "Saturday" 
-            } else if (title ==="Sun"){
-              newTitle = "Sunday"
-            } 
-            if (title == week[week.length-1]){
-              newTitle = "Today"
+            
+            let month: number = 0
+            if(Number(title) <= date) {
+              month = monthNum
+            }else {
+              month = monthNum - 1 < 0 ? monthNum - 1 + 12 : monthNum - 1
             }
-
-            const text = document.createTextNode(newTitle)
+            const text = document.createTextNode(monthArray[month] + " " + title)
             th.appendChild(text);
             tr.appendChild(th);
             tableHead.appendChild(tr);
@@ -124,7 +111,7 @@ export const options = {
             let newBody: string = body[0].replace("[", "")
             newBody = newBody.replace("]", "")
             newBody = newBody.replace(", ", "-")
-            const text = document.createTextNode(newBody)       
+            const text = document.createTextNode(newBody)     
             td.appendChild(text)
             tr.appendChild(td)
             tableBody.appendChild(tr)
@@ -141,7 +128,7 @@ export const options = {
           td.style.borderWidth = '0'
           td.style.fontSize = '12px'
 
-          const unit = document.createTextNode(" bpm")
+          const unit = document.createTextNode(" km/h")
           td.appendChild(unit)
           tr.appendChild(td)
           tableUnit.appendChild(tr)
@@ -182,21 +169,21 @@ export const options = {
     },
     y: {
       beginAtZero: false,
-      min: 60,
-      max: 120,
+      min: 0,
+      max: 8,
       ticks: {
         color: 'rgba(190,190,190,1)',
         callback: function(value: string | number, index: number, ticks: any): string | number {
           if (index % 2 != 0){
             return ''
           }
-          return value + " bpm"
-        }
+          return value + " km/h"
+        },
       },
       grid: {
         display: true,
       },
-    },
+    }
   }
 }
 
@@ -213,7 +200,7 @@ const getOrCreateTooltip = (chart: any): HTMLElement => {
     tooltipEl.style.position = 'absolute'
     tooltipEl.style.transform = 'translate(-70%, -100%)'
     tooltipEl.style.transition = 'all .1s ease'
-    tooltipEl.style.width = '6.9rem'
+    tooltipEl.style.width = '6.3rem'
 
     const table = document.createElement('table')
     table.style.margin = '0px'

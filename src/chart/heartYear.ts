@@ -1,14 +1,17 @@
-import { week } from './global_label'
-import { array as arrayToday } from './heartToday'
+import { year, monthArray } from './global_label'
+import { array2 as arrayMonth6 } from './heartMonth6'
 
 const array2: number[][] = [];
-const labelArray: string[] = week
+const labelArray: string[] = year
 
-for (let i: number = 0; i < week.length-1; i++) {
-  let random: number[] = [getRandomNumber(70, 80),getRandomNumber(90, 110)]
-  array2.push(random)
+for (let i: number = 0; i < year.length/2; i++) {
+  let data: number[] = [getRandomNumber(60, 80),getRandomNumber(90, 110)]
+  array2.push(data)
 }
-array2.push( [Math.min(...arrayToday()), Math.max(...arrayToday())] )
+
+for (let i: number = 0; i < year.length/2; i++) {
+  array2.push(arrayMonth6[i])
+}
 
 const tupleArray: (number | [number, number] | null)[] = array2.map(subArray => {
   if (subArray.length === 2) {
@@ -82,25 +85,31 @@ export const options = {
             th.style.letterSpacing = '-0.5px'
 
             let newTitle: string = ""
-            if (title === "Mon"){
-              newTitle = "Monday"
-            } else if (title ==="Tue"){
-              newTitle = "Tuesday"
-            } else if (title ==="Wed"){
-              newTitle = "Wednesday"
-            } else if (title ==="Thu"){
-              newTitle = "Thursday"
-            } else if (title ==="Fri"){
-              newTitle = "Friday"
-            } else if (title ==="Sat"){
-              newTitle = "Saturday" 
-            } else if (title ==="Sun"){
-              newTitle = "Sunday"
+            if (title === monthArray[0]){
+              newTitle = "January"
+            } else if (title === monthArray[1]){
+              newTitle = "February"
+            } else if (title === monthArray[2]){
+              newTitle = "March"
+            } else if (title === monthArray[3]){
+              newTitle = "April"
+            } else if (title === monthArray[4]){
+              newTitle = "May"
+            } else if (title === monthArray[5]){
+              newTitle = "June" 
+            } else if (title === monthArray[6]){
+              newTitle = "July"
+            } else if (title === monthArray[7]){
+              newTitle = "August"
+            } else if (title === monthArray[8]){
+              newTitle = "September"
+            } else if (title === monthArray[9]){
+              newTitle = "October"
+            } else if (title === monthArray[10]){
+              newTitle = "November"
+            } else if (title === monthArray[11]){
+              newTitle = "December"
             } 
-            if (title == week[week.length-1]){
-              newTitle = "Today"
-            }
-
             const text = document.createTextNode(newTitle)
             th.appendChild(text);
             tr.appendChild(th);
