@@ -16,35 +16,91 @@ import type { ChartData } from 'chart.js'
 import { Bar } from 'vue-chartjs'
 import { Line } from 'vue-chartjs'
 import * as heartWeek from '../chart/heartWeek'
+import * as heartMonth from '../chart/heartMonth'
+import * as heartMonth6 from '../chart/heartMonth6'
+import * as heartYear from '../chart/heartYear'
 import * as stepsWeek from '../chart/stepsWeek'
+import * as stepsMonth from '../chart/stepsMonth'
+import * as stepsMonth6 from '../chart/stepsMonth6'
+import * as stepsYear from '../chart/stepsYear'
 import * as speedWeek from '../chart/speedWeek'
+import * as speedMonth from '../chart/speedMonth'
+import * as speedMonth6 from '../chart/speedMonth6'
+import * as speedYear from '../chart/speedYear'
+import * as speedToday from '../chart/speedToday'
+
 import * as sleepToday from '../chart/sleepToday'
 
 ChartJS.register(Title, Tooltip, Legend, PointElement, LineElement, BarElement, CategoryScale, LinearScale)
 
 let dataMounted: boolean = false 
-const optionsHeart = heartWeek.options
-const optionsSteps = stepsWeek.options
-const optionsSpeed = speedWeek.options
+const optionsHeartWeek = heartWeek.options
+const optionsHeartMonth = heartMonth.options
+const optionsHeartMonth6 = heartMonth6.options
+const optionsHeartYear = heartYear.options
+const optionsStepsWeek = stepsWeek.options
+const optionsStepsMonth = stepsMonth.options
+const optionsStepsMonth6 = stepsMonth6.options
+const optionsStepsYear = stepsYear.options
+const optionsSpeedWeek = speedWeek.options
+const optionsSpeedMonth = speedMonth.options
+const optionsSpeedMonth6 = speedMonth6.options
+const optionsSpeedYear = speedYear.options
+
+
 const optionsSleep = sleepToday.options
-const dataHeart = ref<ChartData<'bar'>>({ datasets: [] })
-const dataSteps = ref<ChartData<'bar'>>({ datasets: [] })
-const dataSpeed = ref<ChartData<'bar'>>({ datasets: [] })
+
+
+
+const dataHeartWeek = ref<ChartData<'bar'>>({ datasets: [] })
+const dataHeartMonth = ref<ChartData<'bar'>>({ datasets: [] })
+const dataHeartMonth6 = ref<ChartData<'bar'>>({ datasets: [] })
+const dataHeartYear = ref<ChartData<'bar'>>({ datasets: [] })
+const dataStepsWeek = ref<ChartData<'bar'>>({ datasets: [] })
+const dataStepsMonth = ref<ChartData<'bar'>>({ datasets: [] })
+const dataStepsMonth6 = ref<ChartData<'bar'>>({ datasets: [] })
+const dataStepsYear = ref<ChartData<'bar'>>({ datasets: [] })
+const dataSpeedWeek = ref<ChartData<'bar'>>({ datasets: [] })
+const dataSpeedMonth = ref<ChartData<'bar'>>({ datasets: [] })
+const dataSpeedMonth6 = ref<ChartData<'bar'>>({ datasets: [] })
+const dataSpeedYear = ref<ChartData<'bar'>>({ datasets: [] })
+
 const dataSleep = ref<ChartData<'line'>>({ datasets: [] })
+
 const arrayHeartWeek = heartWeek.array()
-const arraySpeedWeek = speedWeek.arrayflat()
+const arrayHeartMonth = heartMonth.array()
+const arrayHeartMonth6 = heartMonth6.array()
+const arrayHeartYear = heartYear.array()
+const arraySpeedWeek = speedWeek.array()
+const arraySpeedMonth = speedMonth.array()
+const arraySpeedMonth6 = speedMonth6.array()
+const arraySpeedYear = speedYear.array()
+const arraySpeed = speedToday.array()
 
 let myStyles = {
   height: window.innerWidth/window.innerHeight > 1? `calc(100vh - 14rem)` :  `calc(100vh - 25rem)`,
 }
 
 let currentBPM = ref(arrayHeartWeek[arrayHeartWeek.length-1])
-const sliderValue = ref<number>(0);
+const sliderHeart = ref<number>(0);
+const sliderStep = ref<number>(0);
+const sliderSpeed = ref<number>(0);
+const sliderSleep = ref<number>(0);
 
 onMounted(() => {
-  dataHeart.value = heartWeek.datasets()
-  dataSteps.value = stepsWeek.datasets()
-  dataSpeed.value = speedWeek.datasets()
+  dataHeartWeek.value = heartWeek.datasets()
+  dataHeartMonth.value = heartMonth.datasets()
+  dataHeartMonth6.value = heartMonth6.datasets()
+  dataHeartYear.value = heartYear.datasets()
+  dataStepsWeek.value = stepsWeek.datasets()
+  dataStepsMonth.value = stepsMonth.datasets()
+  dataStepsMonth6.value = stepsMonth6.datasets()
+  dataStepsYear.value = stepsYear.datasets()
+  dataSpeedWeek.value = speedWeek.datasets()
+  dataSpeedMonth.value = speedMonth.datasets()
+  dataSpeedMonth6.value = speedMonth6.datasets()
+  dataSpeedYear.value = speedYear.datasets()
+
   dataSleep.value = sleepToday.datasets()
   dataMounted = true
 
@@ -52,14 +108,41 @@ onMounted(() => {
     currentBPM.value = heartWeek.getRandomNumber(arrayHeartWeek[arrayHeartWeek.length-2],arrayHeartWeek[arrayHeartWeek.length-1])
   }, 5000)
 })
-
 </script>
 
 <template>
   <div class="container"> 
     <Tabs>
       <Tab title="heart-pulse">
-        <Slider v-model="sliderValue" class="sliderWrapper" />
+        <Slider v-model="sliderHeart" class="sliderWrapper" />
+        <div v-if="sliderHeart === 0">
+          <div class="infoContainer" v-if="dataMounted">
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Current <br> <span class="unit">bpm</span></p></th>
+            <td>
+              <p class="value heart-pulse">{{ currentBPM }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Highest <br> <span class="unit">bpm</span></p></th>
+            <td>
+              <p class="value">{{ Math.max(...arrayHeartWeek) }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Lowest <br> <span class="unit">bpm</span></p></th>
+            <td>
+              <p class="value">{{ Math.min(...arrayHeartWeek) }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Average <br> <span class="unit">bpm</span></p></th>
+            <td>
+              <p class="value">{{ Math.round(arrayHeartWeek.reduce((a:number, b:number) => a+b, 0 ) / arrayHeartWeek.length) }}</p>
+            </td></tr></tbody></table>
+          </div>
+          <div class="graph">
+            <Bar :data="dataHeartWeek" :options="optionsHeartWeek" :style="myStyles"/>
+          </div>
+        </div>
+        <div v-if="sliderHeart === 1">
         <div class="infoContainer" v-if="dataMounted">
           <table class="infoComp"><tbody><tr><th>
             <p class="head">Current <br> <span class="unit">bpm</span></p></th>
@@ -69,81 +152,302 @@ onMounted(() => {
           <table class="infoComp"><tbody><tr><th>
             <p class="head">Highest <br> <span class="unit">bpm</span></p></th>
           <td>
-            <p class="value">{{ Math.max(...arrayHeartWeek) }}</p>
+            <p class="value">{{ Math.max(...arrayHeartMonth) }}</p>
           </td></tr></tbody></table>
           <table class="infoComp"><tbody><tr><th>
             <p class="head">Lowest <br> <span class="unit">bpm</span></p></th>
           <td>
-            <p class="value">{{ Math.min(...arrayHeartWeek) }}</p>
+            <p class="value">{{ Math.min(...arrayHeartMonth) }}</p>
           </td></tr></tbody></table>
           <table class="infoComp"><tbody><tr><th>
             <p class="head">Average <br> <span class="unit">bpm</span></p></th>
           <td>
-            <p class="value">{{ Math.round(arrayHeartWeek.reduce((a:number, b:number) => a+b, 0 ) / arrayHeartWeek.length) }}</p>
+            <p class="value">{{ Math.round(arrayHeartMonth.reduce((a:number, b:number) => a+b, 0 ) / arrayHeartMonth.length) }}</p>
           </td></tr></tbody></table>
         </div>
         <div class="graph">
-          <Bar :data="dataHeart" :options="optionsHeart" :style="myStyles"/>
+          <Bar :data="dataHeartMonth" :options="optionsHeartMonth" :style="myStyles"/>
+        </div>
+        </div>
+        <div v-if="sliderHeart === 2">
+        <div class="infoContainer" v-if="dataMounted">
+          <table class="infoComp"><tbody><tr><th>
+            <p class="head">Current <br> <span class="unit">bpm</span></p></th>
+          <td>
+            <p class="value heart-pulse">{{ currentBPM }}</p>
+          </td></tr></tbody></table>
+          <table class="infoComp"><tbody><tr><th>
+            <p class="head">Highest <br> <span class="unit">bpm</span></p></th>
+          <td>
+            <p class="value">{{ Math.max(...arrayHeartMonth6) }}</p>
+          </td></tr></tbody></table>
+          <table class="infoComp"><tbody><tr><th>
+            <p class="head">Lowest <br> <span class="unit">bpm</span></p></th>
+          <td>
+            <p class="value">{{ Math.min(...arrayHeartMonth6) }}</p>
+          </td></tr></tbody></table>
+          <table class="infoComp"><tbody><tr><th>
+            <p class="head">Average <br> <span class="unit">bpm</span></p></th>
+          <td>
+            <p class="value">{{ Math.round(arrayHeartMonth6.reduce((a:number, b:number) => a+b, 0 ) / arrayHeartMonth.length) }}</p>
+          </td></tr></tbody></table>
+        </div>
+        <div class="graph">
+          <Bar :data="dataHeartMonth6" :options="optionsHeartMonth6" :style="myStyles"/>
+        </div>
+        </div>
+        <div v-if="sliderHeart === 3">
+        <div class="infoContainer" v-if="dataMounted">
+          <table class="infoComp"><tbody><tr><th>
+            <p class="head">Current <br> <span class="unit">bpm</span></p></th>
+          <td>
+            <p class="value heart-pulse">{{ currentBPM }}</p>
+          </td></tr></tbody></table>
+          <table class="infoComp"><tbody><tr><th>
+            <p class="head">Highest <br> <span class="unit">bpm</span></p></th>
+          <td>
+            <p class="value">{{ Math.max(...arrayHeartYear) }}</p>
+          </td></tr></tbody></table>
+          <table class="infoComp"><tbody><tr><th>
+            <p class="head">Lowest <br> <span class="unit">bpm</span></p></th>
+          <td>
+            <p class="value">{{ Math.min(...arrayHeartYear) }}</p>
+          </td></tr></tbody></table>
+          <table class="infoComp"><tbody><tr><th>
+            <p class="head">Average <br> <span class="unit">bpm</span></p></th>
+          <td>
+            <p class="value">{{ Math.round(arrayHeartYear.reduce((a:number, b:number) => a+b, 0 ) / arrayHeartMonth.length) }}</p>
+          </td></tr></tbody></table>
+        </div>
+        <div class="graph">
+          <Bar :data="dataHeartYear" :options="optionsHeartYear" :style="myStyles"/>
+        </div>
         </div>
       </Tab>
       <Tab title="shoe-prints">
-        <Slider v-model="sliderValue" class="sliderWrapper" />
-        <div class="infoContainer" v-if="dataMounted">
-          <table class="infoComp"><tbody><tr><th>
-            <p class="head">Average <br> <span class="unit">steps</span></p></th>
-          <td>
-            <p class="value shoe-prints">{{ stepsWeek.avgValue }}</p>
-          </td></tr></tbody></table>
-          <table class="infoComp"><tbody><tr><th>
-            <p class="head">Climbed <br> <span class="unit">avg. floor</span></p></th>
-          <td>
-            <p class="value">{{ stepsWeek.getRandomNumber(1,10) }}</p>
-          </td></tr></tbody></table>
-          <table class="infoComp"><tbody><tr><th>
-            <p class="head">Distance <br> <span class="unit">avg. km</span></p></th>
-          <td>
-            <p class="value">{{ stepsWeek.distanceValue }}</p>
-          </td></tr></tbody></table>
-          <table class="infoComp"><tbody><tr><th>
-            <p class="head">Active <br> <span class="unit">avg. hour</span></p></th>
-          <td>
-            <p class="value">{{ stepsWeek.durationHour +":"+ stepsWeek.durationMins }}</p>
-          </td></tr></tbody></table>
+        <Slider v-model="sliderStep" class="sliderWrapper" />
+        <div v-if="sliderStep === 0">
+          <div class="infoContainer" v-if="dataMounted">
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Average <br> <span class="unit">steps</span></p></th>
+            <td>
+              <p class="value shoe-prints">{{ stepsWeek.avgValue }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Climbed <br> <span class="unit">avg. floor</span></p></th>
+            <td>
+              <p class="value">{{ stepsWeek.climbed }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Distance <br> <span class="unit">avg. km</span></p></th>
+            <td>
+              <p class="value">{{ stepsWeek.distanceValue }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Active <br> <span class="unit">avg. hour</span></p></th>
+            <td>
+              <p class="value">{{ stepsWeek.durationHour +":"+ stepsWeek.durationMins }}</p>
+            </td></tr></tbody></table>
+          </div>
+          <div class="graph">
+            <Bar :data="dataStepsWeek" :options="optionsStepsWeek" :style="myStyles"/>
+          </div>
         </div>
-        <div class="graph">
-          <Bar :data="dataSteps" :options="optionsSteps" :style="myStyles"/>
+        <div v-if="sliderStep === 1">
+          <div class="infoContainer" v-if="dataMounted">
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Average <br> <span class="unit">steps</span></p></th>
+            <td>
+              <p class="value shoe-prints">{{ stepsMonth.avgValue }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Climbed <br> <span class="unit">avg. floor</span></p></th>
+            <td>
+              <p class="value">{{ stepsMonth.climbed }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Distance <br> <span class="unit">avg. km</span></p></th>
+            <td>
+              <p class="value">{{ stepsMonth.distanceValue }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Active <br> <span class="unit">avg. hour</span></p></th>
+            <td>
+              <p class="value">{{ stepsMonth.durationHour +":"+ stepsMonth.durationMins }}</p>
+            </td></tr></tbody></table>
+          </div>
+          <div class="graph">
+            <Bar :data="dataStepsMonth" :options="optionsStepsMonth" :style="myStyles"/>
+          </div>
+        </div>
+        <div v-if="sliderStep === 2">
+          <div class="infoContainer" v-if="dataMounted">
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Average <br> <span class="unit">steps</span></p></th>
+            <td>
+              <p class="value shoe-prints">{{ stepsMonth6.avgValue }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Climbed <br> <span class="unit">avg. floor</span></p></th>
+            <td>
+              <p class="value">{{ stepsMonth6.climbed }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Distance <br> <span class="unit">avg. km</span></p></th>
+            <td>
+              <p class="value">{{ stepsMonth6.distanceValue }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Active <br> <span class="unit">avg. hour</span></p></th>
+            <td>
+              <p class="value">{{ stepsMonth6.durationHour +":"+ stepsMonth6.durationMins }}</p>
+            </td></tr></tbody></table>
+          </div>
+          <div class="graph">
+            <Bar :data="dataStepsMonth6" :options="optionsStepsMonth6" :style="myStyles"/>
+          </div>
+        </div>
+        <div v-if="sliderStep === 3">
+          <div class="infoContainer" v-if="dataMounted">
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Average <br> <span class="unit">steps</span></p></th>
+            <td>
+              <p class="value shoe-prints">{{ stepsYear.avgValue }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Climbed <br> <span class="unit">avg. floor</span></p></th>
+            <td>
+              <p class="value">{{ stepsYear.climbed }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Distance <br> <span class="unit">avg. km</span></p></th>
+            <td>
+              <p class="value">{{ stepsYear.distanceValue }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Active <br> <span class="unit">avg. hour</span></p></th>
+            <td>
+              <p class="value">{{ stepsYear.durationHour +":"+ stepsYear.durationMins }}</p>
+            </td></tr></tbody></table>
+          </div>
+          <div class="graph">
+            <Bar :data="dataStepsYear" :options="optionsStepsYear" :style="myStyles"/>
+          </div>
         </div>
       </Tab>
       <Tab title="person-walking-dashed-line-arrow-right">
-        <Slider v-model="sliderValue" class="sliderWrapper" />
-        <div class="infoContainer" v-if="dataMounted">
-          <table class="infoComp"><tbody><tr><th>
-            <p class="head">Latest <br> <span class="unit">km/h</span></p></th>
-          <td>
-            <p class="value person-walking-dashed-line-arrow-right">{{ (arraySpeedWeek[arraySpeedWeek.length-1]).toFixed(1) }}</p>
-          </td></tr></tbody></table>
-          <table class="infoComp"><tbody><tr><th>
-            <p class="head">Highest <br> <span class="unit">km/h</span></p></th>
-          <td>
-            <p class="value">{{ Math.max(...arraySpeedWeek).toFixed(1) }}</p>
-          </td></tr></tbody></table>
-          <table class="infoComp"><tbody><tr><th>
-            <p class="head">Lowest <br> <span class="unit">km/h</span></p></th>
-          <td>
-            <p class="value">{{ Math.min(...arraySpeedWeek).toFixed(1) }}</p>
-          </td></tr></tbody></table>
-          <table class="infoComp"><tbody><tr><th>
-            <p class="head">Average <br> <span class="unit">km/h</span></p></th>
-          <td>
-            <p class="value">{{ ((arraySpeedWeek.reduce((a,b) => a+b, 0 ) / arraySpeedWeek.length).toFixed(1)) }}</p>
-          </td></tr></tbody></table>
+        <Slider v-model="sliderSpeed" class="sliderWrapper" />
+        <div v-if="sliderSpeed === 0">
+          <div class="infoContainer" v-if="dataMounted">
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Latest <br> <span class="unit">km/h</span></p></th>
+            <td>
+              <p class="value person-walking-dashed-line-arrow-right">{{ arraySpeed[arraySpeed.length-1] > 0 ? (arraySpeed[arraySpeed.length-1]).toFixed(1) : 0 }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Highest <br> <span class="unit">km/h</span></p></th>
+            <td>
+              <p class="value">{{ Math.max(...arraySpeedWeek).toFixed(1) }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Lowest <br> <span class="unit">km/h</span></p></th>
+            <td>
+              <p class="value">{{ Math.min(...arraySpeedWeek).toFixed(1) }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Average <br> <span class="unit">km/h</span></p></th>
+            <td>
+              <p class="value">{{ ((arraySpeedWeek.reduce((a,b) => a+b, 0 ) / arraySpeedWeek.length).toFixed(1)) }}</p>
+            </td></tr></tbody></table>
+          </div>
+          <div class="graph">
+            <Bar :data="dataSpeedWeek" :options="optionsSpeedWeek" :style="myStyles"/>
+          </div>
         </div>
-        <div class="graph">
-          <Bar :data="dataSpeed" :options="optionsSpeed" :style="myStyles"/>
+        <div v-if="sliderSpeed === 1">
+          <div class="infoContainer" v-if="dataMounted">
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Latest <br> <span class="unit">km/h</span></p></th>
+            <td>
+              <p class="value person-walking-dashed-line-arrow-right">{{ arraySpeed[arraySpeed.length-1] > 0 ? (arraySpeed[arraySpeed.length-1]).toFixed(1) : 0 }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Highest <br> <span class="unit">km/h</span></p></th>
+            <td>
+              <p class="value">{{ Math.max(...arraySpeedMonth).toFixed(1) }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Lowest <br> <span class="unit">km/h</span></p></th>
+            <td>
+              <p class="value">{{ Math.min(...arraySpeedMonth).toFixed(1) }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Average <br> <span class="unit">km/h</span></p></th>
+            <td>
+              <p class="value">{{ ((arraySpeedMonth.reduce((a,b) => a+b, 0 ) / arraySpeedMonth.length).toFixed(1)) }}</p>
+            </td></tr></tbody></table>
+          </div>
+          <div class="graph">
+            <Bar :data="dataSpeedMonth" :options="optionsSpeedMonth" :style="myStyles"/>
+          </div>
+        </div>
+        <div v-if="sliderSpeed === 2">
+          <div class="infoContainer" v-if="dataMounted">
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Latest <br> <span class="unit">km/h</span></p></th>
+            <td>
+              <p class="value person-walking-dashed-line-arrow-right">{{ arraySpeed[arraySpeed.length-1] > 0 ? (arraySpeed[arraySpeed.length-1]).toFixed(1) : 0 }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Highest <br> <span class="unit">km/h</span></p></th>
+            <td>
+              <p class="value">{{ Math.max(...arraySpeedMonth6).toFixed(1) }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Lowest <br> <span class="unit">km/h</span></p></th>
+            <td>
+              <p class="value">{{ Math.min(...arraySpeedMonth6).toFixed(1) }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Average <br> <span class="unit">km/h</span></p></th>
+            <td>
+              <p class="value">{{ ((arraySpeedMonth6.reduce((a,b) => a+b, 0 ) / arraySpeedMonth6.length).toFixed(1)) }}</p>
+            </td></tr></tbody></table>
+          </div>
+          <div class="graph">
+            <Bar :data="dataSpeedMonth6" :options="optionsSpeedMonth6" :style="myStyles"/>
+          </div>
+        </div>
+        <div v-if="sliderSpeed === 3">
+          <div class="infoContainer" v-if="dataMounted">
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Latest <br> <span class="unit">km/h</span></p></th>
+            <td>
+              <p class="value person-walking-dashed-line-arrow-right">{{ arraySpeed[arraySpeed.length-1] > 0 ? (arraySpeed[arraySpeed.length-1]).toFixed(1) : 0 }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Highest <br> <span class="unit">km/h</span></p></th>
+            <td>
+              <p class="value">{{ Math.max(...arraySpeedYear).toFixed(1) }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Lowest <br> <span class="unit">km/h</span></p></th>
+            <td>
+              <p class="value">{{ Math.min(...arraySpeedYear).toFixed(1) }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Average <br> <span class="unit">km/h</span></p></th>
+            <td>
+              <p class="value">{{ ((arraySpeedYear.reduce((a,b) => a+b, 0 ) / arraySpeedYear.length).toFixed(1)) }}</p>
+            </td></tr></tbody></table>
+          </div>
+          <div class="graph">
+            <Bar :data="dataSpeedYear" :options="optionsSpeedYear" :style="myStyles"/>
+          </div>
         </div>
       </Tab>
       <Tab title="bed">
-        <Slider v-model="sliderValue" class="sliderWrapper" />
+        <Slider v-model="sliderSleep" class="sliderWrapper" />
         <div class="infoContainer" v-if="dataMounted">
           <table class="infoComp"><tbody><tr><th>
             <p class="head">Total <br> <span class="unit">hour</span></p></th>
@@ -277,7 +581,7 @@ onMounted(() => {
 
   .graph{
     width: calc(100vw - 2rem);
-    top: 13rem;
+    top: 12.5rem;
   }
 }
 </style>
