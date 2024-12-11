@@ -42,9 +42,9 @@ export const array = () => {
   return arrayNum
 }
 
-export const latest: number = getRandomNumber(Math.min(...array()), Math.max(...array()))
+export const latest: number = array()[array().length-1] > 0 ? parseFloat((array()[array().length-2]).toFixed(1)) : getRandomNumber(1,3)
 
-function getRandomNumber(min: number, max: number): number {
+export function getRandomNumber(min: number, max: number): number {
   return parseFloat(((Math.random() * (max - min + 1)) + min).toFixed(1))
 }
 

@@ -1,3 +1,8 @@
+export const awakeColor: string = 'rgb(255, 200, 0)'
+export const remColor: string = '#bc7cff'
+export const coreColor: string = '#7d00ff'
+export const deepColor: string = '#4a0493'
+
 export const date: number = new Date().getDate()
 export const weekNum: number = new Date().getDay()
 export const monthNum: number = new Date().getMonth()
@@ -66,6 +71,31 @@ export const today: number[] = [
   23,
 ]
 
+export const sleepYtime: string[] = [
+  "8 AM",
+  "7 AM",
+  "6 AM",
+  "5 AM",
+  "4 AM",
+  "3 AM",
+  "2 AM",
+  "1 AM",
+  "12 AM",
+  "11 PM",
+  "10 PM",
+  "9 PM",
+  "8 PM",
+]
+
 function getDaysInMonth(year: number, month: number): number {
   return new Date(year, month+1, 0).getDate();
+}
+
+export function getRandom(count: number, min: number, divide: number): number[] {
+  let array: number[] = []
+  for(let i = 0; i < count; i++){
+    let num:number = parseFloat(((Math.random() + min )/ divide).toFixed(2))
+    array.push(num)
+  }
+  return array
 }

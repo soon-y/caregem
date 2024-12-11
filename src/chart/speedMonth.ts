@@ -1,5 +1,5 @@
 import { month, monthNum, date, monthArray  } from './global_label'
-import { array as arrayWeek } from './speedToday'
+import { array as arrayToday } from './speedToday'
 
 const array2: number[][] = [];
 const labelArray: string[] = month
@@ -8,7 +8,7 @@ for (let i: number = 0; i < month.length-1; i++) {
   let random: number[] = [getRandomNumber(2, 3),getRandomNumber(4, 5)]
   array2.push(random)
 }
-array2.push([Math.min(...arrayWeek()), Math.max(...arrayWeek())])
+if(arrayToday().length>0) array2.push([Math.min(...arrayToday()), Math.max(...arrayToday())])
 
 const tupleArray: (number | [number, number] | null)[] = array2.map(subArray => {
   if (subArray.length === 2) {

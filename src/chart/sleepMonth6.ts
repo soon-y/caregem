@@ -1,35 +1,25 @@
-import { week, sleepYtime, awakeColor, remColor, coreColor, deepColor } from './global_label'
+import { getRandom, monthArray, month6, sleepYtime, awakeColor, remColor, coreColor, deepColor } from './global_label'
 
 export const array: number[] = [];
-const labelArray: string[] = week
+const labelArray: string[] = month6
 
-let numAwake: number = 434
-let numREM: number = 114
-let numCore: number = 271
-let numDeep: number = 21
-
-// for (let i: number = sleep; i <= awake+23; i++) {
-//   for (let j: number = 0; j < 60; j++) {
-//     let hour: number = i > 23 ? i-24 : i
-//     let min: string = j < 10 ? "0" + j : j.toString() 
-
-//     labelArray.push(hour.toString() + ":" + min)
-//   }
-// }
-// labelArray.push(awake.toString() + ":00") 
-
-export const awakeHour: number = Math.floor(numAwake/60)
-export const awakeMins: number = numAwake - awakeHour*60
-export const remHour: number = Math.floor(numREM/60)
-export const remMins: number = numREM - remHour*60
-export const coreHour: number = Math.floor(numCore/60)
-export const coreMins: number = numCore - coreHour*60
-export const deepHour: number = Math.floor(numDeep/60)
-export const deepMins: number = numDeep - deepHour*60
+let numAwake: number = getRandomNumber(400,450)
+let numREM: number = getRandomNumber(100,150)
+let numCore: number = getRandomNumber(250,300)
+let numDeep: number = getRandomNumber(20,30)
 
 export function getRandomNumber(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
+
+export const awakeHour: number = Math.floor(numAwake/60)
+export const awakeMins: string = (numAwake - awakeHour*60) < 10? "0" + (numAwake - awakeHour*60).toString() : (numAwake - awakeHour*60).toString()
+export const remHour: number = Math.floor(numREM/60)
+export const remMins: string = (numREM - remHour*60) < 10? "0" + (numREM - remHour*60).toString() : (numREM - remHour*60).toString()
+export const coreHour: number = Math.floor(numCore/60)
+export const coreMins: string = (numCore - coreHour*60) < 10? "0" + (numCore - coreHour*60).toString() : (numCore - coreHour*60).toString()
+export const deepHour: number = Math.floor(numDeep/60)
+export const deepMins: string = (numDeep - deepHour*60) < 10? "0" + (numDeep - deepHour*60).toString() : (numDeep - deepHour*60).toString()
 
 export const datasets = () => ({
   labels: labelArray,
@@ -38,56 +28,56 @@ export const datasets = () => ({
       label: 'Core',
       backgroundColor: coreColor,
       borderRadius: 6,
-      data: [1.3, 1.2, 1.0, 1.2, 1.4, 1.0, 1.2],
+      data: getRandom(month6.length ,1, 1),
       borderSkipped: true,
     },
     {
       label: 'Deep',
       backgroundColor: deepColor,
       borderRadius: 6,
-      data: [0.2, 0.3, 0.1, 0.2, 0.1, 0.15, 0.1,],
+      data: getRandom(month6.length ,0, 8),
       borderSkipped: true,
     },
     {
       label: 'Core',
       backgroundColor: coreColor,
       borderRadius: 6,
-      data: [0.15, 0.1, 0.15, 0.1, 0.2, 0.1, 0.1,],
+      data: getRandom(month6.length ,0, 5),
       borderSkipped: true,
     },
     {
       label: 'Deep',
       backgroundColor: deepColor,
       borderRadius: 6,
-      data: [0.15, 0.1, 0.1, 0.2, 0.1, 0.15, 0.1,],
+      data: getRandom(month6.length ,0, 8),
       borderSkipped: true,
     },
     {
       label: 'Core',
       backgroundColor: coreColor,
       borderRadius: 6,
-      data: [0.4, 0.7, 0.5, 0.7, 0.6, 0.8, 0.7],
+      data: getRandom(month6.length ,0, 5),
       borderSkipped: true,
     },
     {
       label: 'REM',
       backgroundColor: remColor,
       borderRadius: 6,
-      data: [0.1, 0.13, 0.1, 0.15, 0.12, 0.15, 0.15],
-      borderSkipped: false,
+      data: getRandom(month6.length ,0, 8),
+      borderSkipped: true,
     },
     {
       label: 'Core',
       backgroundColor: coreColor,
       borderRadius: 6,
-      data: [1.5, 1., 1.5, 1.5, 1., 1.5, 1.5],
+      data: getRandom(month6.length ,1, 1),
       borderSkipped: true,
     },
     {
       label: 'REM',
       backgroundColor: remColor,
       borderRadius: 6,
-      data: [0.1, 0.13, 0.17, 0.1, 0.15, 0.2, 0.15],
+      data: getRandom(month6.length ,0, 8),
       borderSkipped: true,
     },
 
@@ -95,84 +85,84 @@ export const datasets = () => ({
       label: 'REM',
       backgroundColor: remColor,
       borderRadius: 6,
-      data: [-0.3, -0.23, -0.22, -0.25, -0.2, -0.25, -0.2],
-      borderSkipped: false,
+      data: getRandom(month6.length ,-1, 8),
+      borderSkipped: true,
     },
     {
       label: 'Awake',
       backgroundColor: awakeColor,
       borderRadius: 6,
-      data: [-0.05, -0.06, -0.1, -0.08, -0.1, -0.08, -0.1],
-      borderSkipped: false,
-    },
-    {
-      label: 'REM',
-      backgroundColor: remColor,
-      borderRadius: 6,
-      data: [-0.2, -0.15, -0.1, -0.12, -0.15, -0.13, -0.15],
-      borderSkipped: true,
-    },
-    {
-      label: 'Core',
-      backgroundColor: coreColor,
-      borderRadius: 6,
-      data: [-0.21, -0.24, -0.22, -0.21, -0.24, -0.2, -0.2],
+      data: getRandom(month6.length ,-1, 8),
       borderSkipped: true,
     },
     {
       label: 'REM',
       backgroundColor: remColor,
       borderRadius: 6,
-      data: [-0.21, -0.18, -0.15, -0.16, -0.2, -0.22, -0.2],
+      data: getRandom(month6.length ,-1, 5),
       borderSkipped: true,
     },
     {
       label: 'Core',
       backgroundColor: coreColor,
       borderRadius: 6,
-      data: [-0.15, -0.2, -0.17, -0.18, -0.2, -0.21, -0.2],
+      data: getRandom(month6.length ,-2, 8),
+      borderSkipped: true,
+    },
+    {
+      label: 'REM',
+      backgroundColor: remColor,
+      borderRadius: 6,
+      data: getRandom(month6.length ,-2, 8),
+      borderSkipped: true,
+    },
+    {
+      label: 'Core',
+      backgroundColor: coreColor,
+      borderRadius: 6,
+      data: getRandom(month6.length ,-3, 8),
       borderSkipped: true,
     },
     {
       label: 'Deep',
       backgroundColor: deepColor,
       borderRadius: 6,
-      data: [-0.11, -0.14, -0.17, -0.12, -0.11, -0.14, -0.1],
+      data: getRandom(month6.length ,-2, 10),
       borderSkipped: true,
     },
     {
       label: 'Core',
       backgroundColor: coreColor,
       borderRadius: 6,
-      data: [-0.11, -0.14, -0.15, -0.14, -0.11, -0.17, -0.1],
+      data: getRandom(month6.length ,-1, 4),
       borderSkipped: true,
     },
     {
       label: 'REM',
       backgroundColor: remColor,
       borderRadius: 6,
-      data: [-0.13, -0.16, -0.15, -0.13, -0.11, -0.12, -0.15],
+      data: getRandom(month6.length ,-1, 5),
       borderSkipped: true,
     },
     {
       label: 'Awake',
       backgroundColor: awakeColor,
       borderRadius: 6,
-      data: [-0.11, -0.14, -0.13, -0.1, -0.15, -0.1, -0.1],
-      borderSkipped: false,
+      data: getRandom(month6.length ,-1, 10),
+      borderSkipped: true,
     },
     {
       label: 'REM',
       backgroundColor: remColor,
       borderRadius: 6,
-      data: [-0.21, -0.22, -0.28, -0.27, -0.22, -0.21, -0.25],
+      data: getRandom(month6.length ,-3, 8),
       borderSkipped: true,
     },
     {
       label: 'Core',
       backgroundColor: coreColor,
       borderRadius: 6,
-      data: [-0.22, -0.21, -0.25, -0.22, -0.23, -0.18, -0.25],
+      data: getRandom(month6.length ,-3, 5),
       borderSkipped: true,
     },
 
@@ -180,63 +170,63 @@ export const datasets = () => ({
       label: 'REM',
       backgroundColor: remColor,
       borderRadius: 6,
-      data: [-0.11, -0.12, -0.14, -0.17, -0.18, -0.19, -0.1],
+      data: getRandom(month6.length ,-2, 8),
       borderSkipped: true,
     },
     {
       label: 'Core',
       backgroundColor: coreColor,
       borderRadius: 6,
-      data: [-0.13, -0.12, -0.13, -0.14, -0.15, -0.12, -0.1],
+      data: getRandom(month6.length ,-2, 8),
       borderSkipped: true,
     },
     {
       label: 'REM',
       backgroundColor: remColor,
       borderRadius: 6,
-      data: [-0.1, -0.16, -0.18, -0.13, -0.12, -0.11, -0.15],
+      data: getRandom(month6.length ,-1, 8),
       borderSkipped: true,
     },
     {
       label: 'Core',
       backgroundColor: coreColor,
       borderRadius: 6,
-      data: [-0.14, -0.15, -0.16, -0.12, -0.11, -0.12, -0.1],
+      data: getRandom(month6.length ,-1, 8),
       borderSkipped: true,
     },
     {
       label: 'Deep',
       backgroundColor: deepColor,
       borderRadius: 6,
-      data: [-0.13, -0.12, -0.14, -0.17, -0.16, -0.15, -0.1],
+      data: getRandom(month6.length ,-1, 10),
       borderSkipped: true,
     },
     {
       label: 'Core',
       backgroundColor: coreColor,
       borderRadius: 6,
-      data: [-0.11, -0.15, -0.12, -0.13, -0.15, -0.14, -0.1],
+      data: getRandom(month6.length ,-1, 4),
       borderSkipped: true,
     },
     {
       label: 'REM',
       backgroundColor: remColor,
       borderRadius: 6,
-      data: [-0.17, -0.19, -0.12, -0.25, -0.2, -0.21, -0.15],
+      data: getRandom(month6.length ,-1, 4),
       borderSkipped: true,
     },
     {
       label: 'Core',
       backgroundColor: coreColor,
       borderRadius: 6,
-      data: [-0.14, -0.12, -0.14, -0.12, -0.11, -0.13, -0.1],
+      data: getRandom(month6.length ,-1, 8),
       borderSkipped: true,
     },
     {
       label: 'REM',
       backgroundColor: remColor,
       borderRadius: 6,
-      data: [-0.13, -0.15, -0.26, -0.22, -0.16, -0.19, -0.1],
+      data: getRandom(month6.length ,-1, 4),
       borderSkipped: true,
     },
   ]
@@ -281,25 +271,31 @@ export const options = {
             th.style.letterSpacing = '-0.5px'
 
             let newTitle: string = ""
-            if (title === "Mon"){
-              newTitle = "Monday"
-            } else if (title ==="Tue"){
-              newTitle = "Tuesday"
-            } else if (title ==="Wed"){
-              newTitle = "Wednesday"
-            } else if (title ==="Thu"){
-              newTitle = "Thursday"
-            } else if (title ==="Fri"){
-              newTitle = "Friday"
-            } else if (title ==="Sat"){
-              newTitle = "Saturday" 
-            } else if (title ==="Sun"){
-              newTitle = "Sunday"
+            if (title === monthArray[0]){
+              newTitle = "January"
+            } else if (title === monthArray[1]){
+              newTitle = "February"
+            } else if (title === monthArray[2]){
+              newTitle = "March"
+            } else if (title === monthArray[3]){
+              newTitle = "April"
+            } else if (title === monthArray[4]){
+              newTitle = "May"
+            } else if (title === monthArray[5]){
+              newTitle = "June" 
+            } else if (title === monthArray[6]){
+              newTitle = "July"
+            } else if (title === monthArray[7]){
+              newTitle = "August"
+            } else if (title === monthArray[8]){
+              newTitle = "September"
+            } else if (title === monthArray[9]){
+              newTitle = "October"
+            } else if (title === monthArray[10]){
+              newTitle = "November"
+            } else if (title === monthArray[11]){
+              newTitle = "December"
             } 
-            if (title == week[week.length-1]){
-              newTitle = "Today"
-            }
-
             const text = document.createTextNode(newTitle)
             th.appendChild(text);
             tr.appendChild(th);
@@ -412,7 +408,7 @@ const getOrCreateTooltip = (chart: any): HTMLElement => {
     tooltipEl.style.position = 'absolute'
     tooltipEl.style.transform = 'translate(-70%, -100%)'
     tooltipEl.style.transition = 'all .1s ease'
-    tooltipEl.style.width = '5rem'
+    tooltipEl.style.width = '5.5 rem'
 
     const table = document.createElement('table')
     table.style.margin = '0px'

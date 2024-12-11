@@ -8,7 +8,7 @@ for (let i: number = 0; i < week.length-1; i++) {
   let random: number[] = [getRandomNumber(2, 3),getRandomNumber(4, 5)]
   array2.push(random)
 }
-array2.push([Math.min(...arrayToday()), Math.max(...arrayToday())])
+if(arrayToday().length>0) array2.push([Math.min(...arrayToday()), Math.max(...arrayToday())])
 
 const tupleArray: (number | [number, number] | null)[] = array2.map(subArray => {
   if (subArray.length === 2) {
