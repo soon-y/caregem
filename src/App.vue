@@ -37,7 +37,14 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
   <RouterView />
 </template>
 
-<style scoped>
+<style>
+.container {
+  width: calc(100vw - 10rem);
+  height: 100vh;
+  position: relative;
+  left: 10rem;
+}
+
 nav {
   position: fixed;
   height: 100vh;
