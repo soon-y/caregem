@@ -14,7 +14,6 @@ import {
 } from 'chart.js'
 import type { ChartData } from 'chart.js'
 import { Bar } from 'vue-chartjs'
-import { Line } from 'vue-chartjs'
 import * as heartWeek from '../chart/heartWeek'
 import * as heartMonth from '../chart/heartMonth'
 import * as heartMonth6 from '../chart/heartMonth6'
@@ -28,8 +27,10 @@ import * as speedMonth from '../chart/speedMonth'
 import * as speedMonth6 from '../chart/speedMonth6'
 import * as speedYear from '../chart/speedYear'
 import * as speedToday from '../chart/speedToday'
-
-import * as sleepToday from '../chart/sleepToday'
+import * as sleepWeek from '../chart/sleepWeek'
+import * as sleepMonth from '../chart/sleepMonth'
+import * as sleepMonth6 from '../chart/sleepMonth6'
+import * as sleepYear from '../chart/sleepYear'
 
 ChartJS.register(Title, Tooltip, Legend, PointElement, LineElement, BarElement, CategoryScale, LinearScale)
 
@@ -46,11 +47,10 @@ const optionsSpeedWeek = speedWeek.options
 const optionsSpeedMonth = speedMonth.options
 const optionsSpeedMonth6 = speedMonth6.options
 const optionsSpeedYear = speedYear.options
-
-
-const optionsSleep = sleepToday.options
-
-
+const optionsSleepWeek = sleepWeek.options
+const optionsSleepMonth = sleepMonth.options
+const optionsSleepMonth6 = sleepMonth6.options
+const optionsSleepYear = sleepYear.options
 
 const dataHeartWeek = ref<ChartData<'bar'>>({ datasets: [] })
 const dataHeartMonth = ref<ChartData<'bar'>>({ datasets: [] })
@@ -64,8 +64,10 @@ const dataSpeedWeek = ref<ChartData<'bar'>>({ datasets: [] })
 const dataSpeedMonth = ref<ChartData<'bar'>>({ datasets: [] })
 const dataSpeedMonth6 = ref<ChartData<'bar'>>({ datasets: [] })
 const dataSpeedYear = ref<ChartData<'bar'>>({ datasets: [] })
-
-const dataSleep = ref<ChartData<'line'>>({ datasets: [] })
+const dataSleepWeek = ref<ChartData<'bar'>>({ datasets: [] })
+const dataSleepMonth = ref<ChartData<'bar'>>({ datasets: [] })
+const dataSleepMonth6 = ref<ChartData<'bar'>>({ datasets: [] })
+const dataSleepYear = ref<ChartData<'bar'>>({ datasets: [] })
 
 const arrayHeartWeek = heartWeek.array()
 const arrayHeartMonth = heartMonth.array()
@@ -75,7 +77,6 @@ const arraySpeedWeek = speedWeek.array()
 const arraySpeedMonth = speedMonth.array()
 const arraySpeedMonth6 = speedMonth6.array()
 const arraySpeedYear = speedYear.array()
-const arraySpeed = speedToday.array()
 
 let myStyles = {
   height: window.innerWidth/window.innerHeight > 1? `calc(100vh - 14rem)` :  `calc(100vh - 25rem)`,
@@ -100,8 +101,10 @@ onMounted(() => {
   dataSpeedMonth.value = speedMonth.datasets()
   dataSpeedMonth6.value = speedMonth6.datasets()
   dataSpeedYear.value = speedYear.datasets()
-
-  dataSleep.value = sleepToday.datasets()
+  dataSleepWeek.value = sleepWeek.datasets()
+  dataSleepMonth.value = sleepMonth.datasets()
+  dataSleepMonth6.value = sleepMonth6.datasets()
+  dataSleepYear.value = sleepYear.datasets()
   dataMounted = true
 
   setInterval(() => {
@@ -342,15 +345,15 @@ onMounted(() => {
             <table class="infoComp"><tbody><tr><th>
               <p class="head">Latest <br> <span class="unit">km/h</span></p></th>
             <td>
-              <p class="value person-walking-dashed-line-arrow-right">{{ arraySpeed[arraySpeed.length-1] > 0 ? (arraySpeed[arraySpeed.length-1]).toFixed(1) : 0 }}</p>
+              <p class="value person-walking-dashed-line-arrow-right">{{ speedToday.latest }}</p>
             </td></tr></tbody></table>
             <table class="infoComp"><tbody><tr><th>
-              <p class="head">Highest <br> <span class="unit">km/h</span></p></th>
+              <p class="head">Highest <br> <span class="unit">avg. km/h</span></p></th>
             <td>
               <p class="value">{{ Math.max(...arraySpeedWeek).toFixed(1) }}</p>
             </td></tr></tbody></table>
             <table class="infoComp"><tbody><tr><th>
-              <p class="head">Lowest <br> <span class="unit">km/h</span></p></th>
+              <p class="head">Lowest <br> <span class="unit">avg. km/h</span></p></th>
             <td>
               <p class="value">{{ Math.min(...arraySpeedWeek).toFixed(1) }}</p>
             </td></tr></tbody></table>
@@ -369,15 +372,15 @@ onMounted(() => {
             <table class="infoComp"><tbody><tr><th>
               <p class="head">Latest <br> <span class="unit">km/h</span></p></th>
             <td>
-              <p class="value person-walking-dashed-line-arrow-right">{{ arraySpeed[arraySpeed.length-1] > 0 ? (arraySpeed[arraySpeed.length-1]).toFixed(1) : 0 }}</p>
+              <p class="value person-walking-dashed-line-arrow-right">{{ speedToday.latest }}</p>
             </td></tr></tbody></table>
             <table class="infoComp"><tbody><tr><th>
-              <p class="head">Highest <br> <span class="unit">km/h</span></p></th>
+              <p class="head">Highest <br> <span class="unit">avg. km/h</span></p></th>
             <td>
               <p class="value">{{ Math.max(...arraySpeedMonth).toFixed(1) }}</p>
             </td></tr></tbody></table>
             <table class="infoComp"><tbody><tr><th>
-              <p class="head">Lowest <br> <span class="unit">km/h</span></p></th>
+              <p class="head">Lowest <br> <span class="unit">avg. km/h</span></p></th>
             <td>
               <p class="value">{{ Math.min(...arraySpeedMonth).toFixed(1) }}</p>
             </td></tr></tbody></table>
@@ -396,15 +399,15 @@ onMounted(() => {
             <table class="infoComp"><tbody><tr><th>
               <p class="head">Latest <br> <span class="unit">km/h</span></p></th>
             <td>
-              <p class="value person-walking-dashed-line-arrow-right">{{ arraySpeed[arraySpeed.length-1] > 0 ? (arraySpeed[arraySpeed.length-1]).toFixed(1) : 0 }}</p>
+              <p class="value person-walking-dashed-line-arrow-right">{{ speedToday.latest}}</p>
             </td></tr></tbody></table>
             <table class="infoComp"><tbody><tr><th>
-              <p class="head">Highest <br> <span class="unit">km/h</span></p></th>
+              <p class="head">Highest <br> <span class="unit">avg. km/h</span></p></th>
             <td>
               <p class="value">{{ Math.max(...arraySpeedMonth6).toFixed(1) }}</p>
             </td></tr></tbody></table>
             <table class="infoComp"><tbody><tr><th>
-              <p class="head">Lowest <br> <span class="unit">km/h</span></p></th>
+              <p class="head">Lowest <br> <span class="unit">avg. km/h</span></p></th>
             <td>
               <p class="value">{{ Math.min(...arraySpeedMonth6).toFixed(1) }}</p>
             </td></tr></tbody></table>
@@ -423,15 +426,15 @@ onMounted(() => {
             <table class="infoComp"><tbody><tr><th>
               <p class="head">Latest <br> <span class="unit">km/h</span></p></th>
             <td>
-              <p class="value person-walking-dashed-line-arrow-right">{{ arraySpeed[arraySpeed.length-1] > 0 ? (arraySpeed[arraySpeed.length-1]).toFixed(1) : 0 }}</p>
+              <p class="value person-walking-dashed-line-arrow-right">{{ speedToday.latest }}</p>
             </td></tr></tbody></table>
             <table class="infoComp"><tbody><tr><th>
-              <p class="head">Highest <br> <span class="unit">km/h</span></p></th>
+              <p class="head">Highest <br> <span class="unit">avg. km/h</span></p></th>
             <td>
               <p class="value">{{ Math.max(...arraySpeedYear).toFixed(1) }}</p>
             </td></tr></tbody></table>
             <table class="infoComp"><tbody><tr><th>
-              <p class="head">Lowest <br> <span class="unit">km/h</span></p></th>
+              <p class="head">Lowest <br> <span class="unit">avg. km/h</span></p></th>
             <td>
               <p class="value">{{ Math.min(...arraySpeedYear).toFixed(1) }}</p>
             </td></tr></tbody></table>
@@ -448,30 +451,113 @@ onMounted(() => {
       </Tab>
       <Tab title="bed">
         <Slider v-model="sliderSleep" class="sliderWrapper" />
-        <div class="infoContainer" v-if="dataMounted">
-          <table class="infoComp"><tbody><tr><th>
-            <p class="head">Total <br> <span class="unit">hour</span></p></th>
-          <td>
-            <p class="value bed">{{ sleepToday.totalHour +":0"+ sleepToday.totalMins }}</p>
-          </td></tr></tbody></table>
-          <table class="infoComp"><tbody><tr><th>
-            <p class="head">REM <br> <span class="unit">hour</span></p></th>
-          <td>
-            <p class="value">{{ sleepToday.remHour +":"+ sleepToday.remMins }}</p>
-          </td></tr></tbody></table>
-          <table class="infoComp"><tbody><tr><th>
-            <p class="head">Core <br> <span class="unit">hour</span></p></th>
-          <td>
-            <p class="value">{{ sleepToday.coreHour +":"+ sleepToday.coreMins }}</p>
-          </td></tr></tbody></table>
-          <table class="infoComp"><tbody><tr><th>
-            <p class="head">Deep <br> <span class="unit">hour</span></p></th>
-          <td>
-            <p class="value">{{ "0:" + sleepToday.deepMins }}</p>
-          </td></tr></tbody></table>
+        <div v-if="sliderSleep === 0">
+          <div class="infoContainer" v-if="dataMounted">
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Total <br> <span class="unit">hour</span></p></th>
+            <td>
+              <p class="value bed">{{ sleepWeek.awakeHour +":"+ sleepWeek.awakeMins }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">REM <br> <span class="unit">hour</span></p></th>
+            <td>
+              <p class="value">{{ sleepWeek.remHour +":"+ sleepWeek.remMins }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Core <br> <span class="unit">hour</span></p></th>
+            <td>
+              <p class="value">{{ sleepWeek.coreHour +":"+ sleepWeek.coreMins }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Deep <br> <span class="unit">hour</span></p></th>
+            <td>
+              <p class="value">{{ "0:" + sleepWeek.deepMins }}</p>
+            </td></tr></tbody></table>
+          </div>
+          <div class="graph">
+            <Bar :data="dataSleepWeek" :options="optionsSleepWeek" :style="myStyles"/>
+          </div>
         </div>
-        <div class="graph">
-          <Line :data="dataSleep" :options="optionsSleep" :style="myStyles"/>
+        <div v-if="sliderSleep === 1">
+          <div class="infoContainer" v-if="dataMounted">
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Total <br> <span class="unit">hour</span></p></th>
+            <td>
+              <p class="value bed">{{ sleepMonth.awakeHour +":"+ sleepMonth.awakeMins }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">REM <br> <span class="unit">hour</span></p></th>
+            <td>
+              <p class="value">{{ sleepMonth.remHour +":"+ sleepMonth.remMins }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Core <br> <span class="unit">hour</span></p></th>
+            <td>
+              <p class="value">{{ sleepMonth.coreHour +":"+ sleepMonth.coreMins }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Deep <br> <span class="unit">hour</span></p></th>
+            <td>
+              <p class="value">{{ "0:" + sleepMonth.deepMins }}</p>
+            </td></tr></tbody></table>
+          </div>
+          <div class="graph">
+            <Bar :data="dataSleepMonth" :options="optionsSleepMonth" :style="myStyles"/>
+          </div>
+        </div>
+        <div v-if="sliderSleep === 2">
+          <div class="infoContainer" v-if="dataMounted">
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Total <br> <span class="unit">hour</span></p></th>
+            <td>
+              <p class="value bed">{{ sleepMonth6.awakeHour +":"+ sleepMonth6.awakeMins }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">REM <br> <span class="unit">hour</span></p></th>
+            <td>
+              <p class="value">{{ sleepMonth6.remHour +":"+ sleepMonth6.remMins }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Core <br> <span class="unit">hour</span></p></th>
+            <td>
+              <p class="value">{{ sleepMonth6.coreHour +":"+ sleepMonth6.coreMins }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Deep <br> <span class="unit">hour</span></p></th>
+            <td>
+              <p class="value">{{ "0:" + sleepMonth6.deepMins }}</p>
+            </td></tr></tbody></table>
+          </div>
+          <div class="graph">
+            <Bar :data="dataSleepMonth6" :options="optionsSleepMonth6" :style="myStyles"/>
+          </div>
+        </div>
+        <div v-if="sliderSleep === 3">
+          <div class="infoContainer" v-if="dataMounted">
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Total <br> <span class="unit">hour</span></p></th>
+            <td>
+              <p class="value bed">{{ sleepYear.awakeHour +":"+ sleepYear.awakeMins }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">REM <br> <span class="unit">hour</span></p></th>
+            <td>
+              <p class="value">{{ sleepYear.remHour +":"+ sleepYear.remMins }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Core <br> <span class="unit">hour</span></p></th>
+            <td>
+              <p class="value">{{ sleepYear.coreHour +":"+ sleepYear.coreMins }}</p>
+            </td></tr></tbody></table>
+            <table class="infoComp"><tbody><tr><th>
+              <p class="head">Deep <br> <span class="unit">hour</span></p></th>
+            <td>
+              <p class="value">{{ "0:" + sleepYear.deepMins }}</p>
+            </td></tr></tbody></table>
+          </div>
+          <div class="graph">
+            <Bar :data="dataSleepYear" :options="optionsSleepYear" :style="myStyles"/>
+          </div>
         </div>
       </Tab>
     </Tabs>    
@@ -480,13 +566,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.container {
-  width: calc(100vw - 10rem);
-  height: 100vh;
-  position: relative;
-  left: 10rem;
-}
-
 .sliderWrapper {
   width: calc(100% - 1.5rem);
   position: absolute;
