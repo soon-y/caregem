@@ -118,7 +118,7 @@ onMounted(() => {
           <table class="infoComp"><tbody><tr><th>
             <p class="head">Latest <br> <span class="unit">km/h</span></p></th>
           <td>
-            <p class="value person-walking-dashed-line-arrow-right">{{ arraySpeed[arraySpeed.length-1] > 0 ? (arraySpeed[arraySpeed.length-1]).toFixed(1) : 0 }}</p>
+            <p class="value person-walking-dashed-line-arrow-right">{{ speedToday.latest }}</p>
           </td></tr></tbody></table>
           <table class="infoComp"><tbody><tr><th>
             <p class="head">Highest <br> <span class="unit">km/h</span></p></th>
@@ -173,13 +173,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.container {
-  width: calc(100vw - 10rem);
-  height: 100vh;
-  position: relative;
-  left: 10rem;
-}
-
 .infoContainer {
   display: grid;
   width: 100%;
