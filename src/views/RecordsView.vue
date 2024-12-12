@@ -79,7 +79,7 @@ const arraySpeedMonth6 = speedMonth6.array()
 const arraySpeedYear = speedYear.array()
 
 let myStyles = {
-  height: window.innerWidth/window.innerHeight > 1? `calc(100vh - 14rem)` :  `calc(100vh - 25rem)`,
+  height: window.innerWidth/window.innerHeight > 1? `calc(100vh - 14rem)` :  `calc(100vh - 24rem)`,
 }
 
 let currentBPM = ref(arrayHeartWeek[arrayHeartWeek.length-1])
@@ -578,7 +578,7 @@ onMounted(() => {
   display: grid;
   width: 25%;
   grid-template-rows: repeat(4, minmax(0, 1fr));
-  margin: 0.6rem 0
+  margin: 0.6rem 0;
 }
 
 .infoComp {
@@ -650,8 +650,9 @@ onMounted(() => {
   .infoContainer{
     grid-template-columns: repeat(2, minmax(0, 1fr));
     left: 0;
-    top: 39rem;
+    top: calc(100vh - 15.6rem);
     width: 100%;
+    height: auto;
   }
 
   .infoComp th {
