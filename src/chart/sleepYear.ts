@@ -77,7 +77,7 @@ export const datasets = () => ({
       label: 'REM',
       backgroundColor: remColor,
       borderRadius: 6,
-      data: getRandom(year.length ,0, 8),
+      data: getRandom(year.length ,0, 7),
       borderSkipped: true,
     },
 
@@ -127,7 +127,7 @@ export const datasets = () => ({
       label: 'Deep',
       backgroundColor: deepColor,
       borderRadius: 6,
-      data: getRandom(year.length ,-2, 10),
+      data: getRandom(year.length ,-2, 8),
       borderSkipped: true,
     },
     {
@@ -148,7 +148,7 @@ export const datasets = () => ({
       label: 'Awake',
       backgroundColor: awakeColor,
       borderRadius: 6,
-      data: getRandom(year.length ,-1, 10),
+      data: getRandom(year.length ,-1, 8),
       borderSkipped: true,
     },
     {
@@ -198,7 +198,7 @@ export const datasets = () => ({
       label: 'Deep',
       backgroundColor: deepColor,
       borderRadius: 6,
-      data: getRandom(year.length ,-1, 10),
+      data: getRandom(year.length ,-1, 8),
       borderSkipped: true,
     },
     {

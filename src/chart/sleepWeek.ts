@@ -45,7 +45,7 @@ export const datasets = () => ({
       label: 'Deep',
       backgroundColor: deepColor,
       borderRadius: 6,
-      data: [0.2, 0.3, 0.1, 0.2, 0.1, 0.15, 0.1,],
+      data: [0.17, 0.16, 0.14, 0.13, 0.14, 0.15, 0.1,],
       borderSkipped: true,
     },
     {
@@ -59,7 +59,7 @@ export const datasets = () => ({
       label: 'Deep',
       backgroundColor: deepColor,
       borderRadius: 6,
-      data: [0.15, 0.1, 0.1, 0.2, 0.1, 0.15, 0.1,],
+      data: [0.15, 0.12, 0.13, 0.14, 0.11, 0.15, 0.1,],
       borderSkipped: true,
     },
     {
