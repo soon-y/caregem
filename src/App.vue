@@ -79,6 +79,16 @@ nav a.router-link-exact-active:hover {
 }
 
 @media screen and (max-aspect-ratio: 1) {
+  .container {
+    width: 100vw;
+    content: '';
+    position: fixed;
+    background-color: var(--line-color);
+    z-index: 1;
+    height: calc(100vh - 4rem);
+    left: 0;
+  }
+
   nav {
     padding: 0.6rem 0 ;
     bottom: 0;
