@@ -1,4 +1,4 @@
-import { week } from './global_label'
+import { getRandomNumber, getOrCreateTooltip, week } from './global_label'
 import { array as arrayToday } from './heartToday'
 
 const array2: number[][] = [];
@@ -25,10 +25,6 @@ export const array = () => {
     }
   }
   return arrayNum
-}
-
-export function getRandomNumber(min: number, max: number): number {
-  return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
 export const datasets = () => ({
@@ -59,10 +55,6 @@ export const options = {
         const {chart, tooltip} = context
         const tooltipEl = getOrCreateTooltip(chart)
         const lineHeight: string  = '18px'
-
-        if (tooltip.opacity === 0) {
-          tooltipEl.style.opacity = '1'
-        }
 
         // Set Text
         if (tooltip.body) {
@@ -198,28 +190,4 @@ export const options = {
       },
     },
   }
-}
-
-const getOrCreateTooltip = (chart: any): HTMLElement => {
-  let tooltipEl = chart.canvas.parentNode.querySelector('div')
-
-  if (!tooltipEl) {
-    tooltipEl = document.createElement('div')
-    tooltipEl.style.background = 'rgba(200,200,200,0.3)'
-    tooltipEl.style.borderRadius = '10px'
-    tooltipEl.style.color = 'black'
-    tooltipEl.style.opacity = 1
-    tooltipEl.style.pointerEvents = 'none'
-    tooltipEl.style.position = 'absolute'
-    tooltipEl.style.transform = 'translate(-70%, -100%)'
-    tooltipEl.style.transition = 'all .1s ease'
-    tooltipEl.style.width = '6.9rem'
-
-    const table = document.createElement('table')
-    table.style.margin = '0px'
-
-    tooltipEl.appendChild(table)
-    chart.canvas.parentNode.appendChild(tooltipEl)
-  }
-  return tooltipEl
 }

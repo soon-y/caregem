@@ -20,6 +20,7 @@ import * as heartToday from '../chart/heartToday'
 import * as stepsToday from '../chart/stepsToday'
 import * as speedToday from '../chart/speedToday'
 import * as sleepToday from '../chart/sleepToday'
+import { getRandomNumber } from '../chart/global_label'
 
 ChartJS.register(Title, Tooltip, Legend, PointElement, LineElement, BarElement, CategoryScale, LinearScale)
 
@@ -49,7 +50,7 @@ onMounted(() => {
   dataMounted = true
 
   setInterval(() => {
-    currentBPM.value = heartToday.getRandomNumber(arrayHeart[arrayHeart.length-2],arrayHeart[arrayHeart.length-1])
+    currentBPM.value = getRandomNumber(arrayHeart[arrayHeart.length-2],arrayHeart[arrayHeart.length-1])
   }, 5000)
 })
 
@@ -95,8 +96,7 @@ onMounted(() => {
           <table class="infoComp"><tbody><tr><th>
             <p class="head">Climbed <br> <span class="unit">floor</span></p></th>
           <td>
-            <p class="value">{{ stepsToday.totalValue > 100 ? stepsToday.getRandomNumber(1,10) : 0 }}</p>
-            
+            <p class="value">{{ stepsToday.totalValue > 100 ? stepsToday.climbed : 0 }}</p>   
           </td></tr></tbody></table>
           <table class="infoComp"><tbody><tr><th>
             <p class="head">Distance <br> <span class="unit">km</span></p></th>

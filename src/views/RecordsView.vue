@@ -31,6 +31,7 @@ import * as sleepWeek from '../chart/sleepWeek'
 import * as sleepMonth from '../chart/sleepMonth'
 import * as sleepMonth6 from '../chart/sleepMonth6'
 import * as sleepYear from '../chart/sleepYear'
+import { getRandomNumber } from '../chart/global_label'
 
 ChartJS.register(Title, Tooltip, Legend, PointElement, LineElement, BarElement, CategoryScale, LinearScale)
 
@@ -108,7 +109,7 @@ onMounted(() => {
   dataMounted = true
 
   setInterval(() => {
-    currentBPM.value = heartWeek.getRandomNumber(arrayHeartWeek[arrayHeartWeek.length-2],arrayHeartWeek[arrayHeartWeek.length-1])
+    currentBPM.value = getRandomNumber(arrayHeartWeek[arrayHeartWeek.length-2],arrayHeartWeek[arrayHeartWeek.length-1])
   }, 5000)
 })
 </script>

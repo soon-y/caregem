@@ -1,4 +1,4 @@
-import { year, monthArray } from './global_label'
+import { getRandomNumber, getOrCreateTooltip, year, monthArray } from './global_label'
 import { array as arrayMonth6 } from './stepsMonth6'
 
 const array: number[] = [];
@@ -11,10 +11,6 @@ for (let i: number = 0; i < year.length/2; i++) {
 
 for (let i: number = 0; i < year.length/2; i++) {
   array.push(arrayMonth6[i])
-}
-
-export function getRandomNumber(min: number, max: number): number {
-  return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
 export const avgValue: number = Math.floor(array.reduce((a:number, b:number) => a+b, 0 )/array.length)
@@ -51,12 +47,6 @@ export const options = {
         const {chart, tooltip} = context
         const tooltipEl = getOrCreateTooltip(chart)
         const lineHeight: string  = '18px'
-
-        // Hide if no tooltip
-        // if (tooltip.opacity === 0) {
-        //   tooltipEl.style.opacity = '0'
-        //   return
-        // }
 
         // Set Text
         if (tooltip.body) {
@@ -195,28 +185,4 @@ export const options = {
       },
     }
   }
-}
-
-const getOrCreateTooltip = (chart: any): HTMLElement => {
-  let tooltipEl = chart.canvas.parentNode.querySelector('div')
-
-  if (!tooltipEl) {
-    tooltipEl = document.createElement('div')
-    tooltipEl.style.background = 'rgba(200,200,200,0.3)'
-    tooltipEl.style.borderRadius = '10px'
-    tooltipEl.style.color = 'black'
-    tooltipEl.style.opacity = 1
-    tooltipEl.style.pointerEvents = 'none'
-    tooltipEl.style.position = 'absolute'
-    tooltipEl.style.transform = 'translate(-70%, -100%)'
-    tooltipEl.style.transition = 'all .1s ease'
-    tooltipEl.style.width = '5.5rem'
-
-    const table = document.createElement('table')
-    table.style.margin = '0px'
-
-    tooltipEl.appendChild(table)
-    chart.canvas.parentNode.appendChild(tooltipEl)
-  }
-  return tooltipEl
 }

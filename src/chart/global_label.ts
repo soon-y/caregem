@@ -2,7 +2,6 @@ export const awakeColor: string = 'rgb(255, 200, 0)'
 export const remColor: string = '#bc7cff'
 export const coreColor: string = '#7d00ff'
 export const deepColor: string = '#4a0493'
-
 export const date: number = new Date().getDate()
 export const weekNum: number = new Date().getDay()
 export const monthNum: number = new Date().getMonth()
@@ -98,4 +97,32 @@ export function getRandom(count: number, min: number, divide: number): number[] 
     array.push(num)
   }
   return array
+}
+
+export const getOrCreateTooltip = (chart: any): HTMLElement => {
+  let tooltipEl = chart.canvas.parentNode.querySelector('div')
+
+  if (!tooltipEl) {
+    tooltipEl = document.createElement('div')
+    tooltipEl.style.background = 'rgba(200,200,200,0.3)'
+    tooltipEl.style.borderRadius = '10px'
+    tooltipEl.style.color = 'black'
+    tooltipEl.style.opacity = 1
+    tooltipEl.style.pointerEvents = 'none'
+    tooltipEl.style.position = 'absolute'
+    tooltipEl.style.transform = 'translate(-70%, -100%)'
+    tooltipEl.style.transition = 'all .1s ease'
+    tooltipEl.style.width = '6.9rem'
+
+    const table = document.createElement('table')
+    table.style.margin = '0px'
+
+    tooltipEl.appendChild(table)
+    chart.canvas.parentNode.appendChild(tooltipEl)
+  }
+  return tooltipEl
+}
+
+export function getRandomNumber(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1) + min);
 }

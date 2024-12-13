@@ -1,4 +1,4 @@
-import { getRandom, year, monthArray, sleepYtime, awakeColor, remColor, coreColor, deepColor } from './global_label'
+import { getRandomNumber, getOrCreateTooltip, getRandom, year, monthArray, sleepYtime, awakeColor, remColor, coreColor, deepColor } from './global_label'
 
 export const array: number[] = [];
 const labelArray: string[] = year
@@ -7,10 +7,6 @@ let numAwake: number = getRandomNumber(400,450)
 let numREM: number = getRandomNumber(100,150)
 let numCore: number = getRandomNumber(250,300)
 let numDeep: number = getRandomNumber(20,30)
-
-export function getRandomNumber(min: number, max: number): number {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
 
 export const awakeHour: number = Math.floor(numAwake/60)
 export const awakeMins: string = (numAwake - awakeHour*60) < 10? "0" + (numAwake - awakeHour*60).toString() : (numAwake - awakeHour*60).toString()
@@ -393,28 +389,4 @@ export const options = {
       },
     }
   }
-}
-
-const getOrCreateTooltip = (chart: any): HTMLElement => {
-  let tooltipEl = chart.canvas.parentNode.querySelector('div')
-
-  if (!tooltipEl) {
-    tooltipEl = document.createElement('div')
-    tooltipEl.style.background = 'rgba(200,200,200,0.3)'
-    tooltipEl.style.borderRadius = '10px'
-    tooltipEl.style.color = 'black'
-    tooltipEl.style.opacity = 1
-    tooltipEl.style.pointerEvents = 'none'
-    tooltipEl.style.position = 'absolute'
-    tooltipEl.style.transform = 'translate(-70%, -100%)'
-    tooltipEl.style.transition = 'all .1s ease'
-    tooltipEl.style.width = '5.5rem'
-
-    const table = document.createElement('table')
-    table.style.margin = '0px'
-
-    tooltipEl.appendChild(table)
-    chart.canvas.parentNode.appendChild(tooltipEl)
-  }
-  return tooltipEl
 }

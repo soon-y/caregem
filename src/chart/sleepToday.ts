@@ -1,11 +1,9 @@
+import { getOrCreateTooltip, awakeColor, remColor, coreColor, deepColor } from './global_label'
+
 export const array: number[] = [];
 const labelArray: string[] = [];
 const sleep: number = 22;
 const awake: number = 5;
-const awakeColor: string = 'rgb(255, 200, 0)'
-const remColor: string = '#bc7cff'
-const coreColor: string = '#7d00ff'
-const deepColor: string = '#4a0493'
 let numAwake: number = 0
 let numREM: number = 0
 let numCore: number = 0
@@ -146,7 +144,7 @@ for (let i: number = 361; i <= 370; i++) {
 
 for (let i: number = 371; i <= 378; i++) {
   let num: number = 2
-numREM++
+  numREM++
   array.push(num) 
 }
 
@@ -164,7 +162,7 @@ for (let i: number = 386; i <= 390; i++) {
 
 for (let i: number = 391; i <= 398; i++) {
   let num: number = 1
-numCore++
+  numCore++
   array.push(num) 
 }
 
@@ -206,10 +204,6 @@ export const coreMins: number = numCore - coreHour*60
 export const deepHour: number = Math.floor(numDeep/60)
 export const deepMins: number = numDeep - deepHour*60
 
-export function getRandomNumber(min: number, max: number): number {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
 export const datasets = () => ({
   labels: labelArray,
   datasets: [
@@ -248,12 +242,6 @@ export const options = {
         const {chart, tooltip} = context
         const tooltipEl = getOrCreateTooltip(chart)
         const lineHeight: string  = '18px'
-
-        // Hide if no tooltip
-        // if (tooltip.opacity === 0) {
-        //   tooltipEl.style.opacity = '0'
-        //   return
-        // }
 
         // Set Text
         if (tooltip.body) {
@@ -387,28 +375,4 @@ export const options = {
       },
     }
   }
-}
-
-const getOrCreateTooltip = (chart: any): HTMLElement => {
-  let tooltipEl = chart.canvas.parentNode.querySelector('div')
-
-  if (!tooltipEl) {
-    tooltipEl = document.createElement('div')
-    tooltipEl.style.background = 'rgba(200,200,200,0.3)'
-    tooltipEl.style.borderRadius = '10px'
-    tooltipEl.style.color = 'black'
-    tooltipEl.style.opacity = 1
-    tooltipEl.style.pointerEvents = 'none'
-    tooltipEl.style.position = 'absolute'
-    tooltipEl.style.transform = 'translate(-70%, -100%)'
-    tooltipEl.style.transition = 'all .1s ease'
-    tooltipEl.style.width = '5rem'
-
-    const table = document.createElement('table')
-    table.style.margin = '0px'
-
-    tooltipEl.appendChild(table)
-    chart.canvas.parentNode.appendChild(tooltipEl)
-  }
-  return tooltipEl
 }
