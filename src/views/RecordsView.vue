@@ -637,20 +637,11 @@ onMounted(() => {
 }
 
 @media screen and (max-aspect-ratio: 1) {
-  .container {
-    width: 100vw;
-    content: '';
-    position: fixed;
-    background-color: var(--line-color);
-    z-index: 1;
-    height: calc(100vh - 4rem);
-    left: 0;
-  }
 
   .infoContainer{
     grid-template-columns: repeat(2, minmax(0, 1fr));
     left: 0;
-    top: calc(100vh - 15.6rem);
+    top: 3rem;
     width: 100%;
     height: auto;
   }
@@ -661,7 +652,7 @@ onMounted(() => {
 
   .graph{
     width: calc(100vw - 2rem);
-    top: 12.5rem;
+    top: 19.2rem;
   }
 }
 </style>
