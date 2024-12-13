@@ -236,16 +236,6 @@ onMounted(() => {
 }
 
 @media screen and (max-aspect-ratio: 1) {
-  .container {
-    width: 100vw;
-    content: '';
-    position: fixed;
-    background-color: var(--line-color);
-    z-index: 1;
-    height: calc(100vh - 4rem);
-    left: 0;
-  }
-
   .infoContainer{
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
