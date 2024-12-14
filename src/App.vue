@@ -1,34 +1,34 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
 </script>
 
 <template>
   <nav>
     <RouterLink to="/">
       <div class="flex">
-        <font-awesome-icon class="navIcon" icon="calendar-day" />
+        <font-awesome-icon class="navIcon navMargin" icon="calendar-day" />
       Today
       </div>
     </RouterLink>
 
-    <RouterLink to="/pills">
+    <RouterLink to="/medications">
       <div class="flex">
         <font-awesome-icon class="navIcon" icon="pills" />
-        Pills
+        Medications
       </div>
     </RouterLink>
 
     <RouterLink to="/records">
       <div class="flex">
-        <font-awesome-icon class="navIcon" icon="chart-column" />
+        <font-awesome-icon class="navIcon navMargin" icon="chart-column" />
         Records
       </div>
     </RouterLink>
 
     <RouterLink to="/account">
       <div class="flex">
-        <font-awesome-icon class="navIcon" icon="chart-column" />
+        <img src="/portrait.jpg" class="navImg" />
         Account
       </div>
     </RouterLink>
@@ -39,10 +39,10 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 <style>
 .container {
-  width: calc(100vw - 10rem);
+  width: calc(100vw - 11.4rem);
   height: 100vh;
   position: relative;
-  left: 10rem;
+  left: 11.4rem;
 }
 
 nav {
@@ -52,16 +52,29 @@ nav {
   grid-template-rows: 3rem 3rem 3rem 3rem;
   padding: 1rem;
   align-items: center;
-  width: 10rem;
+  width: 11.4rem;
   z-index: 100;
-  border-right: 1px solid rgba(239,226,242, 0.5);
-  background-color: rgba(239,226,242,0.1)
+  border-right: 1px solid var(--white-lila-border);
+  background-color: var(--white-lila)
 }
 
 .navIcon{
-  margin-right: 0.4rem;
+  margin-right: 0.5rem;
   font-size: 1.4rem;
-  }
+}
+
+.navMargin{
+  margin-right: 0.7rem;
+}
+
+
+.navImg{
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 1px solid var(--divider-light-1);
+  border-radius: 50%;
+  margin-right: 0.7rem;
+}
 
 nav a {
   display: inline-block;
@@ -77,6 +90,12 @@ nav a.router-link-exact-active {
 nav a.router-link-exact-active:hover {
   background-color: transparent;
 }
+
+.flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+  }
 
 @media screen and (max-aspect-ratio: 1) {
   .container {
@@ -108,13 +127,18 @@ nav a.router-link-exact-active:hover {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-content: center;
   }
 
   .navIcon{
     position: relative;
-    left: 50%;
-    transform: translateX(-50%);
+    margin: auto;
     font-size: 1.4rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .navMargin, .navImg{
+    margin: auto;
     margin-bottom: 0.2rem;
   }
 }
