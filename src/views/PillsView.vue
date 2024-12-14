@@ -9,9 +9,12 @@ import * as medication from '../global_array/medicationInfo'
   <div class="container">
     <div class="boxWrapper">
       <Medication v-for="(name ,index) in medication.name" :key="name"> 
-        <template v-slot:image></template>
+        <template v-slot:image><img v-bind:src="'/pill/' + medication.type[index] + '_' + medication.color[index] +'.png'" 
+          :style="{'background-color': medication.bgColor[index]}" />
+        </template>
         <template v-slot:name> {{ name }} </template>
-        <template v-slot:dose> {{ medication.strength[index] }} </template>
+        <template v-slot:dose> {{ medication.strength[index] + medication.unit[index] }} </template>
+        <template v-slot:interval> {{ medication.interval[index] }} </template>
         <template v-slot:time> {{ medication.time[index] }} </template>
       </Medication>
     </div>
@@ -44,7 +47,6 @@ import * as medication from '../global_array/medicationInfo'
 }
 
 .boxWrapper{
-
   display: grid;
   grid-template-columns: 50% 50%;
   padding: 1rem;
