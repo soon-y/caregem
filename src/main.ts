@@ -13,11 +13,12 @@ import {
   faHeartPulse,
   faBed,
   faShoePrints,
-  faPersonWalkingDashedLineArrowRight 
+  faPersonWalkingDashedLineArrowRight,
+  faChevronRight,
 } from '@fortawesome/free-solid-svg-icons'
 
 /* add each imported icon to the library */
-library.add(faPlus,faCalendarDay,faPills,faChartColumn,faHeartPulse,faBed,faShoePrints,faPersonWalkingDashedLineArrowRight)
+library.add(faChevronRight,faPlus,faCalendarDay,faPills,faChartColumn,faHeartPulse,faBed,faShoePrints,faPersonWalkingDashedLineArrowRight)
 
 const app = createApp(App)
 
