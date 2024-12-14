@@ -1,7 +1,7 @@
 
 <template>
   <div class="container">
-    <h1>This is an accounts page</h1>
+    <h1>height, weight, date</h1>
   </div>
 </template>
 
