@@ -10,8 +10,8 @@ const router = createRouter({
       component: TodayView,
     },
     {
-      path: '/pills',
-      name: 'pill',
+      path: '/medications',
+      name: 'medications',
       component: () => import('../views/PillsView.vue'),
     },
     {
@@ -23,6 +23,11 @@ const router = createRouter({
       path: '/account',
       name: 'account',
       component: () => import('../views/AccountView.vue'),
+    },
+    {
+      path: '/medications/add',
+      name: 'add',
+      component: () => import('../views/AddMedicationView.vue'),
     },
   ],
 })
