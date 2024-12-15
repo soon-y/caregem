@@ -2,7 +2,7 @@ import { today } from './global_label'
 import * as pill from '../global_array/medicationInfo'
 import type { ChartType } from 'chart.js';
 
-const labelArray: (number | [number, number] | null)[] = today
+const labelArray: number[] = today
 const maxInArray: number[] = [
   0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 ];
@@ -24,25 +24,22 @@ let objs: object[] = [{
   data: maxInArray,
 }]
 
-  for (let i: number = 0; i < pill.name.length; i++){
-    let arrayData:number[] = [
-      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-    ];
-    for (let j: number = n; j < n + pill.times[i]; j++){
-      arrayData[pill.pillTime[j]] = pill.application[j]
-    }
-    n = n + pill.times[i]
-  
-    let obj: ChartInterface = {
-      label: pill.name[i],
-      backgroundColor: pill.bgColor[i],
-      data: arrayData,
-    }
-    objs.push(obj)
+for (let i: number = 0; i < pill.name.length; i++){
+  let arrayData:number[] = [
+    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+  ];
+  for (let j: number = n; j < n + pill.times[i]; j++){
+    arrayData[pill.pillTime[j]] = pill.application[j]
   }
+  n = n + pill.times[i]
 
-
-
+  let obj: ChartInterface = {
+    label: pill.name[i],
+    backgroundColor: pill.bgColor[i],
+    data: arrayData,
+  }
+  objs.push(obj)
+}
 
 export const datasets = () => ({
   labels: labelArray,
