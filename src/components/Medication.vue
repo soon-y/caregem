@@ -23,15 +23,16 @@
   background-color: var(--white-lila);
   border-radius: 1rem;
   margin: auto;
+  margin-bottom: 0.8rem;
   padding: 0rem;
   overflow: hidden;
 }
 
 .arrowRight {
   float: right;
-  margin-right: 1.4rem;
+  margin-right: 1rem;
   margin-top: 0.4rem;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   color: rgb(173, 150, 174);
 }
 
