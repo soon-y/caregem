@@ -104,17 +104,6 @@ export default defineComponent({
   position: relative;
 }
 
-/* .tab::before{
-  content: '';
-  background-color: var(--divider-light-1);
-  z-index: 1;
-  position: absolute;
-  inline-size: 1px;
-  block-size: var(--block-size);
-  inset-block-start: 0;
-  inset-inline-start: calc(var(--line-offset) * -1);
-} */
-
 .icon{
   color: var(--divider-light-1);
   font-size: 1.4rem;
@@ -144,7 +133,7 @@ export default defineComponent({
   margin: 0 0.2rem;
   height: calc( var(--height) - 0.6rem);
   position: absolute;
-  top: 0.3rem;
+  top: 0.9rem;
   border-radius: 0.6rem;
   transition-duration: 500ms;
 }
