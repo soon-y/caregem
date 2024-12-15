@@ -40,9 +40,16 @@ import { RouterLink, RouterView } from 'vue-router'
 <style>
 .container {
   width: calc(100vw - 11.4rem);
-  height: 100vh;
+  min-height: 100vh;
   position: relative;
   left: 11.4rem;
+  overflow-y: scroll;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;
+}
+
+.container::-webkit-scrollbar {
+    display: none;
 }
 
 nav {
@@ -116,7 +123,7 @@ nav a.router-link-exact-active:hover {
     text-align: center; 
     grid-template-columns: auto auto auto auto;
     border: none;
-    border-top: 1px solid rgba(239,226,242, 0.5);
+    border-top: 1px solid var(--white-lila-border);
   }
 
   nav a{
