@@ -1,15 +1,43 @@
 <script setup lang="ts">
 import Medication from '../components/Medication.vue'
 import * as medication from '../global_array/medicationInfo'
+import { ref, onMounted } from 'vue'
+import {
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+} from 'chart.js'
+import type { ChartData } from 'chart.js'
+import { Bar } from 'vue-chartjs'
+import * as pillToday from '../chart/pillToday'
 
+ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
+
+const optionsPillToday = pillToday.options
+const dataPillToday = ref<ChartData<'bar'>>({ datasets: [] })
+let myStyles = {
+  height: `30%`,
+}
+
+onMounted(() => {
+  dataPillToday.value = pillToday.datasets()
+  console.log(pillToday.datasets().datasets)
+})
 </script>
 
 
 <template>
   <div class="container">
+    <div class="pillGraph">
+      <Bar :data="dataPillToday" :options="optionsPillToday" :style="myStyles"/>
+    </div>
     <div class="boxWrapper">
       <Medication v-for="(name ,index) in medication.name" :key="name"> 
-        <template v-slot:image><img v-bind:src="'/pill/' + medication.type[index] + '_' + medication.color[index] +'.png'" 
+        <template v-slot:image><img v-bind:src="'/pill/'+ medication.type[index] + '_' + medication.shape[index] + '_' + medication.color[index] +'.png'" 
           :style="{'background-color': medication.bgColor[index]}" />
         </template>
         <template v-slot:name> {{ name }} </template>
@@ -50,7 +78,16 @@ import * as medication from '../global_array/medicationInfo'
   display: grid;
   grid-template-columns: 50% 50%;
   padding: 1rem;
-  margin-bottom: 5rem;
+  margin-bottom: 6rem;
+  margin-top: 5.4rem;
+}
+
+.pillGraph{
+  position: relative;
+  width: calc(100% - 3rem);
+  margin: auto;
+  left:0rem;
+  top: 5.4rem; 
 }
 
 @media screen and (max-aspect-ratio: 1) {
@@ -60,7 +97,6 @@ import * as medication from '../global_array/medicationInfo'
 
   .boxWrapper{
   grid-template-columns: 100%;
-  gap: 0.8rem;
-}
+  }
 }
 </style>
