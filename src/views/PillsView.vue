@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Medication from '../components/Medication.vue'
 import * as medication from '../global_array/medicationInfo'
+import AddMedicationView from './AddMedicationView.vue'
 import { ref, onMounted } from 'vue'
 import {
   Chart as ChartJS,
@@ -23,9 +24,20 @@ let myStyles = {
   height: `30%`,
 }
 
+const addMedicationStyle = ref<{ transform: string }>({
+      transform: 'translate(0, 100%)',
+})
+
+const enableAdd = () => {
+  addMedicationStyle.value = { transform: 'translate(0, 0)' };
+}
+
+const disableAdd = () => {
+  addMedicationStyle.value = { transform: 'translate(0, 100%)' };
+}
+
 onMounted(() => {
   dataPillToday.value = pillToday.datasets()
-  console.log(pillToday.datasets().datasets)
 })
 </script>
 
@@ -47,12 +59,15 @@ onMounted(() => {
       </Medication>
     </div>
 
-    <RouterLink to="/medications/add">
-      <div class="add">
-        <font-awesome-icon icon="fa-plus" class="plusIcon"/>
-      </div>
-    </RouterLink>
+    <div class="add" @click="enableAdd">
+      <font-awesome-icon icon="fa-plus" class="plusIcon"/>
+    </div>
   </div>
+  <AddMedicationView :style = addMedicationStyle>
+    <template v-slot:close>
+      <font-awesome-icon icon="fa-xmark" @click="disableAdd"/>
+    </template>
+  </AddMedicationView>
 </template>
 
 <style scope>
@@ -66,6 +81,7 @@ onMounted(() => {
   bottom: 1rem;
   right: 1rem;
   justify-content: center;
+  z-index: 1;
 }
 
 .plusIcon{
@@ -92,11 +108,11 @@ onMounted(() => {
 
 @media screen and (max-aspect-ratio: 1) {
   .add{
-  bottom: 5rem;
+    bottom: 5rem;
   }
 
   .boxWrapper{
-  grid-template-columns: 100%;
+    grid-template-columns: 100%;
   }
 }
 </style>
