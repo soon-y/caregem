@@ -60,7 +60,7 @@ nav {
   padding: 1rem;
   align-items: center;
   width: 11.4rem;
-  z-index: 100;
+  z-index: 10;
   border-right: 1px solid var(--white-lila-border);
   background-color: var(--white-lila)
 }
