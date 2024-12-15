@@ -1,4 +1,4 @@
-import { getOrCreateTooltip, awakeColor, remColor, coreColor, deepColor } from './global_label'
+import { awakeColor, remColor, coreColor, deepColor } from './global_label'
 
 export const array: number[] = [];
 const labelArray: string[] = [];
@@ -375,4 +375,32 @@ export const options = {
       },
     }
   }
+}
+
+const getOrCreateTooltip = (chart: any): HTMLElement => {
+  let tooltipEl = chart.canvas.parentNode.querySelector('div')
+
+  if (!tooltipEl) {
+    tooltipEl = document.createElement('div')
+    tooltipEl.style.background = 'rgba(200,200,200,0.3)'
+    tooltipEl.style.borderRadius = '10px'
+    tooltipEl.style.color = 'black'
+    tooltipEl.style.opacity = 1
+    tooltipEl.style.pointerEvents = 'none'
+    tooltipEl.style.position = 'absolute'
+    tooltipEl.style.transform = 'translate(-70%, -100%)'
+    tooltipEl.style.transition = 'all .1s ease'
+    tooltipEl.style.width = '4.8rem'
+
+    const table = document.createElement('table')
+    table.style.margin = '0px'
+
+    tooltipEl.appendChild(table)
+    chart.canvas.parentNode.appendChild(tooltipEl)
+  }
+  return tooltipEl
+}
+
+export function getRandomNumber(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1) + min);
 }
