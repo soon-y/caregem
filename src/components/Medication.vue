@@ -14,7 +14,7 @@
 
 <style scope>
 .box{
-  --width: 8rem;
+  --width: 7rem;
 
   display: grid;
   grid-template-columns: var(--width) auto;
