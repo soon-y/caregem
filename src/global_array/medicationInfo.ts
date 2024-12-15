@@ -13,6 +13,6 @@ export const times: number[] = [2, 3]
 export const color: string[] = ["white", "sky"]
 export const bgColor: string[] = ["#6f2982","orange"]
 
-export const types: string[] = ["Capsule", "Tablet", "Liguid", "Topical"]
+export const types: string[] = ["Capsule", "Tablet", "Liquid", "Topical"]
 export const units: string[] = ["mg", "mcg", "g", "ml", "%"]
 export const colors: string[] = ["white", "red", "orange", "blue", "purple"]
