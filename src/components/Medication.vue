@@ -31,7 +31,7 @@
 .arrowRight {
   float: right;
   margin-right: 1rem;
-  margin-top: 0.4rem;
+  margin-top: 0rem;
   font-size: 1.2rem;
   color: rgb(173, 150, 174);
 }
@@ -39,6 +39,7 @@
 .text{
   margin: auto 0;
   margin-left: 1rem;
+  line-height: 1.3rem;
 }
 
 .name {
