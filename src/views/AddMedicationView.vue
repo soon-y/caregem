@@ -2,11 +2,24 @@
 import * as medication from '../global_array/medicationInfo'
 import { ref } from 'vue'
 
-let step = ref(0)
-const selectedType = ref<string>('');
-const selectedUnit = ref<string>('');
-
-console.log(selectedType.value)
+let step = ref<number>(0)
+const selectedName = ref<string | null>(null)
+const selectedStrength = ref<string | null>(null)
+const selectedType = ref<string | null>(null)
+const selectedUnit = ref<string | null>(null)
+const selectedSchedule = ref<string | null>(medication.schedule[0])
+const selectedInterval = ref<string | null>(medication.intervalDays[0])
+const week = ref([
+  { label: 'M', checked: false },
+  { label: 'T', checked: false },
+  { label: 'W', checked: false },
+  { label: 'T', checked: false },
+  { label: 'F', checked: false },
+  { label: 'S', checked: false },
+  { label: 'S', checked: false }, 
+])
+const selectedShapeIndex = ref<number | null>(null)
+const selectedBgIndex = ref<number | null>(null)
 
 const nextStep = () => {
   step.value = step.value + 1;
@@ -16,16 +29,22 @@ const backStep = () => {
   step.value = step.value - 1;
 }
 
-console.log(selectedType.value !== "" )
-
-let buttonStyleType = {
-  backgroundColor: selectedType.value === "" ? 'var(--divider-light-2)' : 'red',
-  color: selectedType.value === "" ? 'var(--divider-light-1)' : 'white'
+const selectShape = (index: number)=> {
+  selectedShapeIndex.value = index
 }
 
-let buttonStyleUnit = {
-  backgroundColor: selectedUnit.value === "" ? 'var(--divider-light-2)' : 'red',
-  color: selectedType.value === "" ? 'var(--divider-light-1)' : 'white'
+const selectBgColor = (index: number)=> {
+  selectedBgIndex.value = index
+}
+
+const transform = (index: number) => {
+  if (index === step.value){
+    return 'translate(0, 0)'
+  } else if (index < step.value){
+    return 'translate(-100%, 0)'
+  } else {
+    return 'translate(100%, 0)'
+  }
 }
 
 </script>
@@ -39,43 +58,200 @@ let buttonStyleUnit = {
     </span>
 
     <div class="form-wrapper">
-      <div>
+      <div class="form" :style="{transform: step === 0 ? 'translate(0, 0)' : 'translate(-100%, 0)'}">
         <p class="inputTitle">Medication Name</p>
-        <input type="text" placeholder="Add Medication Name" />
+        <input type="text" placeholder="Add Medication Name" v-model="selectedName"/>
 
         <p class="inputTitle marginTop">Medication Type</p>
         <div>
           <label v-for="type in medication.types" class="radioSelection radioType">
             <span class="radioLabel">{{type}}</span>
             <input type="radio" :name="'medication_type'" :value="type" v-model="selectedType" >
-            <font-awesome-icon icon="check" class="checkmark"/>
+            <font-awesome-icon icon="check" class="checkmark" v-if="selectedType === type"/>
           </label>
         </div>
-        <button class="button" @click="nextStep" :style="buttonStyleType">Next</button>
+
+        <button class="button" @click="nextStep" :disabled="(selectedName === null) || (selectedType === null)"
+        :style="{
+          backgroundColor: (selectedName === null) || (selectedType === null) ? 'var(--divider-light-2)' : 'var(--main-lila-hell)',
+          color: (selectedName === null) || (selectedType === null) ? 'var(--divider-light-1)' : 'white'
+        }">Next</button>
       </div>
 
-
-
-
-      <div>
-        <p class="inputTitle marginTop">Medication Strength</p>
+      <div class="form" :style="{ transform: transform(1)}">
+        <p class="inputTitle">Medication Strength</p>
         <p class="inputSubtitle">Strength </p>
-        <input type="number" placeholder="Add Strength" />
+        <input type="number" placeholder="Add Strength" v-model="selectedStrength"/>
 
         <p class="inputSubtitle marginTop">Units</p>
         <div>
           <label v-for="unit in medication.units" class="radioSelection radioUnit">
             <span class="radioLabel">{{unit}}</span>
             <input type="radio" :name="'medication_type'" :value="unit" v-model="selectedUnit">
-            <font-awesome-icon icon="check" class="checkmark"/>
+            <font-awesome-icon icon="check" class="checkmark" v-if="selectedUnit === unit"/>
           </label>
         </div>
-        <button class="button" @click="nextStep" :style="buttonStyleUnit">Next</button>
+        <button class="button" @click="nextStep" :disabled="(selectedUnit === null) || (selectedStrength === null)"
+        :style="{
+          backgroundColor: (selectedUnit === null) || (selectedStrength === null) ? 'var(--divider-light-2)' : 'var(--main-lila-hell)',
+          color: (selectedUnit === null) || (selectedStrength === null) ? 'var(--divider-light-1)' : 'white'
+        }">Next</button>
       </div>
 
+      <div class="form" :style="{ transform: transform(2)}">
+        <p class="inputTitle">Set a Schedule</p>
+        <p class="inputSubtitle">When will you take this? </p>
+        <select v-model="selectedSchedule">
+          <option v-for="(item, index) in medication.schedule" :key="index" :value="item">
+            {{ item }}
+          </option>
+        </select>
 
+        <div v-if="selectedSchedule === medication.schedule[1]">
+          <p class="inputSubtitle marginTop">On these days:</p>
+          <div class="week-wrapper">
+            <div v-for="(item, index) in week" :key="index" 
+            :style="{backgroundColor: item.checked ? 'var(--main-lila-hell)' : 'var(--white-lila)'}">
+              <label class="week-label"
+                :for="'week' + index" 
+                :style="{ 
+                  color: item.checked ? 'white' : 'var(--main-lila-dunkel)',
+                }"
+              >
+                {{ item.label }}
+              </label>
+              <input 
+                type="checkbox" 
+                :id="'week' + index" 
+                v-model="item.checked" 
+              />
+            </div>
+          </div>
+        </div>
 
-    </div>
+        <div v-if="selectedSchedule === medication.schedule[2]">
+          <p class="inputSubtitle marginTop">Interval</p>
+          <select v-model="selectedInterval">
+            <option v-for="(item, index) in medication.intervalDays" :key="index" :value="item">
+              {{ item }}
+            </option>
+          </select>
+        </div>
+
+        <p class="inputSubtitle marginTop">At what time</p>
+        <div class="table-wrapper">
+          <table>
+            <tbody>
+              <tr>
+                <td class="align-left">20:00</td>
+                <td class="align-right">1 application</td>
+              </tr>
+            </tbody>
+          </table>
+          add
+        </div>
+
+        <p class="inputSubtitle marginTop">Duration</p>
+        <div class="table-wrapper">
+          <table>
+            <tbody>
+              <tr>
+                <td class="align-left">Start Date</td>
+                <td class="align-left">End Date</td>
+              </tr>
+              <tr>
+                <td class="align-left">Today</td>
+                <td class="align-left">None</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <button class="button" @click="nextStep" :disabled="(selectedUnit === null) || (selectedStrength === null)"
+        :style="{
+          backgroundColor: (selectedUnit === null) || (selectedStrength === null) ? 'var(--divider-light-2)' : 'var(--main-lila-hell)',
+          color: (selectedUnit === null) || (selectedStrength === null) ? 'var(--divider-light-1)' : 'white'
+        }">Next</button>
+      </div> 
+
+      <div class="form" :style="{ transform: transform(3)}">
+        <img v-bind:src="selectedShapeIndex === null ? '/pill/default.png' : '/pill/' + medication.shapeImageNames[selectedShapeIndex] + '.png'" class="default-img"/>
+        <div class="selected-text">{{ selectedName }} <br> {{ selectedType }} </div>
+
+        <p class="inputTitle marginTop">Choose the Shape</p>
+        <div class="image-wrapper">
+          <img v-for="(name, index) in medication.shapeImageNames" :key="index" 
+          :src="'/pill/' + name +'.png'" class="shape-img" 
+          @click="selectShape(index)"
+          :style="{ outline: selectedShapeIndex === index ? '0.4rem solid var(--white-lila-border)' : 'none' }">
+        </div>
+       
+        <button class="button" @click="nextStep" :disabled="( selectedShapeIndex === null)"
+        :style="{
+          backgroundColor: selectedShapeIndex === null ? 'var(--divider-light-2)' : 'var(--main-lila-hell)',
+          color: selectedShapeIndex === null ? 'var(--divider-light-1)' : 'white'
+        }">Next</button>
+        
+      </div> 
+
+      <div class="form" :style="{ transform: transform(4)}">
+        <img v-bind:src="selectedShapeIndex === null ? '/pill/default.png' : '/pill/' + medication.shapeImageNames[selectedShapeIndex] + '.png'" class="default-img"
+        :style="{ backgroundColor: selectedBgIndex === null? 'var(--white-lila-border)' : medication.backgroundColor[selectedBgIndex] }"/>
+        <div class="selected-text">{{ selectedName }} <br> {{ selectedType }} </div>
+
+        <p class="inputTitle marginTop">Choose Colors</p>
+
+        <div v-if="selectedType?.includes('Capsule')">
+          <p class="inputSubtitle marginTop">Left Side</p>
+          <div class="palette-wrapper">
+            <div v-for="(item, index) in medication.chooseColor" :key="index" 
+            class="palette" 
+            :style="{backgroundColor: item }"
+            @click="selectBgColor(index)"
+            ></div>
+          </div>
+
+          <p class="inputSubtitle marginTop">Right Side</p>
+          <div class="palette-wrapper">
+            <div v-for="(item, index) in medication.chooseColor" :key="index" 
+            class="palette" 
+            :style="{backgroundColor: item }"
+            @click="selectBgColor(index)"
+            ></div>
+          </div>
+        </div>
+
+        <div v-if="!(selectedType?.includes('Capsule'))">
+          <p class="inputSubtitle marginTop">Shape Color</p>
+          <div class="palette-wrapper">
+            <div v-for="(item, index) in medication.chooseColor" :key="index" 
+            class="palette" 
+            :style="{backgroundColor: item }"
+            @click="selectBgColor(index)"
+            
+            ></div>
+          </div>
+        </div>
+
+        <p class="inputSubtitle marginTop">Background</p>
+        <div class="palette-wrapper">
+          <div v-for="(item, index) in medication.backgroundColor" :key="index" 
+          class="palette" 
+          @click="selectBgColor(index)"
+          :style="{ 
+            backgroundColor: item,
+            outline: selectedBgIndex === index ? '0.4rem solid var(--white-lila-border)' : 'none'
+             }"></div>
+        </div>
+       
+        <button class="button" @click="nextStep" :disabled="( selectedShapeIndex === null)"
+        :style="{
+          backgroundColor: selectedShapeIndex === null ? 'var(--divider-light-2)' : 'var(--main-lila-hell)',
+          color: selectedShapeIndex === null ? 'var(--divider-light-1)' : 'white'
+        }">Next</button>
+        
+      </div> 
+    </div>     
   </div>
 </template>
 
@@ -99,31 +275,40 @@ let buttonStyleUnit = {
 }
 
 .topIcon{
-  font-size: 1.4rem;
   color: var(--main-lila-hell);
   padding: 0.5rem;
+  position: fixed;
 }
 
 .closeIcon{
-  float: right;
-  margin: 0 0.5rem 0 0;
+  font-size: 1.4rem;
+  right: 0.4rem;
 }
 
 .backIcon{
-  float: left;
-  margin: 0.4rem 0 0 0.4rem;
+  font-size: 1.1rem;
+  left: 0.4rem;
+  top: 0.4rem;
 }
 
 .backIcon span {
-  font-size: 1rem;
-  margin: 0 0 0 0.4rem;
+  margin: 0 0 0 0.2rem;
 }
 
 .form-wrapper {
   margin: auto;
-  width: 50vw;
+  width: 100%;
   text-align: center;
   padding-top: 4rem;
+  overflow: hidden;
+}
+
+.form {
+  transition-duration: 500ms;
+  background-color: white;
+  position: fixed;
+  width: 100%;
+  height: calc(100vh - 4rem);
 }
 
 .inputTitle{
@@ -134,7 +319,7 @@ let buttonStyleUnit = {
 .inputSubtitle{
   font-size: 1rem;
   margin-bottom: 0.4rem;
-  margin-left: 10%;
+  margin-left: 25%;
   text-align: left;
 }
 
@@ -142,29 +327,40 @@ let buttonStyleUnit = {
   margin-top: 2rem;
 }
 
+input[type=text],
+input[type=number],
+.radioSelection,
+select, .button,
+.week-wrapper,
+.table-wrapper,
+.image-wrapper,
+.palette-wrapper{
+  width: 50%;
+  margin: auto;
+}
+
 .radioSelection{
   display: block;
-  width: 80%;
   margin: auto;
-  padding: 0.3rem 0.6rem;
+  padding: 0.4rem 0.6rem;
   background-color: var(--white-lila);
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
   position: relative;
+  text-align: left;
+  border-bottom: 1px solid white;
+  cursor: pointer;
 }
 
 .radioType:first-child,
 .radioUnit:first-child {
   border-radius: 0.8rem 0.8rem 0 0;
-  padding-top: 0.6rem;
+  padding-top: 0.5rem;
 }
 
 .radioType:last-child,
 .radioUnit:last-child {
   border-radius: 0 0 0.8rem .8rem;
-  padding-bottom: 0.6rem;
+  padding-bottom: 0.5rem;
+  border: none;
 }
 
 .checkmark {
@@ -172,36 +368,38 @@ let buttonStyleUnit = {
   margin: auto;
   right: 1rem;
   font-size: 1.2rem;
-
+  color: var(--main-lila-hell)
 }
 
-input[type=radio]:checked ~ .checkmark{
-  display: block;
-}
-
-input[type=radio] {
+input[type=radio],
+input[type=checkbox] {
   opacity: 0;
 }
 
-.radioSelection{
-  text-align: left;
-}
-
 .radioLabel{
-  padding-left: 0.4rem
+  padding-left: 0.4rem;
 }
 
 input[type=text],
-input[type=number] {
+input[type=number],
+select {
   background-color: var(--white-lila);
   border: none;
   border-radius: 0.8rem;
-  width: 80%;
   height: 2.4rem;
   font-size: 1rem;
   padding-left: 1rem;
   padding-right: 1rem;
   outline: none;
+}
+
+select{
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem top 50%;
+  background-size: 0.65rem auto;
+  cursor: pointer;
 }
 
 input[type=text]:focus {
@@ -218,26 +416,133 @@ input[type=text]:focus {
 }
 
 .button {
-  width: 94%;
   height: 2.6rem;
   border: none;
   border-radius: 0.8rem;
   font-size: 1rem;
+  left: 10%;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  cursor: pinter;
+}
+
+.week-wrapper{
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(7, auto);
+  height: 2.6rem;
+  border-radius: 0.8rem;
+  overflow: hidden;
+  position: relative;
+  gap: 1px;
+}
+
+.week-label {
+  position: absolute;
+  top: 50%;
+  transform: translate(-2rem,-50%);
+  padding: 2rem;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.table-wrapper {
+  background-color: var(--white-lila);
+  padding: 0.4rem 0.6rem;
+  border-radius: 0.8rem;
+}
+
+table{
+  width: 100%;
+}
+
+tr {
+  border-bottom: 1px solid white;
+}
+
+td {
+  width: 50%;
+}
+
+.align-left{
+  text-align: left;
+}
+
+.align-right{
+  text-align: right;
+}
+
+.image-wrapper{
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.selected-text{
+  line-height: 1rem;
+  font-size: 0.8rem;
+}
+
+.default-img,
+.shape-img{
+  border-radius: 50%;
+  background-color: var(--white-lila);
+  overflow: hidden;
+}
+
+.shape-img {
+  width: 90%;
+  margin: auto;
+  cursor: pointer;
+
+}
+
+.default-img {
+  width: 10rem;
+}
+
+.palette-wrapper{
+  display: grid;
+  grid-template-columns: repeat(6, auto);
+  gap: 1rem;
+}
+
+.palette {
+  width:50%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  cursor: pointer;
+  margin: auto;
 }
 
 @media screen and (max-aspect-ratio: 1) {
-  .form-wrapper {
-    width: 100vw;
-  }
-
   input[type=text],
   input[type=number],
-  .radioSelection {
-    width: 94%;
+  .radioSelection,
+  .button,
+  select,
+  .week-wrapper,
+  .table-wrapper,
+  .image-wrapper,
+  .palette-wrapper {
+    width: 90%;
+  }
+
+  .button{
+    left: 3%;
   }
 
   .inputSubtitle{
-    margin-left: 3%;
+    margin-left: 6%;
+  }
+
+  .default-img {
+    width: 20%;
+  }
+
+  .palette {
+    width:70%;
   }
 }
 </style>
