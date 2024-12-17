@@ -11,7 +11,7 @@ export const pillTime: number[] = [8, 18, 8, 12, 17]
 export const application: number[] = [1,1,1,1,1]
 export const times: number[] = [2, 3]
 export const color: string[] = ["white", "sky"]
-export const bgColor: string[] = ["#6f2982","#eb962e"]
+export const bgColor: string[] = ["#6f2982","#ff9900"]
 
 export const types: string[] = ["Capsule", "Tablet", "Liquid", "Topical"]
 export const units: string[] = ["mg", "mcg", "g", "ml", "%"]
@@ -20,40 +20,61 @@ export const schedule: string[] = ["Every Day", "On Specific Days of the Week", 
 export const intervalDays: string[] = ["Every Other Day"]
 export const shapeImageNames: string[] = [
   "capsule_white_white",
-  "capsuleBeads_white_white",
+  "capsuleB_white_white",
   "tablet_round_white",
   "tablet_oval_white",
-  "tablet_capsule_white"
-]
-
-export const backgroundColor: string[] = [
-  "#6f2982",
-  "#ac7bb8",
-  "#c290b5",
-  "#b62b2b",
-  "#eb962e",
-  "#b89227",
-  "#fccf00",
-  "#b7e978",
-  "#669a1c",
-  "#1c9a45",
-  "#0895b9",
-  "#527db0",
+  "tablet_ovalC_white"
 ]
 
 export const chooseColor: string[] = [
-  "#f0dcf5",
-  "#bbf0f4",
-  "#c290b5",
-  "#b62b2b",
-  "#eb962e",
+  "#f5f5f5",
+  "#d6d2d8",
+  "#fde261",
+  "#f4e7b0",
+  "#dff4b0",
+  "#63c560",
+  "#b3e9ec",
+  "#4ba5ee",
+  "#ad70bd",
+  "#f6dedd",
+  "#f65750",
+  "#fcb607",
+]
+
+export const backgroundColor: string[] = [
+  "rgb(248, 246, 249)",
+  "#8a808f",
+  "#ffcf00",
   "#b89227",
-  "#fccf00",
-  "#b7e978",
-  "#669a1c",
-  "#1c9a45",
-  "#0895b9",
-  "#527db0",
+  "#bfda07",
+  "#179d14",
+  "#3ed5de",
+  "#0d63a9",
+  "#6f2982",
+  "#d39e9c",
+  "#d30f07",
+  "#ff9900",
+]
+
+export const chooseColorName: string[] = [
+  "white",
+  "gray",
+  "yellow",
+  "salgu",
+  "yellowgreen",
+  "green",
+  "sky",
+  "blue",
+  "lila",
+  "rose",
+  "red",
+  "orange",
+]
+
+export const chooseShape: string[] = [
+  "round",
+  "oval",
+  "ovalC",
 ]
 
 function intervalArray() {
