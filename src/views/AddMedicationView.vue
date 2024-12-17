@@ -20,6 +20,11 @@ const week = ref([
 ])
 const selectedShapeIndex = ref<number | null>(null)
 const selectedBgIndex = ref<number | null>(null)
+const selectedShape = ref<string | null>(null)
+const selectedColorLeft = ref<string | null>(null)
+const selectedColorRight = ref<string | null>(null)
+const selectedColorLeftIndex = ref<number | null>(null)
+const selectedColorRightIndex = ref<number | null>(null)
 
 const nextStep = () => {
   step.value = step.value + 1;
@@ -27,6 +32,15 @@ const nextStep = () => {
 
 const backStep = () => {
   step.value = step.value - 1;
+
+  if(step.value == 3){
+  selectedBgIndex.value = null
+  selectedShape.value = null
+  selectedColorLeft.value = null
+  selectedColorRight.value = null
+  selectedColorLeftIndex.value = null
+  selectedColorRightIndex.value = null
+  }
 }
 
 const selectShape = (index: number)=> {
@@ -35,6 +49,38 @@ const selectShape = (index: number)=> {
 
 const selectBgColor = (index: number)=> {
   selectedBgIndex.value = index
+}
+
+const selectColorLeft = (index: number)=> {
+  selectedColorLeftIndex.value = index
+  selectedColorLeft.value = medication.chooseColorName[index]
+
+  selectedShape.value = medication.shapeImageNames[selectedShapeIndex.value ?? -1].split('_')[0] ?? ''
+
+
+  console.log(selectedShape.value)
+  console.log(selectedColorLeft.value)
+  console.log(selectedColorRight.value)
+}
+
+const selectColorRight = (index: number)=> {
+  selectedColorRightIndex.value = index
+  selectedColorRight.value = medication.chooseColorName[index]
+
+  selectedShape.value = medication.shapeImageNames[selectedShapeIndex.value ?? -1] ?? ''
+
+  if (selectedShape.value.includes('tablet')){
+    selectedColorLeft.value = selectedShape.value.split('_')[1] 
+
+  } else {
+
+  }
+
+  selectedShape.value  = selectedShape.value.split('_')[0] 
+  console.log(selectedShape.value)
+  console.log(selectedColorLeft.value)
+  console.log(selectedColorRight.value)
+
 }
 
 const transform = (index: number) => {
@@ -111,7 +157,9 @@ const transform = (index: number) => {
           <p class="inputSubtitle marginTop">On these days:</p>
           <div class="week-wrapper">
             <div v-for="(item, index) in week" :key="index" 
-            :style="{backgroundColor: item.checked ? 'var(--main-lila-hell)' : 'var(--white-lila)'}">
+            :style="{
+              backgroundColor: item.checked ? 'var(--main-lila-hell)' : 'var(--white-lila)',
+            }">
               <label class="week-label"
                 :for="'week' + index" 
                 :style="{ 
@@ -175,15 +223,20 @@ const transform = (index: number) => {
       </div> 
 
       <div class="form" :style="{ transform: transform(3)}">
+        <div class="selected-text">{{ selectedName }} <br> 
+          {{ selectedType }}, {{ selectedStrength }} {{ selectedUnit }}
+        </div>
         <img v-bind:src="selectedShapeIndex === null ? '/pill/default.png' : '/pill/' + medication.shapeImageNames[selectedShapeIndex] + '.png'" class="default-img"/>
-        <div class="selected-text">{{ selectedName }} <br> {{ selectedType }} </div>
 
-        <p class="inputTitle marginTop">Choose the Shape</p>
+        <p class="inputTitle">Choose the Shape</p>
         <div class="image-wrapper">
           <img v-for="(name, index) in medication.shapeImageNames" :key="index" 
           :src="'/pill/' + name +'.png'" class="shape-img" 
           @click="selectShape(index)"
-          :style="{ outline: selectedShapeIndex === index ? '0.4rem solid var(--white-lila-border)' : 'none' }">
+          :style="{ 
+            outline: selectedShapeIndex === index ? '0.3rem solid var(--white-lila-border)' : 'none',
+            outlineOffset: '0.2rem',
+             }">
         </div>
        
         <button class="button" @click="nextStep" :disabled="( selectedShapeIndex === null)"
@@ -191,45 +244,47 @@ const transform = (index: number) => {
           backgroundColor: selectedShapeIndex === null ? 'var(--divider-light-2)' : 'var(--main-lila-hell)',
           color: selectedShapeIndex === null ? 'var(--divider-light-1)' : 'white'
         }">Next</button>
-        
       </div> 
 
       <div class="form" :style="{ transform: transform(4)}">
-        <img v-bind:src="selectedShapeIndex === null ? '/pill/default.png' : '/pill/' + medication.shapeImageNames[selectedShapeIndex] + '.png'" class="default-img"
-        :style="{ backgroundColor: selectedBgIndex === null? 'var(--white-lila-border)' : medication.backgroundColor[selectedBgIndex] }"/>
-        <div class="selected-text">{{ selectedName }} <br> {{ selectedType }} </div>
+        <div class="selected-text">{{ selectedName }} <br> 
+          {{ selectedType }}, {{ selectedStrength }} {{ selectedUnit }}
+        </div>
+        <img 
+        :style="{ backgroundColor: selectedBgIndex === null? 'var(--white-lila)' : medication.backgroundColor[selectedBgIndex] }"
+        v-bind:src="(selectedShape === null || selectedColorLeft === null || selectedColorRight === null ) ? 
+        '/pill/' + medication.shapeImageNames[selectedShapeIndex ?? -1] + '.png' : 
+        '/pill/' + selectedShape + '_' + selectedColorLeft + '_' + selectedColorRight + '.png'" 
+        class="default-img"/>
 
-        <p class="inputTitle marginTop">Choose Colors</p>
+        <p class="inputTitle">Choose Colors</p>
 
-        <div v-if="selectedType?.includes('Capsule')">
+        <div v-if="selectedShapeIndex !== null && medication.shapeImageNames[selectedShapeIndex].includes('capsule')">
           <p class="inputSubtitle marginTop">Left Side</p>
           <div class="palette-wrapper">
             <div v-for="(item, index) in medication.chooseColor" :key="index" 
             class="palette" 
-            :style="{backgroundColor: item }"
-            @click="selectBgColor(index)"
-            ></div>
-          </div>
-
-          <p class="inputSubtitle marginTop">Right Side</p>
-          <div class="palette-wrapper">
-            <div v-for="(item, index) in medication.chooseColor" :key="index" 
-            class="palette" 
-            :style="{backgroundColor: item }"
-            @click="selectBgColor(index)"
-            ></div>
+            @click="selectColorLeft(index)"
+            :style="{ 
+            backgroundColor: item,
+            outline: selectedColorLeftIndex === index ? '0.3rem solid var(--white-lila-border)' : 'none',
+            outlineOffset: '0.2rem',
+             }">
+            </div>
           </div>
         </div>
 
-        <div v-if="!(selectedType?.includes('Capsule'))">
-          <p class="inputSubtitle marginTop">Shape Color</p>
-          <div class="palette-wrapper">
-            <div v-for="(item, index) in medication.chooseColor" :key="index" 
-            class="palette" 
-            :style="{backgroundColor: item }"
-            @click="selectBgColor(index)"
-            
-            ></div>
+        <p class="inputSubtitle marginTop" v-if="selectedShapeIndex !== null && !(medication.shapeImageNames[selectedShapeIndex].includes('capsule'))">Shape Color</p>
+        <p class="inputSubtitle marginTop" v-else>Right Side</p>
+        <div class="palette-wrapper">
+          <div v-for="(item, index) in medication.chooseColor" :key="index" 
+          class="palette" 
+          @click="selectColorRight(index)"
+          :style="{ 
+          backgroundColor: item,
+          outline: selectedColorRightIndex === index ? '0.3rem solid var(--white-lila-border)' : 'none',
+          outlineOffset: '0.2rem',
+            }">
           </div>
         </div>
 
@@ -240,14 +295,16 @@ const transform = (index: number) => {
           @click="selectBgColor(index)"
           :style="{ 
             backgroundColor: item,
-            outline: selectedBgIndex === index ? '0.4rem solid var(--white-lila-border)' : 'none'
-             }"></div>
+            outline: selectedBgIndex === index ? '0.3rem solid var(--white-lila-border)' : 'none',
+            outlineOffset: '0.2rem',
+             }">
+          </div>
         </div>
        
-        <button class="button" @click="nextStep" :disabled="( selectedShapeIndex === null)"
+        <button class="button" @click="nextStep" :disabled="( selectedBgIndex === null || selectedColorRightIndex === null || selectedColorLeftIndex === null )"
         :style="{
-          backgroundColor: selectedShapeIndex === null ? 'var(--divider-light-2)' : 'var(--main-lila-hell)',
-          color: selectedShapeIndex === null ? 'var(--divider-light-1)' : 'white'
+          backgroundColor: selectedBgIndex === null || selectedColorRightIndex === null || selectedColorLeftIndex === null ? 'var(--divider-light-2)' : 'var(--main-lila-hell)',
+          color: selectedBgIndex === null || selectedColorRightIndex === null || selectedColorLeftIndex === null ? 'var(--divider-light-1)' : 'white'
         }">Next</button>
         
       </div> 
@@ -278,6 +335,7 @@ const transform = (index: number) => {
   color: var(--main-lila-hell);
   padding: 0.5rem;
   position: fixed;
+  cursor: pointer;
 }
 
 .closeIcon{
@@ -314,6 +372,7 @@ const transform = (index: number) => {
 .inputTitle{
   font-size: 1.6rem;
   margin-bottom: 0.4rem;
+  font-weight: 500;
 }
 
 .inputSubtitle{
@@ -374,6 +433,7 @@ select, .button,
 input[type=radio],
 input[type=checkbox] {
   opacity: 0;
+  position: absolute;
 }
 
 .radioLabel{
@@ -400,6 +460,7 @@ select{
   background-position: right 1rem top 50%;
   background-size: 0.65rem auto;
   cursor: pointer;
+  color: var(--main-lila-dunkel);
 }
 
 input[type=text]:focus {
@@ -440,10 +501,10 @@ input[type=text]:focus {
 .week-label {
   position: absolute;
   top: 50%;
-  transform: translate(-2rem,-50%);
-  padding: 2rem;
+  transform: translate(-50%,-50%);
   cursor: pointer;
   font-size: 1rem;
+  padding:  2rem 1rem;
 }
 
 .table-wrapper {
@@ -482,6 +543,7 @@ td {
 .selected-text{
   line-height: 1rem;
   font-size: 0.8rem;
+  margin-bottom: .4rem;
 }
 
 .default-img,
@@ -492,14 +554,15 @@ td {
 }
 
 .shape-img {
-  width: 90%;
+  width: 84%;
   margin: auto;
   cursor: pointer;
-
 }
 
 .default-img {
-  width: 10rem;
+  width: 14rem;
+  margin-bottom: 0.5rem;
+  transition-duration: 500ms;
 }
 
 .palette-wrapper{
@@ -531,6 +594,7 @@ td {
 
   .button{
     left: 3%;
+    cursor: pointer;
   }
 
   .inputSubtitle{
@@ -538,7 +602,7 @@ td {
   }
 
   .default-img {
-    width: 20%;
+    width: 10rem;
   }
 
   .palette {
