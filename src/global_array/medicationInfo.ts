@@ -11,8 +11,54 @@ export const pillTime: number[] = [8, 18, 8, 12, 17]
 export const application: number[] = [1,1,1,1,1]
 export const times: number[] = [2, 3]
 export const color: string[] = ["white", "sky"]
-export const bgColor: string[] = ["#6f2982","orange"]
+export const bgColor: string[] = ["#6f2982","#eb962e"]
 
 export const types: string[] = ["Capsule", "Tablet", "Liquid", "Topical"]
 export const units: string[] = ["mg", "mcg", "g", "ml", "%"]
 export const colors: string[] = ["white", "red", "orange", "blue", "purple"]
+export const schedule: string[] = ["Every Day", "On Specific Days of the Week", "Every Few Days"]
+export const intervalDays: string[] = ["Every Other Day"]
+export const shapeImageNames: string[] = [
+  "capsule_white_white",
+  "capsuleBeads_white_white",
+  "tablet_round_white",
+  "tablet_oval_white",
+  "tablet_capsule_white"
+]
+
+export const backgroundColor: string[] = [
+  "#6f2982",
+  "#ac7bb8",
+  "#c290b5",
+  "#b62b2b",
+  "#eb962e",
+  "#b89227",
+  "#fccf00",
+  "#b7e978",
+  "#669a1c",
+  "#1c9a45",
+  "#0895b9",
+  "#527db0",
+]
+
+export const chooseColor: string[] = [
+  "#f0dcf5",
+  "#bbf0f4",
+  "#c290b5",
+  "#b62b2b",
+  "#eb962e",
+  "#b89227",
+  "#fccf00",
+  "#b7e978",
+  "#669a1c",
+  "#1c9a45",
+  "#0895b9",
+  "#527db0",
+]
+
+function intervalArray() {
+  for(let i:number = 3; i < 100; i++){
+    intervalDays.push("Every " +i+ " Days")
+  }
+}
+intervalArray()
