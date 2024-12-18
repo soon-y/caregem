@@ -2,9 +2,12 @@
 import * as medication from '../global_array/medicationInfo'
 import { ref } from 'vue'
 
+const now = new Date();
+const selectedDays = ref<string>("")
+const todayDate = ref<string>(new Date().toLocaleDateString())
 let step = ref<number>(0)
 const selectedName = ref<string | null>(null)
-const selectedStrength = ref<string | null>(null)
+const selectedStrength = ref<number | null>(null)
 const selectedType = ref<string | null>(null)
 const selectedUnit = ref<string | null>(null)
 const selectedSchedule = ref<string | null>(medication.schedule[0])
@@ -18,33 +21,82 @@ const week = ref([
   { label: 'S', checked: false },
   { label: 'S', checked: false }, 
 ])
+
+interface ScheduleItem {
+  hour: number
+  min: number
+  application: number
+}
+
+const schedule = ref<ScheduleItem[]>([
+  { hour: now.getHours(), min: now.getMinutes(), application: 1 },
+])
+
 const selectedShapeIndex = ref<number | null>(null)
-const selectedBgIndex = ref<number | null>(null)
+const selectedBgIndex = ref<number>(0)
 const selectedShape = ref<string | null>(null)
-const selectedColorLeft = ref<string | null>(null)
-const selectedColorRight = ref<string | null>(null)
-const selectedColorLeftIndex = ref<number | null>(null)
-const selectedColorRightIndex = ref<number | null>(null)
+const selectedColorLeft = ref<string | null>("white")
+const selectedColorRight = ref<string | null>("white")
+const selectedColorLeftIndex = ref<number>(0)
+const selectedColorRightIndex = ref<number>(0)
 
 const nextStep = () => {
   step.value = step.value + 1;
+
+  if(step.value == 3 && selectedSchedule.value?.includes('Specific')) {
+    week.value.forEach((day, index) => {
+      if (day.checked) {
+        if (index === 0 ){ selectedDays.value += 'Mon, '}
+        if (index === 1 ){ selectedDays.value += 'Tue, '}
+        if (index === 2 ){ selectedDays.value += 'Wed, '}
+        if (index === 3 ){ selectedDays.value += 'Thu, '}
+        if (index === 4 ){ selectedDays.value += 'Fri, '}
+        if (index === 5 ){ selectedDays.value += 'Sat, '}
+        if (index === 6 ){ selectedDays.value += 'Sun, '}
+      }
+    })
+      selectedDays.value = selectedDays.value.replace(/,\s*$/, "");
+  }
 }
 
 const backStep = () => {
   step.value = step.value - 1;
 
-  if(step.value == 3){
-  selectedBgIndex.value = null
-  selectedShape.value = null
-  selectedColorLeft.value = null
-  selectedColorRight.value = null
-  selectedColorLeftIndex.value = null
-  selectedColorRightIndex.value = null
+  if(step.value === 2){
+    selectedDays.value = " "
   }
+
+  if(step.value === 3){
+  selectedShape.value = null
+  selectedShapeIndex.value = null
+  selectedColorLeft.value = "white"
+  selectedColorRight.value = "white"
+  selectedBgIndex.value = 0
+  selectedColorLeftIndex.value = 0
+  selectedColorRightIndex.value = 0
+  }
+}
+
+const addNewTime = () => {
+  let data = { hour: now.getHours(), min: now.getMinutes(), application: 1 }
+  if (schedule.value.length > 0) {
+    data.hour = schedule.value[schedule.value.length-1].hour + 1 > 23 ? 0 : schedule.value[schedule.value.length-1].hour + 1
+    data.min = schedule.value[schedule.value.length-1].min
+  }  
+  schedule.value.push(data)
+}
+
+const deleteSchedule = (index : number) => {
+  schedule.value.splice(index, 1)
 }
 
 const selectShape = (index: number)=> {
   selectedShapeIndex.value = index
+  selectedShape.value = medication.shapeImageNames[index]
+  if (selectedShape.value.includes('tablet')){
+    selectedColorLeft.value = selectedShape.value.split('_')[1] 
+  } 
+  selectedShape.value = selectedShape.value.split('_')[0] 
 }
 
 const selectBgColor = (index: number)=> {
@@ -54,32 +106,14 @@ const selectBgColor = (index: number)=> {
 const selectColorLeft = (index: number)=> {
   selectedColorLeftIndex.value = index
   selectedColorLeft.value = medication.chooseColorName[index]
-
-  selectedShape.value = medication.shapeImageNames[selectedShapeIndex.value ?? -1].split('_')[0] ?? ''
-
-
-  console.log(selectedShape.value)
-  console.log(selectedColorLeft.value)
-  console.log(selectedColorRight.value)
 }
 
 const selectColorRight = (index: number)=> {
   selectedColorRightIndex.value = index
   selectedColorRight.value = medication.chooseColorName[index]
+}
 
-  selectedShape.value = medication.shapeImageNames[selectedShapeIndex.value ?? -1] ?? ''
-
-  if (selectedShape.value.includes('tablet')){
-    selectedColorLeft.value = selectedShape.value.split('_')[1] 
-
-  } else {
-
-  }
-
-  selectedShape.value  = selectedShape.value.split('_')[0] 
-  console.log(selectedShape.value)
-  console.log(selectedColorLeft.value)
-  console.log(selectedColorRight.value)
+const done  = ()=> {
 
 }
 
@@ -92,16 +126,17 @@ const transform = (index: number) => {
     return 'translate(100%, 0)'
   }
 }
-
 </script>
 
 <template>
   <div class="container_Add">
-    <span class="closeIcon topIcon"><slot name="close"></slot></span>
-    <span class="backIcon topIcon" @click="backStep" v-if="step !== 0">
-      <font-awesome-icon icon="fa-solid fa-chevron-left"/>
-      <span>Back</span>
-    </span>
+    <div class="fixed">
+      <span class="closeIcon topIcon"><slot name="close"></slot></span>
+      <span class="backIcon topIcon" @click="backStep" v-if="step !== 0">
+        <font-awesome-icon icon="fa-solid fa-chevron-left"/>
+        <span>Back</span>
+      </span>
+    </div>
 
     <div class="form-wrapper">
       <div class="form" :style="{transform: step === 0 ? 'translate(0, 0)' : 'translate(-100%, 0)'}">
@@ -127,7 +162,7 @@ const transform = (index: number) => {
       <div class="form" :style="{ transform: transform(1)}">
         <p class="inputTitle">Medication Strength</p>
         <p class="inputSubtitle">Strength </p>
-        <input type="number" placeholder="Add Strength" v-model="selectedStrength"/>
+        <input type="number" placeholder="Add Strength" v-model="selectedStrength" min="1" class="inputNum">
 
         <p class="inputSubtitle marginTop">Units</p>
         <div>
@@ -162,17 +197,11 @@ const transform = (index: number) => {
             }">
               <label class="week-label"
                 :for="'week' + index" 
-                :style="{ 
-                  color: item.checked ? 'white' : 'var(--main-lila-dunkel)',
-                }"
-              >
+                :style="{ color: item.checked ? 'white' : 'var(--main-lila-dunkel)',
+                }">
                 {{ item.label }}
               </label>
-              <input 
-                type="checkbox" 
-                :id="'week' + index" 
-                v-model="item.checked" 
-              />
+              <input type="checkbox" :id="'week' + index" v-model="item.checked" />
             </div>
           </div>
         </div>
@@ -190,35 +219,62 @@ const transform = (index: number) => {
         <div class="table-wrapper">
           <table>
             <tbody>
-              <tr>
-                <td class="align-left">20:00</td>
-                <td class="align-right">1 application</td>
+              <tr v-for="(item, index) in schedule" :key="index" >
+                <td class="align-left" :style="{
+                    display: 'flex', alignItems: 'center',
+                }">
+                  <font-awesome-icon icon="circle-minus" class="circleIcon" @click="deleteSchedule(index)"
+                  :style="{color: 'var(--white-lila-border)', marginRight: '0.5rem' }"/>
+                  <input type="number" v-model="item.hour" min="0" max="23" 
+                  class="inlineNumInput" :style="{ textAlign: 'right' }" /> : 
+                  <input type="number" v-model="item.min" min="0" max="59" class="inlineNumInput"/>
+                  </td>
+                <td class="align-right" :style="{color: 'var(--main-lila-hell)'}">
+                  <input type="number" v-model="item.application" min="1" class="inlineNumInput"
+                  :style="{ textAlign: 'right' }"
+                  />
+                  <span v-if="item.application === 1"> application</span>
+                  <span v-else> applications</span>
+                </td>
               </tr>
             </tbody>
           </table>
-          add
+          <div @click="addNewTime" :style="{ 
+            textAlign: 'left', 
+            marginLeft: '0.2rem',
+            display: 'flex', cursor: 'pointer',
+            }"> 
+            <font-awesome-icon icon="circle-plus" class="circleIcon" :style="{
+              color: 'var(--main-lila-hell)', marginRight: '0.56em' }"/> 
+              Add a Time
+          </div>
         </div>
 
         <p class="inputSubtitle marginTop">Duration</p>
         <div class="table-wrapper">
           <table>
             <tbody>
-              <tr>
+              <tr :style="{color: 'var(--white-lila-border)' }">
                 <td class="align-left">Start Date</td>
                 <td class="align-left">End Date</td>
               </tr>
               <tr>
-                <td class="align-left">Today</td>
-                <td class="align-left">None</td>
+                <td class="align-left">
+                  <font-awesome-icon icon="calendar" class="calenderIcon"/>{{ todayDate }}
+                </td>
+                <td class="align-left">
+                  <font-awesome-icon icon="calendar" class="calenderIcon"/>
+                  None
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <button class="button" @click="nextStep" :disabled="(selectedUnit === null) || (selectedStrength === null)"
+        <button class="button" @click="nextStep" :disabled="schedule.length === 0"
         :style="{
-          backgroundColor: (selectedUnit === null) || (selectedStrength === null) ? 'var(--divider-light-2)' : 'var(--main-lila-hell)',
-          color: (selectedUnit === null) || (selectedStrength === null) ? 'var(--divider-light-1)' : 'white'
+          backgroundColor: schedule.length === 0 ? 'var(--divider-light-2)' : 'var(--main-lila-hell)',
+          color: schedule.length === 0 ? 'var(--divider-light-1)' : 'white'
         }">Next</button>
       </div> 
 
@@ -258,7 +314,6 @@ const transform = (index: number) => {
         class="default-img"/>
 
         <p class="inputTitle">Choose Colors</p>
-
         <div v-if="selectedShapeIndex !== null && medication.shapeImageNames[selectedShapeIndex].includes('capsule')">
           <p class="inputSubtitle marginTop">Left Side</p>
           <div class="palette-wrapper">
@@ -301,12 +356,44 @@ const transform = (index: number) => {
           </div>
         </div>
        
-        <button class="button" @click="nextStep" :disabled="( selectedBgIndex === null || selectedColorRightIndex === null || selectedColorLeftIndex === null )"
-        :style="{
-          backgroundColor: selectedBgIndex === null || selectedColorRightIndex === null || selectedColorLeftIndex === null ? 'var(--divider-light-2)' : 'var(--main-lila-hell)',
-          color: selectedBgIndex === null || selectedColorRightIndex === null || selectedColorLeftIndex === null ? 'var(--divider-light-1)' : 'white'
-        }">Next</button>
-        
+        <button class="button" @click="nextStep" :style="{ backgroundColor: 'var(--main-lila-hell)', color: 'white' }">Next</button>
+      </div> 
+
+      <div class="form" :style="{ transform: transform(5)}">
+        <img 
+        :style="{ backgroundColor: selectedBgIndex === null? 'var(--white-lila)' : medication.backgroundColor[selectedBgIndex] }"
+        v-bind:src="'/pill/' + selectedShape + '_' + selectedColorLeft + '_' + selectedColorRight + '.png'" 
+        class="default-img"/>
+
+        <p class="inputTitle"> {{ selectedName }} </p>
+        {{ selectedType }}, {{ selectedStrength }} {{ selectedUnit }}
+
+        <p class="inputSubtitle marginTop">Schedule</p>
+        <div class="table-wrapper">
+          <table>
+            <tbody>
+              <tr v-if= "selectedSchedule?.includes('Every Day') ">
+                <td colspan="2" class="align-left" :style="{ borderBottom: '1px solid white' }">{{ selectedSchedule }}</td>
+              </tr>
+              <tr v-if= "selectedSchedule?.includes('Specific') ">
+                <td colspan="2" class="align-left" :style="{ borderBottom: '1px solid white' }">{{ selectedDays }}</td>
+              </tr>
+              <tr v-if= "selectedSchedule?.includes('Every Few Days') ">
+                <td colspan="2" class="align-left" :style="{ borderBottom: '1px solid white' }">{{ selectedInterval }}</td>
+              </tr>
+              <tr v-for="(item, index) in schedule" :key="index" class="align-left">
+                <td>{{ item.hour < 10 ? '0' + item.hour : item.hour }}:{{ item.min }} </td>
+                <td>{{ item.application > 1? item.application + ' applications' : item.application + ' application'}}</td>          
+              </tr>
+              <tr class="align-left">
+                <td colspan="2" class="align-left" :style="{ borderTop: '1px solid white', color: 'var(--white-lila-border)' }">Starts on {{ todayDate }}
+                </td>
+              </tr> 
+            </tbody>
+          </table>
+        </div>
+      
+        <button class="button" @click="done" :style="{ backgroundColor: 'var(--main-lila-hell)', color: 'white' }">Done</button>
       </div> 
     </div>     
   </div>
@@ -321,10 +408,6 @@ const transform = (index: number) => {
   transition-duration: 500ms;
   z-index: 100;
   top: 0;
-  overflow-y: scroll;
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;
-  margin-bottom: 3rem;
 }
 
 .container_Add::-webkit-scrollbar {
@@ -333,7 +416,7 @@ const transform = (index: number) => {
 
 .topIcon{
   color: var(--main-lila-hell);
-  padding: 0.5rem;
+  padding: 0.5rem 0.5rem 0 0.5rem;
   position: fixed;
   cursor: pointer;
 }
@@ -357,16 +440,19 @@ const transform = (index: number) => {
   margin: auto;
   width: 100%;
   text-align: center;
-  padding-top: 4rem;
-  overflow: hidden;
-}
+  padding-top: 3.2rem;
+  }
 
 .form {
   transition-duration: 500ms;
   background-color: white;
   position: fixed;
   width: 100%;
-  height: calc(100vh - 4rem);
+  height: calc(100vh - 3.2rem);
+  overflow-y: scroll;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;
+  margin-bottom: 3rem;
 }
 
 .inputTitle{
@@ -387,7 +473,7 @@ const transform = (index: number) => {
 }
 
 input[type=text],
-input[type=number],
+.inputNum,
 .radioSelection,
 select, .button,
 .week-wrapper,
@@ -427,7 +513,8 @@ select, .button,
   margin: auto;
   right: 1rem;
   font-size: 1.2rem;
-  color: var(--main-lila-hell)
+  color: var(--main-lila-hell);
+  transform: translate(0 , 10%);
 }
 
 input[type=radio],
@@ -440,8 +527,14 @@ input[type=checkbox] {
   padding-left: 0.4rem;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 input[type=text],
-input[type=number],
+.inputNum,
 select {
   background-color: var(--white-lila);
   border: none;
@@ -451,6 +544,17 @@ select {
   padding-left: 1rem;
   padding-right: 1rem;
   outline: none;
+  -moz-appearance: textfield;
+}
+
+.inlineNumInput {
+  -moz-appearance: textfield;
+  background-color: var(--white-lila);
+  border: none;
+  width: 1.3rem;
+  height: 1.2rem;
+  color: var(--main-lila-hell);
+  font-size: 0.96rem;
 }
 
 select{
@@ -460,7 +564,7 @@ select{
   background-position: right 1rem top 50%;
   background-size: 0.65rem auto;
   cursor: pointer;
-  color: var(--main-lila-dunkel);
+  color: black;
 }
 
 input[type=text]:focus {
@@ -474,6 +578,19 @@ input[type=text]:focus {
 
 ::-ms-input-placeholder { /* Edge 12-18 */
   color: var(--white-lila-border);
+}
+
+.circleIcon {
+  font-size: 1.2rem;
+  cursor: pointer;
+  align-self: center;
+}
+
+.calenderIcon {
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: var(--white-lila-border);
+  margin-right: 0.3rem;
 }
 
 .button {
@@ -503,8 +620,8 @@ input[type=text]:focus {
   top: 50%;
   transform: translate(-50%,-50%);
   cursor: pointer;
-  font-size: 1rem;
-  padding:  2rem 1rem;
+  font-size: 0.9rem;
+  padding: 1rem;
 }
 
 .table-wrapper {
@@ -523,6 +640,7 @@ tr {
 
 td {
   width: 50%;
+  height: 2rem;
 }
 
 .align-left{
@@ -536,7 +654,7 @@ td {
 .image-wrapper{
   display: grid;
   grid-template-columns: repeat(4, auto);
-  gap: 1rem;
+  gap: 1.2rem;
   margin-top: 1rem;
 }
 
@@ -581,7 +699,7 @@ td {
 
 @media screen and (max-aspect-ratio: 1) {
   input[type=text],
-  input[type=number],
+  .inputNum,
   .radioSelection,
   .button,
   select,
