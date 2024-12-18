@@ -11,7 +11,7 @@ export const pillTime: number[] = [8, 18, 8, 12, 17]
 export const application: number[] = [1,1,1,1,1]
 export const times: number[] = [2, 3]
 export const color: string[] = ["white", "sky"]
-export const bgColor: string[] = ["#6f2982","#ff9900"]
+export const bgColor: string[] = ["#6f2982","#ffb900"]
 
 export const types: string[] = ["Capsule", "Tablet", "Liquid", "Topical"]
 export const units: string[] = ["mg", "mcg", "g", "ml", "%"]
@@ -53,7 +53,7 @@ export const backgroundColor: string[] = [
   "#6f2982",
   "#d39e9c",
   "#d30f07",
-  "#ff9900",
+  "#ffb900",
 ]
 
 export const chooseColorName: string[] = [
