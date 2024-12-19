@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import Medication from '../components/Medication.vue'
+import { today } from '../chart/global_label'
+import Tabs from '../components/Tabs.vue'
+import Tab from '../components/Tab.vue'
+import Details from './Details.vue'
 import * as medication from '../global_array/medicationInfo'
 import AddMedicationView from './AddMedicationView.vue'
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import {
   Chart as ChartJS,
   Title,
@@ -18,56 +22,125 @@ import * as pillToday from '../chart/pillToday'
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
-const optionsPillToday = pillToday.options
-const dataPillToday = ref<ChartData<'bar'>>({ datasets: [] })
+const optionsMedicationToday = pillToday.options
+const dataMedicationToday = ref<ChartData<'bar'>>({ datasets: [] })
+
 let myStyles = {
-  height: `30%`,
+  height: `20vh`,
+  width: '100%',
+  marginTop: '5rem'
 }
+const clickedIndex = ref<number>(0)
 
-const addMedicationStyle = ref<{ transform: string }>({
-      transform: 'translate(0, 100%)',
+
+const datasetsToday = () => ({
+  labels: today,
+  datasets: [
+    {
+      label: medication.data[clickedIndex.value].name,
+      backgroundColor: medication.backgroundColor[medication.data[clickedIndex.value].bgColorIndex],
+      data: [0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+    }
+  ]
 })
 
-const enableAdd = () => {
-  addMedicationStyle.value = { transform: 'translate(0, 0)' };
-}
-
-const disableAdd = () => {
-  addMedicationStyle.value = { transform: 'translate(0, 100%)' };
-}
-
-onMounted(() => {
-  dataPillToday.value = pillToday.datasets()
+const medicationStyle = ref<{ transform: string }>({
+  transform: 'translate(0, 100%)',
 })
+
+const enableAddPage = () => {
+  medicationStyle.value = { transform: 'translate(0, 0)' };
+}
+
+const closeAddPage = () => {
+  medicationStyle.value = { transform: 'translate(0, 100%)' };
+}
+
+const detailsStyle = ref<{ transform: string }>({
+  transform: 'translate(100%, 0)',
+})
+
+const toDetailPage = (index: number) => {
+  detailsStyle.value = { transform: 'translate(0, 0)' };
+  clickedIndex.value = index
+  dataMedicationToday.value = datasetsToday()
+}
+
+const closeDetailpage = () => {
+  detailsStyle.value = { transform: 'translate(100%, 0)' };
+}
+
 </script>
 
 
 <template>
   <div class="container">
-    <div class="pillGraph">
-      <Bar :data="dataPillToday" :options="optionsPillToday" :style="myStyles"/>
-    </div>
-    <div class="boxWrapper">
-      <Medication v-for="(name ,index) in medication.name" :key="name"> 
-        <template v-slot:image><img v-bind:src="'/pill/'+ medication.type[index] + '_' + medication.shape[index] + '_' + medication.color[index] +'.png'" 
-          :style="{'background-color': medication.bgColor[index]}" />
+    <div class="box-wrapper">
+      <Medication v-for="(item ,index) in medication.data" :key="index" 
+      @click="toDetailPage(index)" :style="{cursor: 'pointer'}"> 
+        <template v-slot:image>
+          <img v-bind:src="'/pill/'+ item.shape + '_' + item.colorLeft + '_' + item.colorRight +'.png'" 
+          :style="{ 'background-color': medication.backgroundColor[item.bgColorIndex] }" />
         </template>
-        <template v-slot:name> {{ name }} </template>
-        <template v-slot:dose> {{ medication.strength[index] + medication.unit[index] }} </template>
-        <template v-slot:interval> {{ medication.interval[index] }} </template>
-        <template v-slot:time> {{ medication.time[index] }} </template>
+        <template v-slot:name> {{ item.name }} </template>
+        <template v-slot:dose> {{ item.strength + item.unit }} </template>
+        <template v-slot:schedule> {{ item.schedule.join(", ") }} </template>
+        <template v-slot:time> {{ item.time.join(", ") }} </template>
       </Medication>
     </div>
 
-    <div class="add" @click="enableAdd">
-      <font-awesome-icon icon="fa-plus" class="plusIcon"/>
+    <div class="add" @click="enableAddPage">
+      <font-awesome-icon icon="fa-plus" class="plus-icon"/>
     </div>
   </div>
-  <AddMedicationView :style = addMedicationStyle>
+
+  <AddMedicationView :style = medicationStyle>
     <template v-slot:close>
-      <font-awesome-icon icon="fa-xmark" @click="disableAdd"/>
+      <font-awesome-icon icon="fa-xmark" @click="closeAddPage"/>
     </template>
   </AddMedicationView>
+
+  <Details :style = detailsStyle>
+    <template v-slot:close>
+      <font-awesome-icon icon="fa-xmark" @click="closeDetailpage"/>
+    </template>
+
+    <template v-slot:name> {{ medication.data[clickedIndex].name }} </template>
+
+    <template v-slot:tab>
+      <Tabs>
+      <Tab title="DAY">
+
+        <Bar :data="dataMedicationToday" :options="optionsMedicationToday" :style="myStyles"/>
+
+
+      </Tab>
+      <Tab title="WEEK">
+  
+
+      </Tab>
+      <Tab title="MONTH">
+        
+
+      </Tab>
+      <Tab title="YEAR">
+        
+      </Tab>
+    </Tabs>   
+    </template>
+
+
+
+    <template v-slot:image>
+      <img v-bind:src="'/pill/'+ medication.data[clickedIndex].shape + '_' + medication.data[clickedIndex].colorLeft + '_' + medication.data[clickedIndex].colorRight +'.png'" 
+      :style="{ 'background-color': medication.backgroundColor[medication.data[clickedIndex].bgColorIndex] }" />
+    </template>
+
+    <template v-slot:dose> {{ medication.data[clickedIndex].strength + medication.data[clickedIndex].unit }} </template>
+    <template v-slot:schedule> {{ medication.data[clickedIndex].schedule.join(", ") }} </template>
+    <template v-slot:time> {{ medication.data[clickedIndex].time.join(", ") }} </template>
+  </Details>
+
 </template>
 
 <style scope>
@@ -82,15 +155,16 @@ onMounted(() => {
   right: 1rem;
   justify-content: center;
   z-index: 1;
+  cursor: pointer;
 }
 
-.plusIcon{
+.plus-icon{
   align-self: center;
   color: white;
   font-size: 1.2rem;
 }
 
-.boxWrapper{
+.box-wrapper{
   display: grid;
   grid-template-columns: 50% 50%;
   padding: 1rem;
@@ -98,7 +172,7 @@ onMounted(() => {
   margin-top: 5.4rem;
 }
 
-.pillGraph{
+.pill-graph{
   position: relative;
   width: calc(100% - 3rem);
   margin: auto;
@@ -111,7 +185,7 @@ onMounted(() => {
     bottom: 5rem;
   }
 
-  .boxWrapper{
+  .box-wrapper{
     grid-template-columns: 100%;
   }
 }
