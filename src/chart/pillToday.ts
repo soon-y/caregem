@@ -1,63 +1,11 @@
 import { today } from './global_label'
-import * as pill from '../global_array/medicationInfo'
-import type { ChartType } from 'chart.js';
+
 
 const labelArray: number[] = today
-const maxInArray: number[] = [
-  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-];
-for (let i: number = 0; i < pill.pillTime.length; i++){
-  maxInArray[pill.pillTime[i]] = maxInArray[pill.pillTime[i]] + pill.application[i]
-}
 
-let n:number = 0
-interface ChartInterface {
-  type?: ChartType;
-  label: string,
-  backgroundColor: string,
-  data: (number | null)[];
-}
-
-let objs: object[] = [{
-  label: pill.name[0],
-  backgroundColor: pill.bgColor[0],
-  data: maxInArray,
-}]
-
-for (let i: number = 0; i < pill.name.length; i++){
-  let arrayData:number[] = [
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-  ];
-  for (let j: number = n; j < n + pill.times[i]; j++){
-    arrayData[pill.pillTime[j]] = pill.application[j]
-  }
-  n = n + pill.times[i]
-
-  let obj: ChartInterface = {
-    label: pill.name[i],
-    backgroundColor: pill.bgColor[i],
-    data: arrayData,
-  }
-  objs.push(obj)
-}
-
-export const datasets = () => ({
-  labels: labelArray,
-  datasets: [{
-    label: pill.name[0],
-    backgroundColor: pill.bgColor[0],
-    data: [0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0],
-  },{
-    label: pill.name[1],
-    backgroundColor: pill.bgColor[1],
-    data: [0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1,0,0,0,0,0],
-  },
-]})
-
-console.log(datasets().datasets)
 
 export const options = {
-  responsive: true,
+  responsive: false,
   maintainAspectRatio: false,
   animation: false as const,
   plugins: {
@@ -70,6 +18,11 @@ export const options = {
         const {chart, tooltip} = context
         const tooltipEl = getOrCreateTooltip(chart)
         const lineHeight: string  = '15px'
+
+        // if (tooltip.opacity === 0) {
+        //   tooltipEl.style.opacity = '0'
+        //   return;
+        // }
 
         // Set Text
         if (tooltip.body) {
@@ -149,7 +102,6 @@ export const options = {
   },
   scales: {
     x: {
-      stacked: true,
       ticks: {
         maxRotation: 0,
         color: 'rgba(190,190,190,1)',
@@ -166,10 +118,9 @@ export const options = {
       }
     },
     y: {
-      stacked: true,
-      beginAtZero: false,
+      beginAtZero: true,
       min: 0,
-      max: Math.max(...maxInArray),
+      max: 2,
       step: 1,
       ticks: {
         color: 'rgba(190,190,190,1)',
