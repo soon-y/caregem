@@ -16,3 +16,129 @@ a {
   transition: 0.4s;
   padding: 3px;
 }
+
+.tab-wrapper {
+  width: calc(100% - 1rem);
+  margin: auto;
+}
+
+.container {
+  width: calc(100vw - 11.4rem);
+  min-height: 100vh;
+  position: relative;
+  left: 11.4rem;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+}
+
+.container-full {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background-color: white;
+  transition-duration: 500ms;
+  z-index: 100;
+  top: 0;
+}
+
+.container-full::-webkit-scrollbar,
+.container::-webkit-scrollbar {
+  display: none;
+}
+
+.margin-top {
+  margin-top: 2rem;
+}
+
+.inputTitle {
+  font-size: 1.6rem;
+  margin-bottom: 0.4rem;
+  font-weight: 500;
+}
+
+.input-subtitle {
+  font-size: 1rem;
+  margin-bottom: 0.4rem;
+  text-align: left;
+}
+
+.topIcon {
+  color: var(--main-lila-hell);
+  padding: 0.5rem 0.5rem 0 0.5rem;
+  position: fixed;
+  cursor: pointer;
+  z-index: 100;
+}
+
+.closeIcon {
+  font-size: 1.4rem;
+  right: 0.4rem;
+}
+
+.content-wrapper {
+  width: 50%;
+  margin: auto;
+}
+
+.slider-wrapper {
+  position: absolute;
+}
+
+.info-comp th {
+  text-align: left;
+  width: 5.2rem;
+}
+
+.info-comp .head {
+  font-weight: 600;
+  line-height: 1rem;
+}
+
+.info-comp .unit {
+  font-size: 0.8rem;
+  margin-left: 1px;
+}
+
+.info-comp .value {
+  font-weight: 600;
+  font-size: 2.4rem;
+  margin: 0
+}
+
+.heart-pulse {
+  color: var(--heart);
+}
+
+.shoe-prints {
+  color: var(--steps);
+}
+
+.person-walking-dashed-line-arrow-right {
+  color: var(--speed);
+}
+
+.bed {
+  color: var(--sleep);
+}
+
+@media screen and (max-aspect-ratio: 1) {
+  .container {
+    width: 100vw;
+    content: '';
+    position: fixed;
+    background-color: var(--line-color);
+    z-index: 1;
+    height: calc(100vh - 4rem);
+    left: 0;
+  }
+
+  .content-wrapper {
+    width: 86%;
+  }
+
+  .info-comp th {
+    width: 5em;
+  }
+}

@@ -7,28 +7,28 @@ import { RouterLink, RouterView } from 'vue-router'
   <nav>
     <RouterLink to="/">
       <div class="flex">
-        <font-awesome-icon class="navIcon navMargin" icon="calendar-day" />
+        <font-awesome-icon class="nav-icon nav-margin" icon="calendar-day" />
       Today
       </div>
     </RouterLink>
 
     <RouterLink to="/medications">
       <div class="flex">
-        <font-awesome-icon class="navIcon" icon="pills" />
+        <font-awesome-icon class="nav-icon" icon="pills" />
         Medications
       </div>
     </RouterLink>
 
     <RouterLink to="/records">
       <div class="flex">
-        <font-awesome-icon class="navIcon navMargin" icon="chart-column" />
+        <font-awesome-icon class="nav-icon nav-margin" icon="chart-column" />
         Records
       </div>
     </RouterLink>
 
     <RouterLink to="/account">
       <div class="flex">
-        <img src="/portrait.jpg" class="navImg" />
+        <img src="/portrait.jpg" class="nav-img" />
         Account
       </div>
     </RouterLink>
@@ -37,21 +37,7 @@ import { RouterLink, RouterView } from 'vue-router'
   <RouterView />
 </template>
 
-<style>
-.container {
-  width: calc(100vw - 11.4rem);
-  min-height: 100vh;
-  position: relative;
-  left: 11.4rem;
-  overflow-y: scroll;
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;
-}
-
-.container::-webkit-scrollbar {
-    display: none;
-}
-
+<style scope>
 nav {
   position: fixed;
   height: 100vh;
@@ -65,17 +51,16 @@ nav {
   background-color: var(--white-lila)
 }
 
-.navIcon{
+.nav-icon{
   margin-right: 0.5rem;
   font-size: 1.4rem;
 }
 
-.navMargin{
+.nav-margin{
   margin-right: 0.7rem;
 }
 
-
-.navImg{
+.nav-img{
   width: 1.5rem;
   height: 1.5rem;
   border: 1px solid var(--divider-light-1);
@@ -105,16 +90,6 @@ nav a.router-link-exact-active:hover {
   }
 
 @media screen and (max-aspect-ratio: 1) {
-  .container {
-    width: 100vw;
-    content: '';
-    position: fixed;
-    background-color: var(--line-color);
-    z-index: 1;
-    height: calc(100vh - 4rem);
-    left: 0;
-  }
-
   nav {
     padding: 0.6rem 0 ;
     bottom: 0;
@@ -137,14 +112,14 @@ nav a.router-link-exact-active:hover {
     align-content: center;
   }
 
-  .navIcon{
+  .nav-icon{
     position: relative;
     margin: auto;
     font-size: 1.4rem;
     margin-bottom: 0.2rem;
   }
 
-  .navMargin, .navImg{
+  .nav-margin, .nav-img{
     margin: auto;
     margin-bottom: 0.2rem;
   }

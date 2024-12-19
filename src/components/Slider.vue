@@ -23,13 +23,13 @@ const props = defineProps({
 	rangeText: {
 		type: String,
 		default: "Week"
-	}
-});
+	},
+})
 
 // Define the emit function for emitting updates with type safety
 const emit = defineEmits<{
   (event: 'update:modelValue', value: number): void;
-}>();
+}>()
 
 // Create a reactive reference for the slider value with an explicit type
 const sliderValue = ref<number>(props.modelValue)
@@ -64,7 +64,7 @@ const left = () => {
 </script>
 
 <template>
-  <div class="sliderContainer">
+  <div class="slider-container">
     <input
       type="range"
       :min="min"
@@ -82,7 +82,7 @@ const left = () => {
 </template>
 
 <style scoped>
-.sliderContainer {
+.slider-container {
 	width: 100%;
 	--width: 2rem;
 	margin: 0;

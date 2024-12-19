@@ -116,27 +116,28 @@ onMounted(() => {
 
 <template>
   <div class="container"> 
+    <div class="tab-wrapper">
     <Tabs>
-      <Tab title="heart-pulse">
-        <Slider v-model="sliderHeart" class="sliderWrapper" />
+      <Tab title="fa-heart-pulse">
+        <Slider v-model="sliderHeart" class="slider-wrapper" />
         <div v-if="sliderHeart === 0">
-          <div class="infoContainer" v-if="dataMounted">
-            <table class="infoComp"><tbody><tr><th>
+          <div class="info-container" v-if="dataMounted">
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Current <br> <span class="unit">bpm</span></p></th>
             <td>
               <p class="value heart-pulse">{{ currentBPM }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Highest <br> <span class="unit">bpm</span></p></th>
             <td>
               <p class="value">{{ Math.max(...arrayHeartWeek) }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Lowest <br> <span class="unit">bpm</span></p></th>
             <td>
               <p class="value">{{ Math.min(...arrayHeartWeek) }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Average <br> <span class="unit">bpm</span></p></th>
             <td>
               <p class="value">{{ Math.round(arrayHeartWeek.reduce((a:number, b:number) => a+b, 0 ) / arrayHeartWeek.length) }}</p>
@@ -147,23 +148,23 @@ onMounted(() => {
           </div>
         </div>
         <div v-if="sliderHeart === 1">
-        <div class="infoContainer" v-if="dataMounted">
-          <table class="infoComp"><tbody><tr><th>
+        <div class="info-container" v-if="dataMounted">
+          <table class="info-comp"><tbody><tr><th>
             <p class="head">Current <br> <span class="unit">bpm</span></p></th>
           <td>
             <p class="value heart-pulse">{{ currentBPM }}</p>
           </td></tr></tbody></table>
-          <table class="infoComp"><tbody><tr><th>
+          <table class="info-comp"><tbody><tr><th>
             <p class="head">Highest <br> <span class="unit">bpm</span></p></th>
           <td>
             <p class="value">{{ Math.max(...arrayHeartMonth) }}</p>
           </td></tr></tbody></table>
-          <table class="infoComp"><tbody><tr><th>
+          <table class="info-comp"><tbody><tr><th>
             <p class="head">Lowest <br> <span class="unit">bpm</span></p></th>
           <td>
             <p class="value">{{ Math.min(...arrayHeartMonth) }}</p>
           </td></tr></tbody></table>
-          <table class="infoComp"><tbody><tr><th>
+          <table class="info-comp"><tbody><tr><th>
             <p class="head">Average <br> <span class="unit">bpm</span></p></th>
           <td>
             <p class="value">{{ Math.round(arrayHeartMonth.reduce((a:number, b:number) => a+b, 0 ) / arrayHeartMonth.length) }}</p>
@@ -174,23 +175,23 @@ onMounted(() => {
         </div>
         </div>
         <div v-if="sliderHeart === 2">
-        <div class="infoContainer" v-if="dataMounted">
-          <table class="infoComp"><tbody><tr><th>
+        <div class="info-container" v-if="dataMounted">
+          <table class="info-comp"><tbody><tr><th>
             <p class="head">Current <br> <span class="unit">bpm</span></p></th>
           <td>
             <p class="value heart-pulse">{{ currentBPM }}</p>
           </td></tr></tbody></table>
-          <table class="infoComp"><tbody><tr><th>
+          <table class="info-comp"><tbody><tr><th>
             <p class="head">Highest <br> <span class="unit">bpm</span></p></th>
           <td>
             <p class="value">{{ Math.max(...arrayHeartMonth6) }}</p>
           </td></tr></tbody></table>
-          <table class="infoComp"><tbody><tr><th>
+          <table class="info-comp"><tbody><tr><th>
             <p class="head">Lowest <br> <span class="unit">bpm</span></p></th>
           <td>
             <p class="value">{{ Math.min(...arrayHeartMonth6) }}</p>
           </td></tr></tbody></table>
-          <table class="infoComp"><tbody><tr><th>
+          <table class="info-comp"><tbody><tr><th>
             <p class="head">Average <br> <span class="unit">bpm</span></p></th>
           <td>
             <p class="value">{{ Math.round(arrayHeartMonth6.reduce((a:number, b:number) => a+b, 0 ) / arrayHeartMonth.length) }}</p>
@@ -201,23 +202,23 @@ onMounted(() => {
         </div>
         </div>
         <div v-if="sliderHeart === 3">
-        <div class="infoContainer" v-if="dataMounted">
-          <table class="infoComp"><tbody><tr><th>
+        <div class="info-container" v-if="dataMounted">
+          <table class="info-comp"><tbody><tr><th>
             <p class="head">Current <br> <span class="unit">bpm</span></p></th>
           <td>
             <p class="value heart-pulse">{{ currentBPM }}</p>
           </td></tr></tbody></table>
-          <table class="infoComp"><tbody><tr><th>
+          <table class="info-comp"><tbody><tr><th>
             <p class="head">Highest <br> <span class="unit">bpm</span></p></th>
           <td>
             <p class="value">{{ Math.max(...arrayHeartYear) }}</p>
           </td></tr></tbody></table>
-          <table class="infoComp"><tbody><tr><th>
+          <table class="info-comp"><tbody><tr><th>
             <p class="head">Lowest <br> <span class="unit">bpm</span></p></th>
           <td>
             <p class="value">{{ Math.min(...arrayHeartYear) }}</p>
           </td></tr></tbody></table>
-          <table class="infoComp"><tbody><tr><th>
+          <table class="info-comp"><tbody><tr><th>
             <p class="head">Average <br> <span class="unit">bpm</span></p></th>
           <td>
             <p class="value">{{ Math.round(arrayHeartYear.reduce((a:number, b:number) => a+b, 0 ) / arrayHeartMonth.length) }}</p>
@@ -228,26 +229,26 @@ onMounted(() => {
         </div>
         </div>
       </Tab>
-      <Tab title="shoe-prints">
-        <Slider v-model="sliderStep" class="sliderWrapper" />
+      <Tab title="fa-shoe-prints">
+        <Slider v-model="sliderStep" class="slider-wrapper" />
         <div v-if="sliderStep === 0">
-          <div class="infoContainer" v-if="dataMounted">
-            <table class="infoComp"><tbody><tr><th>
+          <div class="info-container" v-if="dataMounted">
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Average <br> <span class="unit">steps</span></p></th>
             <td>
               <p class="value shoe-prints">{{ stepsWeek.avgValue }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Climbed <br> <span class="unit">avg. floor</span></p></th>
             <td>
               <p class="value">{{ stepsWeek.climbed }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Distance <br> <span class="unit">avg. km</span></p></th>
             <td>
               <p class="value">{{ stepsWeek.distanceValue }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Active <br> <span class="unit">avg. hour</span></p></th>
             <td>
               <p class="value">{{ stepsWeek.durationHour +":"+ stepsWeek.durationMins }}</p>
@@ -258,23 +259,23 @@ onMounted(() => {
           </div>
         </div>
         <div v-if="sliderStep === 1">
-          <div class="infoContainer" v-if="dataMounted">
-            <table class="infoComp"><tbody><tr><th>
+          <div class="info-container" v-if="dataMounted">
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Average <br> <span class="unit">steps</span></p></th>
             <td>
               <p class="value shoe-prints">{{ stepsMonth.avgValue }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Climbed <br> <span class="unit">avg. floor</span></p></th>
             <td>
               <p class="value">{{ stepsMonth.climbed }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Distance <br> <span class="unit">avg. km</span></p></th>
             <td>
               <p class="value">{{ stepsMonth.distanceValue }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Active <br> <span class="unit">avg. hour</span></p></th>
             <td>
               <p class="value">{{ stepsMonth.durationHour +":"+ stepsMonth.durationMins }}</p>
@@ -285,23 +286,23 @@ onMounted(() => {
           </div>
         </div>
         <div v-if="sliderStep === 2">
-          <div class="infoContainer" v-if="dataMounted">
-            <table class="infoComp"><tbody><tr><th>
+          <div class="info-container" v-if="dataMounted">
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Average <br> <span class="unit">steps</span></p></th>
             <td>
               <p class="value shoe-prints">{{ stepsMonth6.avgValue }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Climbed <br> <span class="unit">avg. floor</span></p></th>
             <td>
               <p class="value">{{ stepsMonth6.climbed }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Distance <br> <span class="unit">avg. km</span></p></th>
             <td>
               <p class="value">{{ stepsMonth6.distanceValue }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Active <br> <span class="unit">avg. hour</span></p></th>
             <td>
               <p class="value">{{ stepsMonth6.durationHour +":"+ stepsMonth6.durationMins }}</p>
@@ -312,23 +313,23 @@ onMounted(() => {
           </div>
         </div>
         <div v-if="sliderStep === 3">
-          <div class="infoContainer" v-if="dataMounted">
-            <table class="infoComp"><tbody><tr><th>
+          <div class="info-container" v-if="dataMounted">
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Average <br> <span class="unit">steps</span></p></th>
             <td>
               <p class="value shoe-prints">{{ stepsYear.avgValue }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Climbed <br> <span class="unit">avg. floor</span></p></th>
             <td>
               <p class="value">{{ stepsYear.climbed }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Distance <br> <span class="unit">avg. km</span></p></th>
             <td>
               <p class="value">{{ stepsYear.distanceValue }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Active <br> <span class="unit">avg. hour</span></p></th>
             <td>
               <p class="value">{{ stepsYear.durationHour +":"+ stepsYear.durationMins }}</p>
@@ -339,26 +340,26 @@ onMounted(() => {
           </div>
         </div>
       </Tab>
-      <Tab title="person-walking-dashed-line-arrow-right">
-        <Slider v-model="sliderSpeed" class="sliderWrapper" />
+      <Tab title="fa-person-walking-dashed-line-arrow-right">
+        <Slider v-model="sliderSpeed" class="slider-wrapper" />
         <div v-if="sliderSpeed === 0">
-          <div class="infoContainer" v-if="dataMounted">
-            <table class="infoComp"><tbody><tr><th>
+          <div class="info-container" v-if="dataMounted">
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Latest <br> <span class="unit">km/h</span></p></th>
             <td>
               <p class="value person-walking-dashed-line-arrow-right">{{ speedToday.latest }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Highest <br> <span class="unit">avg. km/h</span></p></th>
             <td>
               <p class="value">{{ Math.max(...arraySpeedWeek).toFixed(1) }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Lowest <br> <span class="unit">avg. km/h</span></p></th>
             <td>
               <p class="value">{{ Math.min(...arraySpeedWeek).toFixed(1) }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Average <br> <span class="unit">km/h</span></p></th>
             <td>
               <p class="value">{{ ((arraySpeedWeek.reduce((a,b) => a+b, 0 ) / arraySpeedWeek.length).toFixed(1)) }}</p>
@@ -369,23 +370,23 @@ onMounted(() => {
           </div>
         </div>
         <div v-if="sliderSpeed === 1">
-          <div class="infoContainer" v-if="dataMounted">
-            <table class="infoComp"><tbody><tr><th>
+          <div class="info-container" v-if="dataMounted">
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Latest <br> <span class="unit">km/h</span></p></th>
             <td>
               <p class="value person-walking-dashed-line-arrow-right">{{ speedToday.latest }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Highest <br> <span class="unit">avg. km/h</span></p></th>
             <td>
               <p class="value">{{ Math.max(...arraySpeedMonth).toFixed(1) }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Lowest <br> <span class="unit">avg. km/h</span></p></th>
             <td>
               <p class="value">{{ Math.min(...arraySpeedMonth).toFixed(1) }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Average <br> <span class="unit">km/h</span></p></th>
             <td>
               <p class="value">{{ ((arraySpeedMonth.reduce((a,b) => a+b, 0 ) / arraySpeedMonth.length).toFixed(1)) }}</p>
@@ -396,23 +397,23 @@ onMounted(() => {
           </div>
         </div>
         <div v-if="sliderSpeed === 2">
-          <div class="infoContainer" v-if="dataMounted">
-            <table class="infoComp"><tbody><tr><th>
+          <div class="info-container" v-if="dataMounted">
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Latest <br> <span class="unit">km/h</span></p></th>
             <td>
               <p class="value person-walking-dashed-line-arrow-right">{{ speedToday.latest}}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Highest <br> <span class="unit">avg. km/h</span></p></th>
             <td>
               <p class="value">{{ Math.max(...arraySpeedMonth6).toFixed(1) }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Lowest <br> <span class="unit">avg. km/h</span></p></th>
             <td>
               <p class="value">{{ Math.min(...arraySpeedMonth6).toFixed(1) }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Average <br> <span class="unit">km/h</span></p></th>
             <td>
               <p class="value">{{ ((arraySpeedMonth6.reduce((a,b) => a+b, 0 ) / arraySpeedMonth6.length).toFixed(1)) }}</p>
@@ -423,23 +424,23 @@ onMounted(() => {
           </div>
         </div>
         <div v-if="sliderSpeed === 3">
-          <div class="infoContainer" v-if="dataMounted">
-            <table class="infoComp"><tbody><tr><th>
+          <div class="info-container" v-if="dataMounted">
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Latest <br> <span class="unit">km/h</span></p></th>
             <td>
               <p class="value person-walking-dashed-line-arrow-right">{{ speedToday.latest }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Highest <br> <span class="unit">avg. km/h</span></p></th>
             <td>
               <p class="value">{{ Math.max(...arraySpeedYear).toFixed(1) }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Lowest <br> <span class="unit">avg. km/h</span></p></th>
             <td>
               <p class="value">{{ Math.min(...arraySpeedYear).toFixed(1) }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Average <br> <span class="unit">km/h</span></p></th>
             <td>
               <p class="value">{{ ((arraySpeedYear.reduce((a,b) => a+b, 0 ) / arraySpeedYear.length).toFixed(1)) }}</p>
@@ -450,26 +451,26 @@ onMounted(() => {
           </div>
         </div>
       </Tab>
-      <Tab title="bed">
-        <Slider v-model="sliderSleep" class="sliderWrapper" />
+      <Tab title="fa-bed">
+        <Slider v-model="sliderSleep" class="slider-wrapper" />
         <div v-if="sliderSleep === 0">
-          <div class="infoContainer" v-if="dataMounted">
-            <table class="infoComp"><tbody><tr><th>
+          <div class="info-container" v-if="dataMounted">
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Total <br> <span class="unit">hour</span></p></th>
             <td>
               <p class="value bed">{{ sleepWeek.awakeHour +":"+ sleepWeek.awakeMins }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">REM <br> <span class="unit">hour</span></p></th>
             <td>
               <p class="value">{{ sleepWeek.remHour +":"+ sleepWeek.remMins }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Core <br> <span class="unit">hour</span></p></th>
             <td>
               <p class="value">{{ sleepWeek.coreHour +":"+ sleepWeek.coreMins }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Deep <br> <span class="unit">hour</span></p></th>
             <td>
               <p class="value">{{ "0:" + sleepWeek.deepMins }}</p>
@@ -480,23 +481,23 @@ onMounted(() => {
           </div>
         </div>
         <div v-if="sliderSleep === 1">
-          <div class="infoContainer" v-if="dataMounted">
-            <table class="infoComp"><tbody><tr><th>
+          <div class="info-container" v-if="dataMounted">
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Total <br> <span class="unit">hour</span></p></th>
             <td>
               <p class="value bed">{{ sleepMonth.awakeHour +":"+ sleepMonth.awakeMins }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">REM <br> <span class="unit">hour</span></p></th>
             <td>
               <p class="value">{{ sleepMonth.remHour +":"+ sleepMonth.remMins }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Core <br> <span class="unit">hour</span></p></th>
             <td>
               <p class="value">{{ sleepMonth.coreHour +":"+ sleepMonth.coreMins }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Deep <br> <span class="unit">hour</span></p></th>
             <td>
               <p class="value">{{ "0:" + sleepMonth.deepMins }}</p>
@@ -507,23 +508,23 @@ onMounted(() => {
           </div>
         </div>
         <div v-if="sliderSleep === 2">
-          <div class="infoContainer" v-if="dataMounted">
-            <table class="infoComp"><tbody><tr><th>
+          <div class="info-container" v-if="dataMounted">
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Total <br> <span class="unit">hour</span></p></th>
             <td>
               <p class="value bed">{{ sleepMonth6.awakeHour +":"+ sleepMonth6.awakeMins }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">REM <br> <span class="unit">hour</span></p></th>
             <td>
               <p class="value">{{ sleepMonth6.remHour +":"+ sleepMonth6.remMins }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Core <br> <span class="unit">hour</span></p></th>
             <td>
               <p class="value">{{ sleepMonth6.coreHour +":"+ sleepMonth6.coreMins }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Deep <br> <span class="unit">hour</span></p></th>
             <td>
               <p class="value">{{ "0:" + sleepMonth6.deepMins }}</p>
@@ -534,23 +535,23 @@ onMounted(() => {
           </div>
         </div>
         <div v-if="sliderSleep === 3">
-          <div class="infoContainer" v-if="dataMounted">
-            <table class="infoComp"><tbody><tr><th>
+          <div class="info-container" v-if="dataMounted">
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Total <br> <span class="unit">hour</span></p></th>
             <td>
               <p class="value bed">{{ sleepYear.awakeHour +":"+ sleepYear.awakeMins }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">REM <br> <span class="unit">hour</span></p></th>
             <td>
               <p class="value">{{ sleepYear.remHour +":"+ sleepYear.remMins }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Core <br> <span class="unit">hour</span></p></th>
             <td>
               <p class="value">{{ sleepYear.coreHour +":"+ sleepYear.coreMins }}</p>
             </td></tr></tbody></table>
-            <table class="infoComp"><tbody><tr><th>
+            <table class="info-comp"><tbody><tr><th>
               <p class="head">Deep <br> <span class="unit">hour</span></p></th>
             <td>
               <p class="value">{{ "0:" + sleepYear.deepMins }}</p>
@@ -562,27 +563,26 @@ onMounted(() => {
         </div>
       </Tab>
     </Tabs>    
-
+    </div>
   </div>
 </template>
 
 <style scoped>
-.sliderWrapper {
-  width: calc(100% - 1.5rem);
-  position: absolute;
+.slider-wrapper {
+  width: calc(100% - 1rem);
 }
 
-.infoContainer {
+.info-container {
   position: relative;
   left: 75%;
-  top: 8rem;
+  top: 8.4rem;
   display: grid;
   width: 25%;
   grid-template-rows: repeat(4, minmax(0, 1fr));
   margin: 0.6rem 0;
 }
 
-.infoComp {
+.info-comp {
   width: 100%;
   height: 3rem;
   border-radius: 1rem;
@@ -592,65 +592,24 @@ onMounted(() => {
   color: var(--black-mute)
 }
 
-.infoComp th {
-  text-align: left;
-  width: 5rem;
-}
-
-.infoComp .head{
-  font-weight: 600; 
-  line-height: 1rem;
-}
-
-.infoComp .unit{
-  font-size: 0.8rem;
-  margin-left: 1px;
-}
-
-.infoComp .value{
-  font-weight: 600; 
-  font-size: 2.4rem;
-  margin: 0
-}
-
 .graph{
   width: 73%;
   margin-left: 0.3rem;
   position: absolute;
-  top: 12rem;
+  top: 13rem;
   padding: 0 1rem 0 0;
-}
-
-.heart-pulse {
-  color: var(--heart);
-}
-
-.shoe-prints {
-  color: var(--steps);
-}
-
-.person-walking-dashed-line-arrow-right {
-  color: var(--speed);
-}
-
-.bed {
-  color: var(--sleep);
 }
 
 @media screen and (max-aspect-ratio: 1) {
 
-  .infoContainer{
+  .info-container{
     grid-template-columns: repeat(2, minmax(0, 1fr));
     left: 0;
     top: 3rem;
     width: 100%;
     height: auto;
   }
-
-  .infoComp th {
-    width: 4rem;
-  }
-
+  
   .graph{
     width: calc(100vw - 2rem);
     top: 19.2rem;

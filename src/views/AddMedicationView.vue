@@ -12,6 +12,7 @@ const selectedType = ref<string | null>(null)
 const selectedUnit = ref<string | null>(null)
 const selectedSchedule = ref<string | null>(medication.schedule[0])
 const selectedInterval = ref<string | null>(medication.intervalDays[0])
+const memo = ref<string>("")
 const week = ref([
   { label: 'M', checked: false },
   { label: 'T', checked: false },
@@ -129,7 +130,7 @@ const transform = (index: number) => {
 </script>
 
 <template>
-  <div class="container_Add">
+  <div class="container-full">
     <div class="fixed">
       <span class="closeIcon topIcon"><slot name="close"></slot></span>
       <span class="backIcon topIcon" @click="backStep" v-if="step !== 0">
@@ -140,290 +141,295 @@ const transform = (index: number) => {
 
     <div class="form-wrapper">
       <div class="form" :style="{transform: step === 0 ? 'translate(0, 0)' : 'translate(-100%, 0)'}">
-        <p class="inputTitle">Medication Name</p>
-        <input type="text" placeholder="Add Medication Name" v-model="selectedName"/>
+        <div class="content-wrapper">
+          <img src="/icons/default.png" class="guide-img" :style="{ marginTop: '3.1rem' }">
+          <p class="inputTitle" > Medication Name</p>
+          <input type="text" placeholder="Add Medication Name" v-model="selectedName"/>
 
-        <p class="inputTitle marginTop">Medication Type</p>
-        <div>
-          <label v-for="type in medication.types" class="radioSelection radioType">
-            <span class="radioLabel">{{type}}</span>
-            <input type="radio" :name="'medication_type'" :value="type" v-model="selectedType" >
-            <font-awesome-icon icon="check" class="checkmark" v-if="selectedType === type"/>
-          </label>
+          <p class="inputTitle margin-top">Medication Type</p>
+          <div>
+            <label v-for="type in medication.types" class="radioSelection radioType">
+              <span class="radioLabel">{{type}}</span>
+              <input type="radio" :name="'medication_type'" :value="type" v-model="selectedType" >
+              <font-awesome-icon icon="check" class="checkmark" v-if="selectedType === type"/>
+            </label>
+          </div>
+
+          <button class="button" @click="nextStep" :disabled="(selectedName === null) || (selectedType === null)"
+          :style="{
+            backgroundColor: (selectedName === null) || (selectedType === null) ? 'var(--divider-light-2)' : 'var(--main-lila-hell)',
+            color: (selectedName === null) || (selectedType === null) ? 'var(--divider-light-1)' : 'white'
+          }">Next</button>
         </div>
-
-        <button class="button" @click="nextStep" :disabled="(selectedName === null) || (selectedType === null)"
-        :style="{
-          backgroundColor: (selectedName === null) || (selectedType === null) ? 'var(--divider-light-2)' : 'var(--main-lila-hell)',
-          color: (selectedName === null) || (selectedType === null) ? 'var(--divider-light-1)' : 'white'
-        }">Next</button>
       </div>
 
       <div class="form" :style="{ transform: transform(1)}">
-        <p class="inputTitle">Medication Strength</p>
-        <p class="inputSubtitle">Strength </p>
-        <input type="number" placeholder="Add Strength" v-model="selectedStrength" min="1" class="inputNum">
+        <div class="content-wrapper">
+          <p class="navTitle">{{ selectedName }} <br> {{ selectedType }}</p>
+          <img src="/icons/default.png" class="guide-img" >
+          <p class="inputTitle">Medication Strength</p>
+          <p class="input-subtitle">Strength </p>
+          <input type="number" placeholder="Add Strength" v-model="selectedStrength" min="1" class="inputNum">
 
-        <p class="inputSubtitle marginTop">Units</p>
-        <div>
-          <label v-for="unit in medication.units" class="radioSelection radioUnit">
-            <span class="radioLabel">{{unit}}</span>
-            <input type="radio" :name="'medication_type'" :value="unit" v-model="selectedUnit">
-            <font-awesome-icon icon="check" class="checkmark" v-if="selectedUnit === unit"/>
-          </label>
+          <p class="input-subtitle margin-top">Units</p>
+          <div>
+            <label v-for="unit in medication.units" class="radioSelection radioUnit">
+              <span class="radioLabel">{{unit}}</span>
+              <input type="radio" :name="'medication_type'" :value="unit" v-model="selectedUnit">
+              <font-awesome-icon icon="check" class="checkmark" v-if="selectedUnit === unit"/>
+            </label>
+          </div>
+          <button class="button" @click="nextStep" :disabled="(selectedUnit === null) || (selectedStrength === null)"
+          :style="{
+            backgroundColor: (selectedUnit === null) || (selectedStrength === null) ? 'var(--divider-light-2)' : 'var(--main-lila-hell)',
+            color: (selectedUnit === null) || (selectedStrength === null) ? 'var(--divider-light-1)' : 'white'
+          }">Next</button>
         </div>
-        <button class="button" @click="nextStep" :disabled="(selectedUnit === null) || (selectedStrength === null)"
-        :style="{
-          backgroundColor: (selectedUnit === null) || (selectedStrength === null) ? 'var(--divider-light-2)' : 'var(--main-lila-hell)',
-          color: (selectedUnit === null) || (selectedStrength === null) ? 'var(--divider-light-1)' : 'white'
-        }">Next</button>
       </div>
 
       <div class="form" :style="{ transform: transform(2)}">
-        <p class="inputTitle">Set a Schedule</p>
-        <p class="inputSubtitle">When will you take this? </p>
-        <select v-model="selectedSchedule">
-          <option v-for="(item, index) in medication.schedule" :key="index" :value="item">
-            {{ item }}
-          </option>
-        </select>
-
-        <div v-if="selectedSchedule === medication.schedule[1]">
-          <p class="inputSubtitle marginTop">On these days:</p>
-          <div class="week-wrapper">
-            <div v-for="(item, index) in week" :key="index" 
-            :style="{
-              backgroundColor: item.checked ? 'var(--main-lila-hell)' : 'var(--white-lila)',
-            }">
-              <label class="week-label"
-                :for="'week' + index" 
-                :style="{ color: item.checked ? 'white' : 'var(--main-lila-dunkel)',
-                }">
-                {{ item.label }}
-              </label>
-              <input type="checkbox" :id="'week' + index" v-model="item.checked" />
-            </div>
-          </div>
-        </div>
-
-        <div v-if="selectedSchedule === medication.schedule[2]">
-          <p class="inputSubtitle marginTop">Interval</p>
-          <select v-model="selectedInterval">
-            <option v-for="(item, index) in medication.intervalDays" :key="index" :value="item">
+        <div class="content-wrapper">
+          <p class="navTitle">{{ selectedName }} <br> {{ selectedType }}, {{ selectedStrength }}{{ selectedUnit }}</p>
+          <img src="/icons/calendar.png" class="guide-img" >
+          <p class="inputTitle">Set a Schedule</p>
+          <p class="input-subtitle">When will you take this? </p>
+          <select v-model="selectedSchedule">
+            <option v-for="(item, index) in medication.schedule" :key="index" :value="item">
               {{ item }}
             </option>
           </select>
-        </div>
 
-        <p class="inputSubtitle marginTop">At what time</p>
-        <div class="table-wrapper">
-          <table>
-            <tbody>
-              <tr v-for="(item, index) in schedule" :key="index" >
-                <td class="align-left" :style="{
-                    display: 'flex', alignItems: 'center',
-                }">
-                  <font-awesome-icon icon="circle-minus" class="circleIcon" @click="deleteSchedule(index)"
-                  :style="{color: 'var(--white-lila-border)', marginRight: '0.5rem' }"/>
-                  <input type="number" v-model="item.hour" min="0" max="23" 
-                  class="inlineNumInput" :style="{ textAlign: 'right' }" /> : 
-                  <input type="number" v-model="item.min" min="0" max="59" class="inlineNumInput"/>
-                  </td>
-                <td class="align-right" :style="{color: 'var(--main-lila-hell)'}">
-                  <input type="number" v-model="item.application" min="1" class="inlineNumInput"
-                  :style="{ textAlign: 'right' }"
-                  />
-                  <span v-if="item.application === 1"> application</span>
-                  <span v-else> applications</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div @click="addNewTime" :style="{ 
-            textAlign: 'left', 
-            marginLeft: '0.2rem',
-            display: 'flex', cursor: 'pointer',
-            }"> 
-            <font-awesome-icon icon="circle-plus" class="circleIcon" :style="{
-              color: 'var(--main-lila-hell)', marginRight: '0.56em' }"/> 
-              Add a Time
+          <div v-if="selectedSchedule === medication.schedule[1]">
+            <p class="input-subtitle margin-top">On these days:</p>
+            <div class="week-wrapper content-wrapper">
+              <div v-for="(item, index) in week" :key="index" 
+              :style="{
+                backgroundColor: item.checked ? 'var(--main-lila-hell)' : 'var(--white-lila)',
+              }">
+                <label class="week-label"
+                  :for="'week' + index" 
+                  :style="{ color: item.checked ? 'white' : 'var(--main-lila-dunkel)',
+                  }">
+                  {{ item.label }}
+                </label>
+                <input type="checkbox" :id="'week' + index" v-model="item.checked" />
+              </div>
+            </div>
           </div>
-        </div>
 
-        <p class="inputSubtitle marginTop">Duration</p>
-        <div class="table-wrapper">
-          <table>
-            <tbody>
-              <tr :style="{color: 'var(--white-lila-border)' }">
-                <td class="align-left">Start Date</td>
-                <td class="align-left">End Date</td>
-              </tr>
-              <tr>
-                <td class="align-left">
-                  <font-awesome-icon icon="calendar" class="calenderIcon"/>{{ todayDate }}
-                </td>
-                <td class="align-left">
-                  <font-awesome-icon icon="calendar" class="calenderIcon"/>
-                  None
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+          <div v-if="selectedSchedule === medication.schedule[2]">
+            <p class="input-subtitle margin-top">Interval</p>
+            <select v-model="selectedInterval">
+              <option v-for="(item, index) in medication.intervalDays" :key="index" :value="item">
+                {{ item }}
+              </option>
+            </select>
+          </div>
 
-        <button class="button" @click="nextStep" :disabled="schedule.length === 0"
-        :style="{
-          backgroundColor: schedule.length === 0 ? 'var(--divider-light-2)' : 'var(--main-lila-hell)',
-          color: schedule.length === 0 ? 'var(--divider-light-1)' : 'white'
-        }">Next</button>
+          <p class="input-subtitle margin-top">At what time</p>
+          <div class="table-wrapper">
+            <table>
+              <tbody>
+                <tr v-for="(item, index) in schedule" :key="index" >
+                  <td class="align-left" :style="{
+                      display: 'flex', alignItems: 'center',
+                  }">
+                    <font-awesome-icon icon="circle-minus" class="circleIcon" @click="deleteSchedule(index)"
+                    :style="{color: 'var(--white-lila-border)', marginRight: '0.5rem' }"/>
+                    <input type="number" v-model="item.hour" min="0" max="23" 
+                    class="inlineNumInput" :style="{ textAlign: 'right' }" /> : 
+                    <input type="number" v-model="item.min" min="0" max="59" class="inlineNumInput"/>
+                    </td>
+                  <td class="align-right" :style="{color: 'var(--main-lila-hell)'}">
+                    <input type="number" v-model="item.application" min="1" class="inlineNumInput"
+                    :style="{ textAlign: 'right' }"
+                    />
+                    <span v-if="item.application === 1"> application</span>
+                    <span v-else> applications</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div @click="addNewTime" :style="{ 
+              textAlign: 'left', 
+              marginLeft: '0.2rem',
+              display: 'flex', cursor: 'pointer',
+              }"> 
+              <font-awesome-icon icon="circle-plus" class="circleIcon" :style="{
+                color: 'var(--main-lila-hell)', marginRight: '0.56em' }"/> 
+                Add a Time
+            </div>
+          </div>
+
+          <p class="input-subtitle margin-top">Duration</p>
+          <div class="table-wrapper">
+            <table>
+              <tbody>
+                <tr :style="{color: 'var(--white-lila-border)' }">
+                  <td class="align-left">Start Date</td>
+                  <td class="align-left">End Date</td>
+                </tr>
+                <tr>
+                  <td class="align-left">
+                    <font-awesome-icon icon="calendar" class="calenderIcon"/>{{ todayDate }}
+                  </td>
+                  <td class="align-left">
+                    <font-awesome-icon icon="calendar" class="calenderIcon"/>
+                    None
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <button class="button" @click="nextStep" :disabled="schedule.length === 0"
+          :style="{
+            backgroundColor: schedule.length === 0 ? 'var(--divider-light-2)' : 'var(--main-lila-hell)',
+            color: schedule.length === 0 ? 'var(--divider-light-1)' : 'white'
+          }">Next</button>
+        </div>
       </div> 
 
       <div class="form" :style="{ transform: transform(3)}">
-        <div class="selected-text">{{ selectedName }} <br> 
-          {{ selectedType }}, {{ selectedStrength }} {{ selectedUnit }}
-        </div>
-        <img v-bind:src="selectedShapeIndex === null ? '/pill/default.png' : '/pill/' + medication.shapeImageNames[selectedShapeIndex] + '.png'" class="default-img"/>
+        <div class="content-wrapper">
+          <p class="navTitle">{{ selectedName }} <br> {{ selectedType }}, {{ selectedStrength }}{{ selectedUnit }}</p>
+          <img v-bind:src="selectedShapeIndex === null ? '/icons/default.png' : '/pill/' + medication.shapeImageNames[selectedShapeIndex] + '.png'" 
+          class="guide-img default-img"/>
 
-        <p class="inputTitle">Choose the Shape</p>
-        <div class="image-wrapper">
-          <img v-for="(name, index) in medication.shapeImageNames" :key="index" 
-          :src="'/pill/' + name +'.png'" class="shape-img" 
-          @click="selectShape(index)"
-          :style="{ 
-            outline: selectedShapeIndex === index ? '0.3rem solid var(--white-lila-border)' : 'none',
-            outlineOffset: '0.2rem',
-             }">
+          <p class="inputTitle">Choose the Shape</p>
+          <div class="image-wrapper">
+            <img v-for="(name, index) in medication.shapeImageNames" :key="index" 
+            :src="'/pill/' + name +'.png'" class="shape-img" 
+            @click="selectShape(index)"
+            :style="{ 
+              outline: selectedShapeIndex === index ? '0.3rem solid var(--white-lila-border)' : 'none',
+              outlineOffset: '0.2rem',
+              }">
+          </div>
+        
+          <button class="button" @click="nextStep" :disabled="( selectedShapeIndex === null)"
+          :style="{
+            backgroundColor: selectedShapeIndex === null ? 'var(--divider-light-2)' : 'var(--main-lila-hell)',
+            color: selectedShapeIndex === null ? 'var(--divider-light-1)' : 'white'
+          }">Next</button>
         </div>
-       
-        <button class="button" @click="nextStep" :disabled="( selectedShapeIndex === null)"
-        :style="{
-          backgroundColor: selectedShapeIndex === null ? 'var(--divider-light-2)' : 'var(--main-lila-hell)',
-          color: selectedShapeIndex === null ? 'var(--divider-light-1)' : 'white'
-        }">Next</button>
       </div> 
 
       <div class="form" :style="{ transform: transform(4)}">
-        <div class="selected-text">{{ selectedName }} <br> 
-          {{ selectedType }}, {{ selectedStrength }} {{ selectedUnit }}
-        </div>
-        <img 
-        :style="{ backgroundColor: selectedBgIndex === null? 'var(--white-lila)' : medication.backgroundColor[selectedBgIndex] }"
-        v-bind:src="(selectedShape === null || selectedColorLeft === null || selectedColorRight === null ) ? 
-        '/pill/' + medication.shapeImageNames[selectedShapeIndex ?? -1] + '.png' : 
-        '/pill/' + selectedShape + '_' + selectedColorLeft + '_' + selectedColorRight + '.png'" 
-        class="default-img"/>
+        <div class="content-wrapper">
+          <p class="navTitle">{{ selectedName }} <br> {{ selectedType }}, {{ selectedStrength }}{{ selectedUnit }}</p>
+          <img 
+          :style="{ backgroundColor: selectedBgIndex === null? 'var(--white-lila)' : medication.backgroundColor[selectedBgIndex] }"
+          v-bind:src="(selectedShape === null || selectedColorLeft === null || selectedColorRight === null ) ? 
+          '/pill/' + medication.shapeImageNames[selectedShapeIndex ?? -1] + '.png' : 
+          '/pill/' + selectedShape + '_' + selectedColorLeft + '_' + selectedColorRight + '.png'" 
+          class="guide-img default-img"/>
 
-        <p class="inputTitle">Choose Colors</p>
-        <div v-if="selectedShapeIndex !== null && medication.shapeImageNames[selectedShapeIndex].includes('capsule')">
-          <p class="inputSubtitle marginTop">Left Side</p>
+          <p class="inputTitle">Choose Colors</p>
+          <div v-if="selectedShapeIndex !== null && medication.shapeImageNames[selectedShapeIndex].includes('capsule')">
+            <p class="input-subtitle palette-title">Left Side</p>
+            <div class="palette-wrapper">
+              <div v-for="(item, index) in medication.chooseColor" :key="index" 
+              class="palette" 
+              @click="selectColorLeft(index)"
+              :style="{ 
+              backgroundColor: item,
+              outline: selectedColorLeftIndex === index ? '0.3rem solid var(--white-lila-border)' : 'none',
+              outlineOffset: '0.2rem',
+              }">
+              </div>
+            </div>
+          </div>
+
+          <p class="input-subtitle palette-title" 
+            v-if="selectedShapeIndex !== null && !(medication.shapeImageNames[selectedShapeIndex].includes('capsule'))">
+            Shape Color
+          </p>
+          <p class="input-subtitle palette-title margin-top" v-else>Right Side</p>
           <div class="palette-wrapper">
             <div v-for="(item, index) in medication.chooseColor" :key="index" 
             class="palette" 
-            @click="selectColorLeft(index)"
+            @click="selectColorRight(index)"
             :style="{ 
             backgroundColor: item,
-            outline: selectedColorLeftIndex === index ? '0.3rem solid var(--white-lila-border)' : 'none',
+            outline: selectedColorRightIndex === index ? '0.3rem solid var(--white-lila-border)' : 'none',
             outlineOffset: '0.2rem',
-             }">
+              }">
             </div>
           </div>
-        </div>
 
-        <p class="inputSubtitle marginTop" v-if="selectedShapeIndex !== null && !(medication.shapeImageNames[selectedShapeIndex].includes('capsule'))">Shape Color</p>
-        <p class="inputSubtitle marginTop" v-else>Right Side</p>
-        <div class="palette-wrapper">
-          <div v-for="(item, index) in medication.chooseColor" :key="index" 
-          class="palette" 
-          @click="selectColorRight(index)"
-          :style="{ 
-          backgroundColor: item,
-          outline: selectedColorRightIndex === index ? '0.3rem solid var(--white-lila-border)' : 'none',
-          outlineOffset: '0.2rem',
-            }">
+          <p class="input-subtitle palette-title margin-top">Background</p>
+          <div class="palette-wrapper">
+            <div v-for="(item, index) in medication.backgroundColor" :key="index" 
+            class="palette" 
+            @click="selectBgColor(index)"
+            :style="{ 
+              backgroundColor: item,
+              outline: selectedBgIndex === index ? '0.3rem solid var(--white-lila-border)' : 'none',
+              outlineOffset: '0.2rem',
+              }">
+            </div>
           </div>
+        
+          <button class="button" @click="nextStep" :style="{ backgroundColor: 'var(--main-lila-hell)', color: 'white' }">Next</button>
         </div>
-
-        <p class="inputSubtitle marginTop">Background</p>
-        <div class="palette-wrapper">
-          <div v-for="(item, index) in medication.backgroundColor" :key="index" 
-          class="palette" 
-          @click="selectBgColor(index)"
-          :style="{ 
-            backgroundColor: item,
-            outline: selectedBgIndex === index ? '0.3rem solid var(--white-lila-border)' : 'none',
-            outlineOffset: '0.2rem',
-             }">
-          </div>
-        </div>
-       
-        <button class="button" @click="nextStep" :style="{ backgroundColor: 'var(--main-lila-hell)', color: 'white' }">Next</button>
       </div> 
 
       <div class="form" :style="{ transform: transform(5)}">
-        <img 
-        :style="{ backgroundColor: selectedBgIndex === null? 'var(--white-lila)' : medication.backgroundColor[selectedBgIndex] }"
-        v-bind:src="'/pill/' + selectedShape + '_' + selectedColorLeft + '_' + selectedColorRight + '.png'" 
-        class="default-img"/>
+        <div class="content-wrapper">
+          <p :style="{ fontSize: '1rem', margin: '1rem'}" > <b>Review Details</b></p>
+          <img 
+          :style="{ backgroundColor: selectedBgIndex === null? 'var(--white-lila)' : medication.backgroundColor[selectedBgIndex] }"
+          v-bind:src="'/pill/' + selectedShape + '_' + selectedColorLeft + '_' + selectedColorRight + '.png'" 
+          class="guide-img default-img"/>
 
-        <p class="inputTitle"> {{ selectedName }} </p>
-        {{ selectedType }}, {{ selectedStrength }} {{ selectedUnit }}
+          <p class="inputTitle"> {{ selectedName }} </p>
+          {{ selectedType }}, {{ selectedStrength }} {{ selectedUnit }}
 
-        <p class="inputSubtitle marginTop">Schedule</p>
-        <div class="table-wrapper">
-          <table>
-            <tbody>
-              <tr v-if= "selectedSchedule?.includes('Every Day') ">
-                <td colspan="2" class="align-left" :style="{ borderBottom: '1px solid white' }">{{ selectedSchedule }}</td>
-              </tr>
-              <tr v-if= "selectedSchedule?.includes('Specific') ">
-                <td colspan="2" class="align-left" :style="{ borderBottom: '1px solid white' }">{{ selectedDays }}</td>
-              </tr>
-              <tr v-if= "selectedSchedule?.includes('Every Few Days') ">
-                <td colspan="2" class="align-left" :style="{ borderBottom: '1px solid white' }">{{ selectedInterval }}</td>
-              </tr>
-              <tr v-for="(item, index) in schedule" :key="index" class="align-left">
-                <td>{{ item.hour < 10 ? '0' + item.hour : item.hour }}:{{ item.min }} </td>
-                <td>{{ item.application > 1? item.application + ' applications' : item.application + ' application'}}</td>          
-              </tr>
-              <tr class="align-left">
-                <td colspan="2" class="align-left" :style="{ borderTop: '1px solid white', color: 'var(--white-lila-border)' }">Starts on {{ todayDate }}
-                </td>
-              </tr> 
-            </tbody>
-          </table>
+          <p class="input-subtitle margin-top">Schedule</p>
+          <div class="table-wrapper">
+            <table>
+              <tbody>
+                <tr v-if= "selectedSchedule?.includes('Every Day') ">
+                  <td colspan="2" class="align-left" :style="{ borderBottom: '1px solid white' }">{{ selectedSchedule }}</td>
+                </tr>
+                <tr v-if= "selectedSchedule?.includes('Specific') ">
+                  <td colspan="2" class="align-left" :style="{ borderBottom: '1px solid white' }">{{ selectedDays }}</td>
+                </tr>
+                <tr v-if= "selectedSchedule?.includes('Every Few Days') ">
+                  <td colspan="2" class="align-left" :style="{ borderBottom: '1px solid white' }">{{ selectedInterval }}</td>
+                </tr>
+                <tr v-for="(item, index) in schedule" :key="index" class="align-left">
+                  <td>{{ item.hour < 10 ? '0' + item.hour : item.hour }}:{{ item.min }} </td>
+                  <td>{{ item.application > 1? item.application + ' applications' : item.application + ' application'}}</td>          
+                </tr>
+                <tr class="align-left">
+                  <td colspan="2" class="align-left" :style="{ borderTop: '1px solid white', color: 'var(--white-lila-border)' }">Starts on {{ todayDate }}
+                  </td>
+                </tr> 
+              </tbody>
+            </table>
+          </div>
+          
+          <p class="input-subtitle margin-top">Optional Details</p>
+          <textarea class="textArea" name="memo" rows="4" cols="50" v-model="memo" placeholder="Notes"></textarea>
+          
+          <button class="button" @click="done" :style="{ backgroundColor: 'var(--main-lila-hell)', color: 'white' }">Done</button>
         </div>
-      
-        <button class="button" @click="done" :style="{ backgroundColor: 'var(--main-lila-hell)', color: 'white' }">Done</button>
       </div> 
     </div>     
   </div>
 </template>
 
 <style scope>
-.container_Add{
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  background-color: white;
-  transition-duration: 500ms;
-  z-index: 100;
-  top: 0;
+.guide-img{
+  width: 30%;
 }
 
-.container_Add::-webkit-scrollbar {
-  display: none;
-}
-
-.topIcon{
-  color: var(--main-lila-hell);
-  padding: 0.5rem 0.5rem 0 0.5rem;
-  position: fixed;
-  cursor: pointer;
-}
-
-.closeIcon{
-  font-size: 1.4rem;
-  right: 0.4rem;
+.navTitle {
+  margin: 0.7rem 0;
+  line-height: 1rem;
+  font-size: 0.8rem;
 }
 
 .backIcon{
@@ -440,47 +446,27 @@ const transform = (index: number) => {
   margin: auto;
   width: 100%;
   text-align: center;
-  padding-top: 3.2rem;
-  }
+}
 
 .form {
   transition-duration: 500ms;
   background-color: white;
   position: fixed;
   width: 100%;
-  height: calc(100vh - 3.2rem);
+  height: calc(100vh);
   overflow-y: scroll;
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;
   margin-bottom: 3rem;
 }
 
-.inputTitle{
-  font-size: 1.6rem;
-  margin-bottom: 0.4rem;
-  font-weight: 500;
-}
-
-.inputSubtitle{
-  font-size: 1rem;
-  margin-bottom: 0.4rem;
-  margin-left: 25%;
-  text-align: left;
-}
-
-.marginTop {
-  margin-top: 2rem;
-}
-
 input[type=text],
 .inputNum,
 .radioSelection,
 select, .button,
-.week-wrapper,
-.table-wrapper,
-.image-wrapper,
-.palette-wrapper{
-  width: 50%;
+.textArea
+{
+  width: 100%;
   margin: auto;
 }
 
@@ -547,6 +533,16 @@ select {
   -moz-appearance: textfield;
 }
 
+.textArea {
+  border: none;
+  border-radius: 0.8rem;
+  background-color: var(--white-lila);
+  padding: 1rem;
+  line-height: 1.5rem;
+  font-family: var(--font);
+  font-size: 1rem;
+}
+
 .inlineNumInput {
   -moz-appearance: textfield;
   background-color: var(--white-lila);
@@ -564,10 +560,11 @@ select{
   background-position: right 1rem top 50%;
   background-size: 0.65rem auto;
   cursor: pointer;
-  color: black;
+  color: var(--main-lila-hell)
 }
 
-input[type=text]:focus {
+input[type=text]:focus,
+textarea:focus {
   border: none;
 }
 
@@ -598,7 +595,6 @@ input[type=text]:focus {
   border: none;
   border-radius: 0.8rem;
   font-size: 1rem;
-  left: 10%;
   margin-top: 2rem;
   margin-bottom: 2rem;
   cursor: pinter;
@@ -678,8 +674,6 @@ td {
 }
 
 .default-img {
-  width: 14rem;
-  margin-bottom: 0.5rem;
   transition-duration: 500ms;
 }
 
@@ -697,34 +691,18 @@ td {
   margin: auto;
 }
 
-@media screen and (max-aspect-ratio: 1) {
-  input[type=text],
-  .inputNum,
-  .radioSelection,
-  .button,
-  select,
-  .week-wrapper,
-  .table-wrapper,
-  .image-wrapper,
-  .palette-wrapper {
-    width: 90%;
-  }
+.palette-title {
+  margin-bottom: 1rem;
+  padding-left: 1%
+}
 
+@media screen and (max-aspect-ratio: 1) {
   .button{
-    left: 3%;
     cursor: pointer;
   }
 
-  .inputSubtitle{
-    margin-left: 6%;
-  }
-
-  .default-img {
-    width: 10rem;
-  }
-
   .palette {
-    width:70%;
+    width: 56%;
   }
 }
 </style>

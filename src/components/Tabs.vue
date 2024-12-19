@@ -6,40 +6,34 @@ export default defineComponent({
   setup(props, { slots }) {
     const gap: number = 0.2
     const margin: number = 0.6
+    const aspectRatio = ref<number>(window.innerWidth / window.innerHeight)
 
     // Define the type for the `tabTitles` ref, which is an array of strings
     const tabTitles = ref<string[]>(slots.default ? slots.default().map((tab: any) => tab.props.title) : [])  
 
     // Define the type for `selectedTitle` as a string
     const selectedTitle = ref<string>(tabTitles.value[0])
+    const selectedIndex = ref<number>(0)
 
     // Provide `selectedTitle` to descendant components
     provide("selectedTitle", selectedTitle)
 
     const selectionBarLeft = () => {
-      switch(selectedTitle.value) {
-        case "heart-pulse":
-          return 0
-        case "shoe-prints":
-          return 26
-        case "person-walking-dashed-line-arrow-right":
+      switch(selectedIndex.value) {
+        case 0:
+          return aspectRatio.value > 1 ? 0.5 : 1
+        case 1:
+          return 25
+        case 2:
           return 50
-        case "bed":
-          return 76
+        case 3:
+          return aspectRatio.value > 1 ? 75.5 : 75
       }
     }
 
-    const selectionBarOffset = () => {
-      switch(selectedTitle.value) {
-        case "heart-pulse":
-          return gap + margin
-        case "shoe-prints":
-          return 0
-        case "person-walking-dashed-line-arrow-right":
-          return 0
-        case "bed":
-          return -margin-gap
-      }
+    const setSelected = (index: number, title: string) => {
+      selectedIndex.value = index
+      selectedTitle.value = title
     }
 
     return {
@@ -47,7 +41,8 @@ export default defineComponent({
       tabTitles,
       selectedTitle,
       selectionBarLeft,
-      selectionBarOffset,
+      selectedIndex,
+      setSelected
     }
   }
 })
@@ -56,11 +51,12 @@ export default defineComponent({
 <template>
   <div class="tabWrapper">
     <ul class="tabs">
-      <li v-for="title in tabTitles" :key="title" class="tab" @click="selectedTitle = title">
-        <font-awesome-icon :icon="title" class="icon" :class="selectedTitle === title ? title : 'icon'"></font-awesome-icon>
+      <div class="selectionBar" :style="{left: `calc(${selectionBarLeft()}% `}"></div>
+      <li v-for="(title, index) in tabTitles" :key="title" class="tab" @click="setSelected(index, title)">
+        <font-awesome-icon :icon="title" class="icon" v-if="title.includes('fa')"
+        :class="selectedTitle === title ? title.replace('fa-', '') : 'icon'"></font-awesome-icon>
+        <span v-else :class="selectedTitle === title ? 'selected' : 'not-selected'">{{ title }}</span>
       </li>
-      <div class="selectionBar" :style="{left: `calc(${selectionBarLeft()}% + ${selectionBarOffset()}rem )`}">
-      </div>
     </ul>
     <slot></slot>
   </div>
@@ -75,7 +71,7 @@ export default defineComponent({
   --marginTop: calc(var(--height)/2 - var(--block-size)/2);
   --margin: 0.6rem;
 
-  width: calc(100% - var(--marginTop)*2);
+  width: 100%;
   margin: var(--margin) auto;
 }
 
@@ -93,6 +89,7 @@ export default defineComponent({
   overflow: hidden;
   align-items: center;
   cursor: pointer;
+  position: relative;
 }
 
 .tab {
@@ -127,21 +124,24 @@ export default defineComponent({
   color: var(--sleep);
 }
 
+.not-selected {
+  color: var(--divider-light-1);
+}
+
 .selectionBar {
   background-color: rgb(255, 255, 255);
-  width: calc(24% - 0.4rem);
-  margin: 0 0.2rem;
+  width: 24%;
+  margin: 0;
   height: calc( var(--height) - 0.6rem);
   position: absolute;
-  top: 0.9rem;
+  top: 0.3rem;
   border-radius: 0.6rem;
   transition-duration: 500ms;
 }
 
 @media screen and (max-aspect-ratio: 1) {
   .selectionBar {
-  position: fixed;
-  top: 0.91rem;
+    width: 24%;
   }
 }
 </style>
