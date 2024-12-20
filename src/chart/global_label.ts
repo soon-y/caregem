@@ -12,12 +12,24 @@ export const month: string[] = []
 export const month6: string[] = []
 export const year: string[] = []
 
-const weekArray: string[] = [
+export const weekArray: string[] = [
   "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"
+]
+
+export const weekArrayKurz: string[] = [
+  "S", "M", "T", "W", "T", "F", "S"
+]
+
+export const weekArrayFull: string[] = [
+  "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
 ]
 
 export const monthArray: string[] = [
   "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+]
+
+export const monthArrayFull: string[] = [
+  "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
 ]
 
 for (let i: number = 0; i <= 6; i++) {
@@ -123,6 +135,34 @@ export const getOrCreateTooltip = (chart: any): HTMLElement => {
   return tooltipEl
 }
 
+export const getOrCreateTooltipKruz = (chart: any): HTMLElement => {
+  let tooltipEl = chart.canvas.parentNode.querySelector('div')
+
+  if (!tooltipEl) {
+    tooltipEl = document.createElement('div')
+    tooltipEl.style.background = 'rgba(200,200,200,0.3)'
+    tooltipEl.style.borderRadius = '10px'
+    tooltipEl.style.color = 'black'
+    tooltipEl.style.opacity = 1
+    tooltipEl.style.pointerEvents = 'none'
+    tooltipEl.style.position = 'absolute'
+    tooltipEl.style.transform = 'translate(-70%, -100%)'
+    tooltipEl.style.transition = 'all .1s ease'
+    tooltipEl.style.width = '6.2rem'
+
+    const table = document.createElement('table')
+    table.style.margin = '0px'
+
+    tooltipEl.appendChild(table)
+    chart.canvas.parentNode.appendChild(tooltipEl)
+  }
+  return tooltipEl
+}
+
 export function getRandomNumber(min: number, max: number): number {
-  return Math.floor(Math.random() * (max - min + 1) + min);
+  return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
+export function getRandomNumberFloat(min: number, max: number): number {
+  return parseFloat((Math.random() * (max - min + 1) + min).toFixed(1))
 }

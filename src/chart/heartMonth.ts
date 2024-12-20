@@ -1,7 +1,7 @@
 import { getRandomNumber, getOrCreateTooltip, month, monthNum, date, monthArray  } from './global_label'
 import { array as arrayToday } from './heartToday'
 
-const array2: number[][] = [];
+const array2: number[][] = []
 const labelArray: string[] = month
 
 for (let i: number = 0; i < month.length-1; i++) {
@@ -15,7 +15,7 @@ const tupleArray: (number | [number, number] | null)[] = array2.map(subArray => 
       return [subArray[0], subArray[1]]; // Convert sub-array to tuple
   }
   return null; // Or handle cases where sub-array length is not 2
-});
+})
 
 export const array = () => {
   let arrayNum: number[] = [];
@@ -54,7 +54,7 @@ export const options = {
       external: function(context: { chart: any, tooltip: any }){
         const {chart, tooltip} = context
         const tooltipEl = getOrCreateTooltip(chart)
-        const lineHeight: string  = '18px'
+        const lineHeight: number = 18
 
         // Set Text
         if (tooltip.body) {
@@ -65,7 +65,7 @@ export const options = {
           titleLines.forEach((title: string) => {
             const tr = document.createElement('tr')
             tr.style.borderWidth = '0'
-            tr.style.lineHeight = lineHeight
+            tr.style.lineHeight = lineHeight +'px'
 
             const th = document.createElement('th')
             th.style.borderWidth = '0'
@@ -80,17 +80,17 @@ export const options = {
               month = monthNum - 1 < 0 ? monthNum - 1 + 12 : monthNum - 1
             }
             const text = document.createTextNode(monthArray[month] + " " + title)
-            th.appendChild(text);
-            tr.appendChild(th);
-            tableHead.appendChild(tr);
+            th.appendChild(text)
+            tr.appendChild(th)
+            tableHead.appendChild(tr)
           })
 
-          const tableBody = document.createElement('tbody');
+          const tableBody = document.createElement('tbody')
           bodyLines.forEach((body: string, i: number) => {
             const tr = document.createElement('tr')
             tr.style.backgroundColor = 'inherit'
             tr.style.borderWidth = '0'
-            tr.style.lineHeight = lineHeight
+            tr.style.lineHeight = lineHeight +'px'
 
             const td = document.createElement('td')
             td.style.borderWidth = '0'
@@ -103,27 +103,20 @@ export const options = {
             newBody = newBody.replace("]", "")
             newBody = newBody.replace(", ", "-")
             const text = document.createTextNode(newBody)       
+
+            const span = document.createElement('span')
+            span.style.fontSize = '14px'
+
+            const unit = document.createTextNode(" bpm")
+            const br = document.createElement('br')
+            span.appendChild(unit)
+
             td.appendChild(text)
+            td.appendChild(br)
+            td.appendChild(span)
             tr.appendChild(td)
             tableBody.appendChild(tr)
           })
-
-          const tableUnit = document.createElement('tbody')
-
-          const tr = document.createElement('tr')
-          tr.style.backgroundColor = 'inherit'
-          tr.style.borderWidth = '0'
-          tr.style.lineHeight = lineHeight
-
-          const td = document.createElement('td')
-          td.style.borderWidth = '0'
-          td.style.fontSize = '12px'
-
-          const unit = document.createTextNode(" bpm")
-          td.appendChild(unit)
-          tr.appendChild(td)
-          tableUnit.appendChild(tr)
-
           const tableRoot = tooltipEl.querySelector('table') as HTMLTableElement
 
           // Remove old children
@@ -134,7 +127,6 @@ export const options = {
           // Add new children
           tableRoot.appendChild(tableHead)
           tableRoot.appendChild(tableBody)
-          tableRoot.appendChild(tableUnit)
       }
 
       const { offsetLeft: positionX, offsetTop: positionY } = chart.canvas

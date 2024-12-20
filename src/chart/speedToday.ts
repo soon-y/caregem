@@ -1,4 +1,4 @@
-import { getRandomNumber, getOrCreateTooltip, today } from './global_label'
+import { getRandomNumberFloat,getOrCreateTooltipKruz, today } from './global_label'
 
 const array2: number[][] = [];
 const currentHour: number = new Date().getHours();
@@ -13,9 +13,9 @@ for (let i: number = 0; i < awake; i++) {
 
 for (let i: number = awake; i <= currentHour; i++) {
   if(i <= sleep){
-    let random: number[] = [getRandomNumber(2, 5),getRandomNumber(2, 5)]
+    let random: number[] = [getRandomNumberFloat(2, 5),getRandomNumberFloat(2, 5)]
     while (random[0] === random[1]){
-      random = [getRandomNumber(2, 5),getRandomNumber(2, 5)]
+      random = [getRandomNumberFloat(2, 5),getRandomNumberFloat(2, 5)]
     }
     let data: number[] = [Math.min(...random), Math.max(...random)]
     array2.push(data)
@@ -42,7 +42,7 @@ export const array = () => {
   return arrayNum
 }
 
-export const latest: number = array()[array().length-1] > 0 ? parseFloat((array()[array().length-2]).toFixed(1)) : getRandomNumber(1,3)
+export const latest: number = array()[array().length-1] > 0 ? parseFloat((array()[array().length-2]).toFixed(1)) : getRandomNumberFloat(1,3)
 
 export const datasets = () => ({
   labels: labelArray,
@@ -69,8 +69,8 @@ export const options = {
       enabled: false,
       external: function(context: { chart: any, tooltip: any }){
         const {chart, tooltip} = context
-        const tooltipEl = getOrCreateTooltip(chart)
-        const lineHeight: string  = '18px'
+        const tooltipEl = getOrCreateTooltipKruz(chart)
+        const lineHeight: number = 18
 
         // Set Text
         if (tooltip.body) {
@@ -81,7 +81,7 @@ export const options = {
           titleLines.forEach((title: string) => {
             const tr = document.createElement('tr')
             tr.style.borderWidth = '0'
-            tr.style.lineHeight = lineHeight
+            tr.style.lineHeight = lineHeight +'px'
 
             const th = document.createElement('th')
             th.style.borderWidth = '0'
@@ -103,7 +103,7 @@ export const options = {
             const tr = document.createElement('tr')
             tr.style.backgroundColor = 'inherit'
             tr.style.borderWidth = '0'
-            tr.style.lineHeight = lineHeight
+            tr.style.lineHeight = lineHeight +'px'
 
             const td = document.createElement('td')
             td.style.borderWidth = '0'
@@ -116,27 +116,20 @@ export const options = {
             newBody = newBody.replace("]", "")
             newBody = newBody.replace(", ", "-")
             const text = document.createTextNode(newBody)     
+
+            const span = document.createElement('span')
+            span.style.fontSize = '14px'
+
+            const unit = document.createTextNode(" km/h")
+            const br = document.createElement('br')
+            span.appendChild(unit)
+
             td.appendChild(text)
+            td.appendChild(br)
+            td.appendChild(span)
             tr.appendChild(td)
             tableBody.appendChild(tr)
           })
-
-          const tableUnit = document.createElement('tbody')
-
-          const tr = document.createElement('tr')
-          tr.style.backgroundColor = 'inherit'
-          tr.style.borderWidth = '0'
-          tr.style.lineHeight = lineHeight
-
-          const td = document.createElement('td')
-          td.style.borderWidth = '0'
-          td.style.fontSize = '12px'
-
-          const unit = document.createTextNode(" km/h")
-          td.appendChild(unit)
-          tr.appendChild(td)
-          tableUnit.appendChild(tr)
-
           const tableRoot = tooltipEl.querySelector('table') as HTMLTableElement
 
           // Remove old children
@@ -147,7 +140,6 @@ export const options = {
           // Add new children
           tableRoot.appendChild(tableHead)
           tableRoot.appendChild(tableBody)
-          tableRoot.appendChild(tableUnit)
       }
 
       const { offsetLeft: positionX, offsetTop: positionY } = chart.canvas

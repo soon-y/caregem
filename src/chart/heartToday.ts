@@ -58,7 +58,7 @@ export const options = {
       external: function(context: { chart: any, tooltip: any }){
         const {chart, tooltip} = context
         const tooltipEl = getOrCreateTooltip(chart)
-        const lineHeight: string  = '18px'
+        const lineHeight: number = 18
 
         // Set Text
         if (tooltip.body) {
@@ -69,7 +69,7 @@ export const options = {
           titleLines.forEach((title: string) => {
             const tr = document.createElement('tr')
             tr.style.borderWidth = '0'
-            tr.style.lineHeight = lineHeight
+            tr.style.lineHeight = lineHeight +'px'
 
             const th = document.createElement('th')
             th.style.borderWidth = '0'
@@ -81,17 +81,17 @@ export const options = {
             let newTitle: string = number > 12 ? (number-12).toString() + ' pm' : number + ' am' 
             if (number === 0) newTitle = '12 am'
             const text = document.createTextNode(newTitle)
-            th.appendChild(text);
-            tr.appendChild(th);
-            tableHead.appendChild(tr);
+            th.appendChild(text)
+            tr.appendChild(th)
+            tableHead.appendChild(tr)
           })
 
-          const tableBody = document.createElement('tbody');
+          const tableBody = document.createElement('tbody')
           bodyLines.forEach((body: string, i: number) => {
             const tr = document.createElement('tr')
             tr.style.backgroundColor = 'inherit'
             tr.style.borderWidth = '0'
-            tr.style.lineHeight = lineHeight
+            tr.style.lineHeight = lineHeight +'px'
 
             const td = document.createElement('td')
             td.style.borderWidth = '0'
@@ -103,27 +103,21 @@ export const options = {
             let newBody: string = body[0].replace("[", "")
             newBody = newBody.replace("]", "")
             newBody = newBody.replace(", ", "-")
-            const text = document.createTextNode(newBody)       
+            const text = document.createTextNode(newBody)
+            
+            const span = document.createElement('span')
+            span.style.fontSize = '14px'
+
+            const unit = document.createTextNode(" bpm")
+            const br = document.createElement('br')
+            span.appendChild(unit)
+
             td.appendChild(text)
+            td.appendChild(br)
+            td.appendChild(span)
             tr.appendChild(td)
             tableBody.appendChild(tr)
           })
-
-          const tableUnit = document.createElement('tbody')
-
-          const tr = document.createElement('tr')
-          tr.style.backgroundColor = 'inherit'
-          tr.style.borderWidth = '0'
-          tr.style.lineHeight = lineHeight
-
-          const td = document.createElement('td')
-          td.style.borderWidth = '0'
-          td.style.fontSize = '12px'
-
-          const unit = document.createTextNode(" bpm")
-          td.appendChild(unit)
-          tr.appendChild(td)
-          tableUnit.appendChild(tr)
 
           const tableRoot = tooltipEl.querySelector('table') as HTMLTableElement
 
@@ -135,7 +129,6 @@ export const options = {
           // Add new children
           tableRoot.appendChild(tableHead)
           tableRoot.appendChild(tableBody)
-          tableRoot.appendChild(tableUnit)
       }
 
       const { offsetLeft: positionX, offsetTop: positionY } = chart.canvas

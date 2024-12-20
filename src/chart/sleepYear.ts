@@ -1,4 +1,4 @@
-import { getRandomNumber, getOrCreateTooltip, getRandom, year, monthArray, sleepYtime, awakeColor, remColor, coreColor, deepColor } from './global_label'
+import { getRandomNumber, getOrCreateTooltipKruz, getRandom, year, monthArray, sleepYtime, awakeColor, remColor, coreColor, deepColor } from './global_label'
 
 export const array: number[] = [];
 const labelArray: string[] = year
@@ -240,14 +240,8 @@ export const options = {
       enabled: false,
       external: function(context: { chart: any, tooltip: any }){
         const {chart, tooltip} = context
-        const tooltipEl = getOrCreateTooltip(chart)
-        const lineHeight: string  = '18px'
-
-        // Hide if no tooltip
-        // if (tooltip.opacity === 0) {
-        //   tooltipEl.style.opacity = '0'
-        //   return
-        // }
+        const tooltipEl = getOrCreateTooltipKruz(chart)
+        const lineHeight: number = 18
 
         // Set Text
         if (tooltip.body) {
@@ -258,7 +252,7 @@ export const options = {
           titleLines.forEach((title: string) => {
             const tr = document.createElement('tr')
             tr.style.borderWidth = '0'
-            tr.style.lineHeight = lineHeight
+            tr.style.lineHeight = lineHeight +'px'
 
             const th = document.createElement('th')
             th.style.borderWidth = '0'
@@ -303,7 +297,7 @@ export const options = {
             const tr = document.createElement('tr')
             tr.style.backgroundColor = 'inherit'
             tr.style.borderWidth = '0'
-            tr.style.lineHeight = lineHeight
+            tr.style.lineHeight = lineHeight +'px'
 
             const td = document.createElement('td')
             td.style.borderWidth = '0'
@@ -314,25 +308,20 @@ export const options = {
 
             let newBody: string = body[0].split(':')[0]
             let time: number = Math.floor(Math.abs(Number(body[0].split(':')[1]))*60)
+            const text = document.createTextNode(newBody)   
+           
+            const span = document.createElement('span')
+            span.style.fontSize = '14px'
 
-            const text1 = document.createTextNode(newBody)   
-            td.appendChild(text1)
+            const unit = document.createTextNode(time +" mins")
+            const br = document.createElement('br')
+            span.appendChild(unit)
+
+            td.appendChild(text)
+            td.appendChild(br)
+            td.appendChild(span)
             tr.appendChild(td)
-            tableBody.appendChild(tr)
-
-            const timetr = document.createElement('tr')
-            timetr.style.backgroundColor = 'inherit'
-            timetr.style.borderWidth = '0'
-            timetr.style.lineHeight = lineHeight
-  
-            const timetd = document.createElement('td')
-            timetd.style.borderWidth = '0'
-            timetd.style.fontSize = '14px'
-  
-            const text2 = document.createTextNode(time +" mins") 
-            timetd.appendChild(text2)
-            timetr.appendChild(timetd)
-            tableBody.appendChild(timetr)            
+            tableBody.appendChild(tr)          
           })
 
           const tableRoot = tooltipEl.querySelector('table') as HTMLTableElement

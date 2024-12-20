@@ -241,7 +241,7 @@ export const options = {
       external: function(context: { chart: any, tooltip: any }){
         const {chart, tooltip} = context
         const tooltipEl = getOrCreateTooltip(chart)
-        const lineHeight: string  = '18px'
+        const lineHeight: number = 18
 
         // Set Text
         if (tooltip.body) {
@@ -252,7 +252,7 @@ export const options = {
           titleLines.forEach((title: string) => {
             const tr = document.createElement('tr')
             tr.style.borderWidth = '0'
-            tr.style.lineHeight = lineHeight
+            tr.style.lineHeight = lineHeight +'px'
 
             const th = document.createElement('th')
             th.style.borderWidth = '0'
@@ -275,7 +275,7 @@ export const options = {
             const tr = document.createElement('tr')
             tr.style.backgroundColor = 'inherit'
             tr.style.borderWidth = '0'
-            tr.style.lineHeight = lineHeight
+            tr.style.lineHeight = lineHeight +'px'
 
             const td = document.createElement('td')
             td.style.borderWidth = '0'
@@ -284,13 +284,13 @@ export const options = {
             td.style.color = '#4b4b4b'
             td.style.fontWeight = '600' 
 
-            const span = document.createElement('span');
-            span.style.borderWidth = '2px';
-            span.style.marginTop = '5px';
-            span.style.height = '14px';
-            span.style.width = '14px';
-            span.style.borderRadius = '50%';
-            span.style.display = 'inline-block';
+            const span = document.createElement('span')
+            span.style.borderWidth = '2px'
+            span.style.marginTop = '5px'
+            span.style.height = '14px'
+            span.style.width = '14px'
+            span.style.borderRadius = '50%'
+            span.style.display = 'inline-block'
 
             let newBody: string = ""
             switch (body[0]) {
@@ -390,7 +390,7 @@ const getOrCreateTooltip = (chart: any): HTMLElement => {
     tooltipEl.style.position = 'absolute'
     tooltipEl.style.transform = 'translate(-70%, -100%)'
     tooltipEl.style.transition = 'all .1s ease'
-    tooltipEl.style.width = '4.8rem'
+    tooltipEl.style.width = '5rem'
 
     const table = document.createElement('table')
     table.style.margin = '0px'

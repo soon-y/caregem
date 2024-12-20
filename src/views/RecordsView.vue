@@ -84,10 +84,10 @@ let myStyles = {
 }
 
 let currentBPM = ref(arrayHeartWeek[arrayHeartWeek.length-1])
-const sliderHeart = ref<number>(0);
-const sliderStep = ref<number>(0);
-const sliderSpeed = ref<number>(0);
-const sliderSleep = ref<number>(0);
+const sliderHeart = ref<number>(0)
+const sliderStep = ref<number>(0)
+const sliderSpeed = ref<number>(0)
+const sliderSleep = ref<number>(0)
 
 onMounted(() => {
   dataHeartWeek.value = heartWeek.datasets()
@@ -594,14 +594,13 @@ onMounted(() => {
 
 .graph{
   width: 73%;
-  margin-left: 0.3rem;
+  margin-left: 1rem;
   position: absolute;
   top: 13rem;
   padding: 0 1rem 0 0;
 }
 
 @media screen and (max-aspect-ratio: 1) {
-
   .info-container{
     grid-template-columns: repeat(2, minmax(0, 1fr));
     left: 0;
@@ -611,7 +610,7 @@ onMounted(() => {
   }
   
   .graph{
-    width: calc(100vw - 2rem);
+    width: calc(100vw - 3rem);
     top: 19.2rem;
   }
 }

@@ -1,11 +1,11 @@
-import { getRandomNumber, getOrCreateTooltip, year, monthArray } from './global_label'
+import { getRandomNumberFloat, getOrCreateTooltipKruz, year, monthArray } from './global_label'
 import { array2 as arrayMonth6 } from './speedMonth6'
 
 const array2: number[][] = [];
 const labelArray: string[] = year
 
 for (let i: number = 0; i < year.length/2; i++) {
-  let random: number[] = [getRandomNumber(2, 3),getRandomNumber(4, 5)]
+  let random: number[] = [getRandomNumberFloat(2, 3),getRandomNumberFloat(4, 5)]
   array2.push(random)
 }
 
@@ -55,8 +55,8 @@ export const options = {
       enabled: false,
       external: function(context: { chart: any, tooltip: any }){
         const {chart, tooltip} = context
-        const tooltipEl = getOrCreateTooltip(chart)
-        const lineHeight: string  = '18px'
+        const tooltipEl = getOrCreateTooltipKruz(chart)
+        const lineHeight: number = 18
 
         // Set Text
         if (tooltip.body) {
@@ -67,7 +67,7 @@ export const options = {
           titleLines.forEach((title: string) => {
             const tr = document.createElement('tr')
             tr.style.borderWidth = '0'
-            tr.style.lineHeight = lineHeight
+            tr.style.lineHeight = lineHeight +'px'
 
             const th = document.createElement('th')
             th.style.borderWidth = '0'
@@ -112,7 +112,7 @@ export const options = {
             const tr = document.createElement('tr')
             tr.style.backgroundColor = 'inherit'
             tr.style.borderWidth = '0'
-            tr.style.lineHeight = lineHeight
+            tr.style.lineHeight = lineHeight +'px'
 
             const td = document.createElement('td')
             td.style.borderWidth = '0'
@@ -125,27 +125,20 @@ export const options = {
             newBody = newBody.replace("]", "")
             newBody = newBody.replace(", ", "-")
             const text = document.createTextNode(newBody)     
+
+            const span = document.createElement('span')
+            span.style.fontSize = '14px'
+
+            const unit = document.createTextNode(" km/h")
+            const br = document.createElement('br')
+            span.appendChild(unit)
+
             td.appendChild(text)
+            td.appendChild(br)
+            td.appendChild(span)
             tr.appendChild(td)
             tableBody.appendChild(tr)
           })
-
-          const tableUnit = document.createElement('tbody')
-
-          const tr = document.createElement('tr')
-          tr.style.backgroundColor = 'inherit'
-          tr.style.borderWidth = '0'
-          tr.style.lineHeight = lineHeight
-
-          const td = document.createElement('td')
-          td.style.borderWidth = '0'
-          td.style.fontSize = '12px'
-
-          const unit = document.createTextNode(" km/h")
-          td.appendChild(unit)
-          tr.appendChild(td)
-          tableUnit.appendChild(tr)
-
           const tableRoot = tooltipEl.querySelector('table') as HTMLTableElement
 
           // Remove old children
@@ -156,7 +149,6 @@ export const options = {
           // Add new children
           tableRoot.appendChild(tableHead)
           tableRoot.appendChild(tableBody)
-          tableRoot.appendChild(tableUnit)
       }
 
       const { offsetLeft: positionX, offsetTop: positionY } = chart.canvas
