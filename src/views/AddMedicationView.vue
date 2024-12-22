@@ -111,9 +111,10 @@ const deleteSchedule = (index : number) => {
 const selectShape = (index: number)=> {
   selectedShapeIndex.value = index
   selectedShape.value = medication.shapeImageNames[index]
-  if (selectedShape.value.includes('tablet')){
+  if (!(selectedShape.value.includes('capsule'))){
     selectedColorLeft.value = selectedShape.value.split('_')[1] 
-  } 
+  }
+
   selectedShape.value = selectedShape.value.split('_')[0] 
 }
 

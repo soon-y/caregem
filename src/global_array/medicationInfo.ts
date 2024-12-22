@@ -67,6 +67,8 @@ export const shapeImageNames: string[] = [
   "tablet_oval_white",
   "tablet_ovalC_white",
   "injection_injection_white",
+  "bottle_bottle_white",
+  "topical_topical_white",
 ]
 
 export const chooseColor: string[] = [
