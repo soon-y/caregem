@@ -1,68 +1,60 @@
 <template>
   <div class="container-full">
-  <div class="fixed">
-      <span class="closeIcon topIcon"><slot name="close"></slot></span>
-  </div>
-
-  <div class="content-wrapper">
-    <div class="name margin-top"><slot name="name"></slot></div>
-
-  <div class="tabs">
-    <slot name="tab"></slot>
-  </div>
-
-  <div class="pill-graph">
-    <slot name="graph"></slot>
-  </div>
-
-
-  <p class="input-subtitle">Schedule </p>
-
-  <div class="box">
-    <slot name="image" class="image"></slot>
-    <div class="text">
-      <div><slot name="dose"></slot></div>
-      <div><slot name="schedule"></slot></div>
-      <div><slot name="interval"></slot></div>
-      <div><slot name="time"></slot></div>    
+    <div class="fixed">
+        <span class="closeIcon topIcon"><slot name="close"></slot></span>
+        <span class="top-title" :style="{fontSize: '1.2rem', marginTop:'0.7rem'}"><slot name="name"></slot></span>
     </div>
+
+    <div class="scroll-wrapper-full">
+    <div class="content-wrapper">
+      <div class="tabs">
+        <slot name="tab"></slot>
+      </div>
+
+      <p class="input-subtitle margin-top">Schedule </p>
+      <div class="schedule-wrapper">
+        <div><slot name="schedule"></slot></div>
+        <div :style="{ color: 'var(--main-lila-hell)', cursor:'pointer' }">Edit</div>
+      </div>
+      <div class="scheduleDate"><slot name="scheduleDate"></slot></div>
+
+      <p class="input-subtitle margin-top">Details </p>
+      <div class="box">
+        <slot name="image"></slot>
+        <div class="box-text">
+          <div class="box-name"><slot name="name"></slot></div>
+          <div><slot name="type"></slot></div>
+          <div><slot name="strength"></slot> <slot name="unit"></slot></div>
+        </div>
+      </div>
+
+      <p class="input-subtitle margin-top">Memo </p>
+      <div class="schedule-wrapper" :style=" { height: '6rem' }">
+        <slot name="memo"></slot>
+        <span :style="{ color: 'var(--white-lila-border)' }"><slot name="empty"></slot></span>
+      </div>
+
+      <button class="button"  :style="{ backgroundColor: 'var(--white-lila)', color: 'var(--main-lila-hell)' }">show All data</button>
+      <button class="button"  :style="{ margin: '0 0 5rem 0', backgroundColor: 'var(--white-lila)', color: 'var(--main-lila-hell)' }">Delete Medication</button>  
+    
+      </div>
     </div>
   </div>
-
-</div>
 </template>
 
 <style scope>
-.box{
-  --width: 7rem;
-
-  display: grid;
-  grid-template-columns: var(--width) auto;
-  width: 100%;
-  height: calc(var(--width));
-  background-color: var(--white-lila);
-  border-radius: 1rem;
-  margin: 0;
-  margin-bottom: 0.8rem;
-  padding: 0rem;
-  overflow: hidden;
+.box-name{
+  margin-bottom: 0.4rem;
 }
 
-.text{
-  margin: auto 0;
-  margin-left: 1rem;
-  line-height: 1.3rem;
+.schedule-wrapper{
+  padding: 0.6rem 1rem;
 }
 
-.name {
-  font-weight: 600;
-  font-size: 1.2rem;
-  text-align: center;
-}
-
-img {
-  width: var(--width);
-  height: var(--width);
+.scheduleDate{
+  color: var(--white-lila-border);
+  margin: 0.2rem 1rem 0 1rem;
+  line-height: 1rem;
 }
 
 @media screen and (max-aspect-ratio: 1) {

@@ -25,7 +25,7 @@ a {
 .container {
   width: calc(100vw - 11.4rem);
   min-height: 100vh;
-  position: relative;
+  position: fixed;
   left: 11.4rem;
   overflow-y: scroll;
   -ms-overflow-style: none;
@@ -178,29 +178,49 @@ table {
   left: 50%;
   transform: translate(-50%, 0);
   text-align: center;
+  font-weight: 600;
 }
 
 .scroll-wrapper {
   background-color: white;
+  padding: 1rem;
   position: fixed;
-  width: 100%;
-  height: calc(100vh - 3.4rem);
+  width: calc(100vw - 11.4rem);
+  height: 100vh;
   overflow-y: scroll;
   -ms-overflow-style: none;
   /* IE and Edge */
   scrollbar-width: none;
-  margin-bottom: 3rem;
+}
+
+.scroll-wrapper-full {
+  margin: auto;
+  background-color: white;
+  padding: 0 1rem 1rem 1rem;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+}
+
+ul {
+  list-style: none;
 }
 
 @media screen and (max-aspect-ratio: 1) {
   .container {
     width: 100vw;
-    content: '';
-    position: fixed;
-    background-color: var(--line-color);
     z-index: 1;
     height: calc(100vh - 4rem);
     left: 0;
+  }
+
+  .scroll-wrapper {
+    width: 100vw;
+    height: calc(100vh - 4rem);
   }
 
   .content-wrapper {

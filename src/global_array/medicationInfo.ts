@@ -6,7 +6,8 @@ interface dataType {
   type: string
   strength: number
   unit: string
-  schedule: string[]
+  schedule: string
+  days: string[]
   time: string[]
   application: number[]
   durationStart: string
@@ -24,10 +25,11 @@ export const data: dataType[] = [
     type: "tablet",
     strength: 500,
     unit: "mg",
-    schedule: ["Every Day"],
+    schedule: "Every Day",
+    days: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
     time: ["8:00", "18:00"],
     application: [1,1],
-    durationStart: "241212",
+    durationStart: "12/1/23",
     durationEnd: "",
     shape: "tablet",
     colorLeft: "round",
@@ -40,10 +42,11 @@ export const data: dataType[] = [
     type: "capsule",
     strength: 10,
     unit: "mg",
-    schedule: ["Mon, Tue", "Wed,Thu"],
+    schedule: "On Specific Days of the Week",
+    days: ["Tue", "Wed", "Thu", "Fri", "Sun"],
     time: ["8:00", "12:00", "17:00"],
     application: [1,1,1],
-    durationStart: "241212",
+    durationStart: "12/1/23",
     durationEnd: "",
     shape: "capsule",
     colorLeft: "white",
@@ -62,7 +65,8 @@ export const shapeImageNames: string[] = [
   "capsuleB_white_white",
   "tablet_round_white",
   "tablet_oval_white",
-  "tablet_ovalC_white"
+  "tablet_ovalC_white",
+  "injection_injection_white",
 ]
 
 export const chooseColor: string[] = [

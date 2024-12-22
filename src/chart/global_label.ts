@@ -8,9 +8,11 @@ export const monthNum: number = new Date().getMonth()
 const thisYear: number = new Date().getFullYear()
 export const NumOfDays: number = getDaysInMonth(thisYear, monthNum-1)
 export const week: string[] = []
+export const weekKurz: string[] = []
 export const month: string[] = []
 export const month6: string[] = []
 export const year: string[] = []
+export const weekNumInMonth: number[] = []
 
 export const weekArray: string[] = [
   "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"
@@ -37,12 +39,19 @@ for (let i: number = 0; i <= 6; i++) {
   week.unshift(weekArray[num])
 }
 
+for (let i: number = 0; i <= 6; i++) {
+  const num: number = weekNum - i < 0 ? weekNum - i + 7 : weekNum - i
+  weekKurz.unshift(weekArrayKurz[num])
+}
+
 for (let i: number = 0; i < NumOfDays; i++) {
   const d = new Date()
   const date = new Date(d)
   date.setDate(date.getDate() - i)
   const num: string = (date.getDate()).toString()
+  const day: number = (date.getDay())
   month.unshift(num)
+  weekNumInMonth.unshift(day)
 }
 
 for (let i: number = 0; i < 6; i++) {

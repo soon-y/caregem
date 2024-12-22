@@ -1,6 +1,6 @@
-import { today } from './global_label'
+import { year, monthArray } from './global_label'
 
-const labelArray: number[] = today
+const labelArray: string[] = year
 
 export const options = {
   responsive: true,
@@ -34,9 +34,32 @@ export const options = {
             th.style.fontSize = '14px'
             th.style.letterSpacing = '-0.5px'
 
-            let number = Number(title)
-            let newTitle: string = number > 12 ? (number-12).toString() + ' pm' : number + ' am' 
-            if (number === 0) newTitle = '12 pm'
+            let newTitle: string = ""
+            if (title === monthArray[0]){
+              newTitle = "January"
+            } else if (title === monthArray[1]){
+              newTitle = "February"
+            } else if (title === monthArray[2]){
+              newTitle = "March"
+            } else if (title === monthArray[3]){
+              newTitle = "April"
+            } else if (title === monthArray[4]){
+              newTitle = "May"
+            } else if (title === monthArray[5]){
+              newTitle = "June" 
+            } else if (title === monthArray[6]){
+              newTitle = "July"
+            } else if (title === monthArray[7]){
+              newTitle = "August"
+            } else if (title === monthArray[8]){
+              newTitle = "September"
+            } else if (title === monthArray[9]){
+              newTitle = "October"
+            } else if (title === monthArray[10]){
+              newTitle = "November"
+            } else if (title === monthArray[11]){
+              newTitle = "December"
+            } 
             const text = document.createTextNode(newTitle)
             th.appendChild(text);
             tr.appendChild(th);
@@ -98,12 +121,6 @@ export const options = {
       ticks: {
         maxRotation: 0,
         color: 'rgba(190,190,190,1)',
-        callback: function(value: string | number, index: number, ticks: any): string | number {
-          if (index % 6 != 0){
-            return ''
-          }
-          return labelArray[index] < 10 ? "0" + labelArray[index] : labelArray[index]
-        }
       },
       grid: {
         display: true,

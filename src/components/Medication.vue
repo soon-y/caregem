@@ -1,10 +1,10 @@
 <template>
   <div class="box">
-    <slot name="image" class="image"></slot>
-    <div class="text">
+    <slot name="image" class="box-img"></slot>
+    <div class="box-text">
       <div>
-        <span class="name"><slot name="name"></slot></span>
-        <font-awesome-icon icon="chevron-right" class="arrowRight"/>
+        <span class="box-name"><slot name="name"></slot></span>
+        <font-awesome-icon icon="chevron-right" class="box-arrowRight"/>
       </div>
       <div><slot name="dose"></slot></div>
       <div><slot name="schedule"></slot></div>
@@ -15,40 +15,6 @@
 </template>
 
 <style scope>
-.box{
-  --width: 7rem;
-
-  display: grid;
-  grid-template-columns: var(--width) auto;
-  width: calc(100% - 0.8rem);
-  height: calc(var(--width));
-  background-color: var(--white-lila);
-  border-radius: 1rem;
-  margin: auto;
-  margin-bottom: 0.8rem;
-  padding: 0rem;
-  overflow: hidden;
-}
-
-.arrowRight {
-  float: right;
-  margin-right: 1rem;
-  margin-top: 0rem;
-  font-size: 1.2rem;
-  color: rgb(173, 150, 174);
-}
-
-.text{
-  margin: auto 0;
-  margin-left: 1rem;
-  line-height: 1.3rem;
-}
-
-.name {
-  font-weight: 600;
-  font-size: 1.2rem
-}
-
 img {
   width: var(--width);
   height: var(--width);
