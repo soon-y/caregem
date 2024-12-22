@@ -173,7 +173,7 @@ table {
 
 .top-title {
   margin: 1rem 0;
-  font-size: 1rem;
+  font-size: 1.2em;
   position: fixed;
   left: 50%;
   transform: translate(-50%, 0);
