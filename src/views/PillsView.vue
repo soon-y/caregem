@@ -347,7 +347,7 @@ const updateDate = (index: number) => {
       </div>
     </template>
     <template v-slot:scheduleDate>
-      <span>Started from {{ medication.data[clickedIndex].durationStart }}</span> 
+      <span>Started on {{ medication.data[clickedIndex].durationStart }}</span> 
       <span v-if="medication.data[clickedIndex].durationEnd !== ''">. Schedule ends {{ medication.data[clickedIndex].durationEnd }}</span> 
     </template>
 
