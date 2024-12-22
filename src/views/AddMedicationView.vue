@@ -40,9 +40,18 @@ const selectedColorLeft = ref<string | null>("white")
 const selectedColorRight = ref<string | null>("white")
 const selectedColorLeftIndex = ref<number>(0)
 const selectedColorRightIndex = ref<number>(0)
+const guideText = ref<string>("")
 
 const nextStep = () => {
   step.value = step.value + 1;
+
+  if(step.value === 1){
+    guideText.value = (selectedName.value ?? '') + '\n' + (selectedType.value ?? '')
+  } else if(step.value === 5){
+    guideText.value = ""
+  } else {
+    guideText.value = (selectedName.value ?? '') + '\n' + (selectedType.value ?? '') +', '+ (selectedStrength.value ?? '') + (selectedUnit.value ?? '')
+  }
 
   if(step.value == 3 && selectedSchedule.value?.includes('Specific')) {
     week.value.forEach((day, index) => {
@@ -62,6 +71,14 @@ const nextStep = () => {
 
 const backStep = () => {
   step.value = step.value - 1;
+
+  if(step.value === 1){
+    guideText.value = (selectedName.value ?? '') + '\n' + (selectedType.value ?? '')
+  } else if(step.value === 0){
+    guideText.value = ""
+  } else {
+    guideText.value = (selectedName.value ?? '') + '\n' + (selectedType.value ?? '') +', '+ (selectedStrength.value ?? '') + (selectedUnit.value ?? '')
+  }
 
   if(step.value === 2){
     selectedDays.value = " "
@@ -137,12 +154,14 @@ const transform = (index: number) => {
         <font-awesome-icon icon="fa-solid fa-chevron-left"/>
         <span>Back</span>
       </span>
+      <span class="nav-title">{{guideText}}</span>
+      <span class="top-title" v-if="step === 5">Review Details</span>
     </div>
 
     <div class="form-wrapper">
-      <div class="form" :style="{transform: step === 0 ? 'translate(0, 0)' : 'translate(-100%, 0)'}">
+      <div class="form scroll-wrapper-full" :style="{transform: step === 0 ? 'translate(0, 0)' : 'translate(-100%, 0)'}">
         <div class="content-wrapper">
-          <img src="/icons/default.png" class="guide-img" :style="{ marginTop: '3.1rem' }">
+          <img src="/icons/default.png" class="guide-img">
           <p class="inputTitle" > Medication Name</p>
           <input type="text" placeholder="Add Medication Name" v-model="selectedName"/>
 
@@ -163,9 +182,8 @@ const transform = (index: number) => {
         </div>
       </div>
 
-      <div class="form" :style="{ transform: transform(1)}">
+      <div class="form scroll-wrapper-full" :style="{ transform: transform(1)}">
         <div class="content-wrapper">
-          <p class="navTitle">{{ selectedName }} <br> {{ selectedType }}</p>
           <img src="/icons/default.png" class="guide-img" >
           <p class="inputTitle">Medication Strength</p>
           <p class="input-subtitle">Strength </p>
@@ -187,9 +205,8 @@ const transform = (index: number) => {
         </div>
       </div>
 
-      <div class="form" :style="{ transform: transform(2)}">
+      <div class="form scroll-wrapper-full" :style="{ transform: transform(2)}">
         <div class="content-wrapper">
-          <p class="navTitle">{{ selectedName }} <br> {{ selectedType }}, {{ selectedStrength }}{{ selectedUnit }}</p>
           <img src="/icons/calendar.png" class="guide-img" >
           <p class="inputTitle">Set a Schedule</p>
           <p class="input-subtitle">When will you take this? </p>
@@ -201,7 +218,7 @@ const transform = (index: number) => {
 
           <div v-if="selectedSchedule === medication.schedule[1]">
             <p class="input-subtitle margin-top">On these days:</p>
-            <div class="week-wrapper content-wrapper">
+            <div class="week-wrapper">
               <div v-for="(item, index) in week" :key="index" 
               :style="{
                 backgroundColor: item.checked ? 'var(--main-lila-hell)' : 'var(--white-lila)',
@@ -244,8 +261,8 @@ const transform = (index: number) => {
                     <input type="number" v-model="item.application" min="1" class="inlineNumInput"
                     :style="{ textAlign: 'right' }"
                     />
-                    <span v-if="item.application === 1"> application</span>
-                    <span v-else> applications</span>
+                    <span v-if="item.application > 1"> applications</span>
+                    <span v-else> application</span>
                   </td>
                 </tr>
               </tbody>
@@ -290,9 +307,8 @@ const transform = (index: number) => {
         </div>
       </div> 
 
-      <div class="form" :style="{ transform: transform(3)}">
+      <div class="form scroll-wrapper-full" :style="{ transform: transform(3)}">
         <div class="content-wrapper">
-          <p class="navTitle">{{ selectedName }} <br> {{ selectedType }}, {{ selectedStrength }}{{ selectedUnit }}</p>
           <img v-bind:src="selectedShapeIndex === null ? '/icons/default.png' : '/pill/' + medication.shapeImageNames[selectedShapeIndex] + '.png'" 
           class="guide-img default-img"/>
 
@@ -315,9 +331,8 @@ const transform = (index: number) => {
         </div>
       </div> 
 
-      <div class="form" :style="{ transform: transform(4)}">
+      <div class="form scroll-wrapper-full" :style="{ transform: transform(4)}">
         <div class="content-wrapper">
-          <p class="navTitle">{{ selectedName }} <br> {{ selectedType }}, {{ selectedStrength }}{{ selectedUnit }}</p>
           <img 
           :style="{ backgroundColor: selectedBgIndex === null? 'var(--white-lila)' : medication.backgroundColor[selectedBgIndex] }"
           v-bind:src="(selectedShape === null || selectedColorLeft === null || selectedColorRight === null ) ? 
@@ -375,9 +390,8 @@ const transform = (index: number) => {
         </div>
       </div> 
 
-      <div class="form" :style="{ transform: transform(5)}">
+      <div class="form scroll-wrapper-full" :style="{ transform: transform(5)}">
         <div class="content-wrapper">
-          <p :style="{ fontSize: '1rem', margin: '1rem'}" > <b>Review Details</b></p>
           <img 
           :style="{ backgroundColor: selectedBgIndex === null? 'var(--white-lila)' : medication.backgroundColor[selectedBgIndex] }"
           v-bind:src="'/pill/' + selectedShape + '_' + selectedColorLeft + '_' + selectedColorRight + '.png'" 
@@ -426,10 +440,15 @@ const transform = (index: number) => {
   width: 30%;
 }
 
-.navTitle {
+.nav-title {
   margin: 0.7rem 0;
   line-height: 1rem;
   font-size: 0.8rem;
+  position: fixed;
+  left: 50%;
+  transform: translate(-50%,0);
+  white-space: pre-wrap; 
+  text-align: center;
 }
 
 .backIcon{
@@ -450,22 +469,13 @@ const transform = (index: number) => {
 
 .form {
   transition-duration: 500ms;
-  background-color: white;
-  position: fixed;
-  width: 100%;
-  height: calc(100vh);
-  overflow-y: scroll;
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;
-  margin-bottom: 3rem;
 }
 
 input[type=text],
 .inputNum,
 .radioSelection,
 select, .button,
-.textArea
-{
+.textArea{
   width: 100%;
   margin: auto;
 }
@@ -596,7 +606,7 @@ textarea:focus {
   border-radius: 0.8rem;
   font-size: 1rem;
   margin-top: 2rem;
-  margin-bottom: 2rem;
+  margin-bottom: 6rem;
   cursor: pinter;
 }
 
@@ -620,16 +630,6 @@ textarea:focus {
   padding: 1rem;
 }
 
-.table-wrapper {
-  background-color: var(--white-lila);
-  padding: 0.4rem 0.6rem;
-  border-radius: 0.8rem;
-}
-
-table{
-  width: 100%;
-}
-
 tr {
   border-bottom: 1px solid white;
 }
@@ -650,6 +650,7 @@ td {
 .image-wrapper{
   display: grid;
   grid-template-columns: repeat(4, auto);
+  justify-items: ;
   gap: 1.2rem;
   margin-top: 1rem;
 }
