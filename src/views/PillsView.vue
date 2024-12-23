@@ -278,7 +278,8 @@ const updateDate = (index: number) => {
         </template>
         <template v-slot:name> {{ item.name }} </template>
         <template v-slot:dose> {{ item.strength + item.unit }} </template>
-        <template v-slot:schedule> {{ item.schedule }} </template>
+        <template v-slot:schedule v-if="item.schedule.includes('Every Day')"> {{ item.schedule }} </template>
+        <template v-slot:schedule v-else> {{ item.days.join(', ') }} </template>
         <template v-slot:time> {{ item.time.join(", ") }} </template>
       </Medication>
     </div>
