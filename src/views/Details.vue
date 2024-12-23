@@ -53,7 +53,7 @@
 
 .scheduleDate{
   color: var(--white-lila-border);
-  margin: 0.2rem 1rem 0 1rem;
+  margin: 0.6rem 1rem 0 1rem;
   line-height: 1rem;
 }
 
