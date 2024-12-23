@@ -35,7 +35,7 @@ a {
 
 .container-full {
   position: fixed;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   background-color: white;
   transition-duration: 500ms;
@@ -224,7 +224,7 @@ ul {
   }
 
   .content-wrapper {
-    width: 86%;
+    width: 90%;
   }
 
   .info-comp th {
