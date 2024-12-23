@@ -158,8 +158,6 @@ const toDetailPage = (index: number) => {
   dataMedicationWeek.value = datasetsWeek()
   dataMedicationMonth.value = datasetsMonth()
   dataMedicationYear.value = datasetsYear()
-
-  console.log(medication.data[index].application.reduce((a, c) => a + c, 0))
 }
 
 const closeDetailpage = () => {
@@ -222,7 +220,7 @@ const updateDate = (index: number) => {
       </div>
 
       <div class="week-selection">
-        <div v-for="(item ,index) in weekKurz" :key="index" class="week-item-amount-container" >
+        <div v-for="(item ,index) in weekKurz" :key="index" class="week-item-amount-container" @click="updateDate(index)">
           <div class="week-item-amount" v-if="index === 6"
             :style="{ height: taken + '%' }"
           ></div>
