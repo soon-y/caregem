@@ -116,7 +116,7 @@ onMounted(() => {
 
 <template>
   <div class="container"> 
-    <div class="tab-wrapper">
+    <div class="tab-wrapper" :style="{ marginTop: '0.6rem' }">
     <Tabs>
       <Tab title="fa-heart-pulse">
         <Slider v-model="sliderHeart" class="slider-wrapper" />

@@ -27,7 +27,7 @@ export default defineComponent({
         case 2:
           return 50
         case 3:
-          return aspectRatio.value > 1 ? 75.5 : 75
+          return aspectRatio.value > 1 ? 75.5 : 74.6
       }
     }
 
@@ -72,7 +72,7 @@ export default defineComponent({
   --margin: 0.6rem;
 
   width: 100%;
-  margin: var(--margin) auto;
+  margin: 0 auto;
 }
 
 .tabs {

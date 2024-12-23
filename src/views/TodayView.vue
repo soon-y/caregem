@@ -58,7 +58,7 @@ onMounted(() => {
 
 <template>
   <div class="container"> 
-    <div class="tab-wrapper">
+    <div class="tab-wrapper" :style="{ marginTop: '0.6rem' }">
     <Tabs>
       <Tab title="fa-heart-pulse">
         <div class="info-container" v-if="dataMounted">
