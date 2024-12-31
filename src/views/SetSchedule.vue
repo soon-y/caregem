@@ -8,7 +8,7 @@ const now = new Date()
 const selectedSchedule = ref<string>(medication.schedule[0])
 const selectedInterval = ref<string | null>(medication.intervalDays[0])
 const today = new Date()
-interface weekItemType { label: string, checked: boolean }
+export interface weekItemType { label: string, checked: boolean }
 const week = ref<weekItemType[]>([
   { label: 'M', checked: false },
   { label: 'T', checked: false },
@@ -35,7 +35,7 @@ const calendarEndDisplay = ref<string>('none')
 const timePickerDisplay = ref<string>('none')
 const valid = ref<boolean>(true)
 const duration = ref<number>(0)
-interface ScheduleItem {
+export interface ScheduleItem {
   hour: number
   min: number
   application: number
