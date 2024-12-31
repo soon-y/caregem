@@ -1,46 +1,48 @@
 <script setup lang="ts">
 import * as medication from '../global_array/medicationInfo'
 import { ref } from 'vue'
+import setSchedule from './SetSchedule.vue'
+import { monthArray } from '../chart/global_label'
 
-const now = new Date();
-const selectedDays = ref<string>("")
-const todayDate = ref<string>(new Date().toLocaleDateString())
+const scheduleRef = ref<InstanceType<typeof setSchedule> | null>(null)
+const selectedDays = ref<string[]>([])
 let step = ref<number>(0)
 const selectedName = ref<string | null>(null)
 const selectedStrength = ref<number | null>(null)
 const selectedType = ref<string | null>(null)
 const selectedUnit = ref<string | null>(null)
-const selectedSchedule = ref<string | null>(medication.schedule[0])
-const selectedInterval = ref<string | null>(medication.intervalDays[0])
 const memo = ref<string>("")
-const week = ref([
-  { label: 'M', checked: false },
-  { label: 'T', checked: false },
-  { label: 'W', checked: false },
-  { label: 'T', checked: false },
-  { label: 'F', checked: false },
-  { label: 'S', checked: false },
-  { label: 'S', checked: false }, 
-])
-
-interface ScheduleItem {
-  hour: number
-  min: number
-  application: number
-}
-
-const schedule = ref<ScheduleItem[]>([
-  { hour: now.getHours(), min: now.getMinutes(), application: 1 },
-])
 
 const selectedShapeIndex = ref<number | null>(null)
 const selectedBgIndex = ref<number>(0)
 const selectedShape = ref<string | null>(null)
-const selectedColorLeft = ref<string | null>("white")
-const selectedColorRight = ref<string | null>("white")
+const selectedColorLeft = ref<string>("white")
+const selectedColorRight = ref<string>("white")
 const selectedColorLeftIndex = ref<number>(0)
 const selectedColorRightIndex = ref<number>(0)
 const guideText = ref<string>("")
+const close = ref<boolean>(false)
+
+const reset = ()=> {
+  setTimeout(() => {
+    step.value = 0
+    selectedDays.value = []
+    selectedName.value = null
+    selectedStrength.value = null
+    selectedType.value = null
+    selectedUnit.value = null
+    selectedShapeIndex.value = null
+    selectedBgIndex.value = 0
+    selectedShape.value = null
+    selectedColorLeft.value = "white"
+    selectedColorRight.value = "white"
+    selectedColorLeftIndex.value = 0
+    selectedColorRightIndex.value = 0
+    memo.value = ""
+    close.value = false
+    scheduleRef.value?.reset()
+  }, 600);
+}
 
 const nextStep = () => {
   step.value = step.value + 1;
@@ -53,19 +55,22 @@ const nextStep = () => {
     guideText.value = (selectedName.value ?? '') + '\n' + (selectedType.value ?? '') +', '+ (selectedStrength.value ?? '') + (selectedUnit.value ?? '')
   }
 
-  if(step.value == 3 && selectedSchedule.value?.includes('Specific')) {
-    week.value.forEach((day, index) => {
-      if (day.checked) {
-        if (index === 0 ){ selectedDays.value += 'Mon, '}
-        if (index === 1 ){ selectedDays.value += 'Tue, '}
-        if (index === 2 ){ selectedDays.value += 'Wed, '}
-        if (index === 3 ){ selectedDays.value += 'Thu, '}
-        if (index === 4 ){ selectedDays.value += 'Fri, '}
-        if (index === 5 ){ selectedDays.value += 'Sat, '}
-        if (index === 6 ){ selectedDays.value += 'Sun, '}
-      }
-    })
-      selectedDays.value = selectedDays.value.replace(/,\s*$/, "");
+  if(scheduleRef.value && step.value == 3){
+    if(scheduleRef.value?.selectedSchedule?.includes('Specific')) {
+      scheduleRef.value.week.forEach((label, index) => {
+        if (label.checked) {
+          if (index === 0 ){ selectedDays.value.push('Mon')}
+          if (index === 1 ){ selectedDays.value.push('Tue')}
+          if (index === 2 ){ selectedDays.value.push('Wed')}
+          if (index === 3 ){ selectedDays.value.push('Thu')}
+          if (index === 4 ){ selectedDays.value.push('Fri')}
+          if (index === 5 ){ selectedDays.value.push('Sat')}
+          if (index === 6 ){ selectedDays.value.push('Sun')}
+        }
+      })
+    } else {
+      selectedDays.value = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+    }
   }
 }
 
@@ -81,7 +86,7 @@ const backStep = () => {
   }
 
   if(step.value === 2){
-    selectedDays.value = " "
+    selectedDays.value = []
   }
 
   if(step.value === 3){
@@ -93,19 +98,6 @@ const backStep = () => {
   selectedColorLeftIndex.value = 0
   selectedColorRightIndex.value = 0
   }
-}
-
-const addNewTime = () => {
-  let data = { hour: now.getHours(), min: now.getMinutes(), application: 1 }
-  if (schedule.value.length > 0) {
-    data.hour = schedule.value[schedule.value.length-1].hour + 1 > 23 ? 0 : schedule.value[schedule.value.length-1].hour + 1
-    data.min = schedule.value[schedule.value.length-1].min
-  }  
-  schedule.value.push(data)
-}
-
-const deleteSchedule = (index : number) => {
-  schedule.value.splice(index, 1)
 }
 
 const selectShape = (index: number)=> {
@@ -132,8 +124,43 @@ const selectColorRight = (index: number)=> {
   selectedColorRight.value = medication.chooseColorName[index]
 }
 
-const done  = ()=> {
+const done = ()=> {
+  const timeArray: string[] = []
+  const applicationArray: number[] = []
 
+  scheduleRef.value?.schedule.map(item => {
+    const hour = item.hour;
+    const min = item.min.toString().padStart(2, '0')
+    timeArray.push(`${hour}:${min}`)
+  })
+
+  scheduleRef.value?.schedule.map(item => {
+    const application = item.application;
+    applicationArray.push(application)
+  })
+
+  const d = 
+  {
+    name: selectedName.value ?? "",
+    type: selectedType.value?? "",
+    strength: selectedStrength.value ?? 0,
+    unit: selectedUnit.value ?? "",
+    schedule: scheduleRef.value?.selectedSchedule ?? "",
+    days: selectedDays.value,
+    time: timeArray,
+    application: applicationArray,
+    durationStart: scheduleRef.value?.startDate+'/'+scheduleRef.value?.startMonth+'/'+scheduleRef.value?.startYear,
+    durationEnd: scheduleRef.value?.endDate === null? "" : scheduleRef.value?.endDate+'/'+scheduleRef.value?.endMonth+'/'+scheduleRef.value?.endYear,
+    shape: selectedShape.value ?? "",
+    colorLeft: selectedColorLeft.value,
+    colorRight: selectedColorRight.value,
+    bgColorIndex: selectedBgIndex.value,
+    memo: memo.value
+  }
+  data.push(d)
+  close.value = true
+  reset()
+  console.log(data)
 }
 
 const transform = (index: number) => {
@@ -145,12 +172,69 @@ const transform = (index: number) => {
     return 'translate(100%, 0)'
   }
 }
+
+interface dataType {
+  name: string
+  type: string
+  strength: number
+  unit: string
+  schedule: string
+  days: string[]
+  time: string[]
+  application: number[]
+  durationStart: string
+  durationEnd: string
+  shape: string
+  colorLeft: string
+  colorRight: string
+  bgColorIndex: number
+  memo: string
+}
+
+const data: dataType[] = [
+  {
+    name: "Metformin",
+    type: "tablet",
+    strength: 500,
+    unit: "mg",
+    schedule: "Every Day",
+    days: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    time: ["8:00", "18:00"],
+    application: [1,1],
+    durationStart: "1/1/23",
+    durationEnd: "",
+    shape: "tablet",
+    colorLeft: "round",
+    colorRight: "white",
+    bgColorIndex: 8,
+    memo: ""
+  },
+  {
+    name: "Carbimazole",
+    type: "capsule",
+    strength: 10,
+    unit: "mg",
+    schedule: "On Specific Days of the Week",
+    days: ["Tue", "Wed", "Thu", "Fri", "Sun"],
+    time: ["8:00", "12:00", "17:00"],
+    application: [1,1,1],
+    durationStart: "1/1/23",
+    durationEnd: "",
+    shape: "capsule",
+    colorLeft: "white",
+    colorRight: "sky",
+    bgColorIndex: 11,
+    memo: ""
+  },
+]
+
+defineExpose({ close, data })
 </script>
 
 <template>
   <div class="container-full">
     <div class="fixed">
-      <span class="closeIcon topIcon"><slot name="close"></slot></span>
+      <span class="closeIcon topIcon" @click="reset"><slot name="close"></slot></span>
       <span class="backIcon topIcon" @click="backStep" v-if="step !== 0">
         <font-awesome-icon icon="fa-solid fa-chevron-left"/>
         <span>Back</span>
@@ -210,100 +294,13 @@ const transform = (index: number) => {
         <div class="content-wrapper">
           <img src="/icons/calendar.png" class="guide-img" >
           <p class="inputTitle">Set a Schedule</p>
-          <p class="input-subtitle">When will you take this? </p>
-          <select v-model="selectedSchedule">
-            <option v-for="(item, index) in medication.schedule" :key="index" :value="item">
-              {{ item }}
-            </option>
-          </select>
+          <setSchedule ref="scheduleRef"></setSchedule>
 
-          <div v-if="selectedSchedule === medication.schedule[1]">
-            <p class="input-subtitle margin-top">On these days:</p>
-            <div class="week-wrapper">
-              <div v-for="(item, index) in week" :key="index" 
-              :style="{
-                backgroundColor: item.checked ? 'var(--main-lila-hell)' : 'var(--white-lila)',
-              }">
-                <label class="week-label"
-                  :for="'week' + index" 
-                  :style="{ color: item.checked ? 'white' : 'var(--main-lila-dunkel)',
-                  }">
-                  {{ item.label }}
-                </label>
-                <input type="checkbox" :id="'week' + index" v-model="item.checked" />
-              </div>
-            </div>
-          </div>
-
-          <div v-if="selectedSchedule === medication.schedule[2]">
-            <p class="input-subtitle margin-top">Interval</p>
-            <select v-model="selectedInterval">
-              <option v-for="(item, index) in medication.intervalDays" :key="index" :value="item">
-                {{ item }}
-              </option>
-            </select>
-          </div>
-
-          <p class="input-subtitle margin-top">At what time</p>
-          <div class="table-wrapper">
-            <table>
-              <tbody>
-                <tr v-for="(item, index) in schedule" :key="index" >
-                  <td class="align-left" :style="{
-                      display: 'flex', alignItems: 'center',
-                  }">
-                    <font-awesome-icon icon="circle-minus" class="circleIcon" @click="deleteSchedule(index)"
-                    :style="{color: 'var(--white-lila-border)', marginRight: '0.5rem' }"/>
-                    <input type="number" v-model="item.hour" min="0" max="23" 
-                    class="inlineNumInput" :style="{ textAlign: 'right' }" /> : 
-                    <input type="number" v-model="item.min" min="0" max="59" class="inlineNumInput"/>
-                    </td>
-                  <td class="align-right" :style="{color: 'var(--main-lila-hell)'}">
-                    <input type="number" v-model="item.application" min="1" class="inlineNumInput"
-                    :style="{ textAlign: 'right' }"
-                    />
-                    <span v-if="item.application > 1"> applications</span>
-                    <span v-else> application</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <div @click="addNewTime" :style="{ 
-              textAlign: 'left', 
-              marginLeft: '0.2rem',
-              display: 'flex', cursor: 'pointer',
-              }"> 
-              <font-awesome-icon icon="circle-plus" class="circleIcon" :style="{
-                color: 'var(--main-lila-hell)', marginRight: '0.56em' }"/> 
-                Add a Time
-            </div>
-          </div>
-
-          <p class="input-subtitle margin-top">Duration</p>
-          <div class="table-wrapper">
-            <table>
-              <tbody>
-                <tr :style="{color: 'var(--white-lila-border)' }">
-                  <td class="align-left">Start Date</td>
-                  <td class="align-left">End Date</td>
-                </tr>
-                <tr>
-                  <td class="align-left">
-                    <font-awesome-icon icon="calendar" class="calenderIcon"/>{{ todayDate }}
-                  </td>
-                  <td class="align-left">
-                    <font-awesome-icon icon="calendar" class="calenderIcon"/>
-                    None
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <button class="button" @click="nextStep" :disabled="schedule.length === 0"
+          <button class="button" @click="nextStep"
+          :disabled="!(scheduleRef?.valid)"
           :style="{
-            backgroundColor: schedule.length === 0 ? 'var(--divider-light-2)' : 'var(--main-lila-hell)',
-            color: schedule.length === 0 ? 'var(--divider-light-1)' : 'white'
+            backgroundColor: !(scheduleRef?.valid) ? 'var(--divider-light-2)' : 'var(--main-lila-hell)',
+            color: !(scheduleRef?.valid) ? 'var(--divider-light-1)' : 'white'
           }">Next</button>
         </div>
       </div> 
@@ -405,21 +402,27 @@ const transform = (index: number) => {
           <div class="table-wrapper">
             <table>
               <tbody>
-                <tr v-if= "selectedSchedule?.includes('Every Day') ">
-                  <td colspan="2" class="align-left" :style="{ borderBottom: '1px solid white' }">{{ selectedSchedule }}</td>
+                <tr v-if= "scheduleRef?.selectedSchedule?.includes('Every Day') ">
+                  <td colspan="2" class="align-left">{{ scheduleRef?.selectedSchedule }}</td>
                 </tr>
-                <tr v-if= "selectedSchedule?.includes('Specific') ">
-                  <td colspan="2" class="align-left" :style="{ borderBottom: '1px solid white' }">{{ selectedDays }}</td>
+                <tr v-if= "scheduleRef?.selectedSchedule?.includes('Specific') ">
+                  <td colspan="2" class="align-left">{{ selectedDays.join(', ') }}</td>
                 </tr>
-                <tr v-if= "selectedSchedule?.includes('Every Few Days') ">
-                  <td colspan="2" class="align-left" :style="{ borderBottom: '1px solid white' }">{{ selectedInterval }}</td>
-                </tr>
-                <tr v-for="(item, index) in schedule" :key="index" class="align-left">
-                  <td>{{ item.hour < 10 ? '0' + item.hour : item.hour }}:{{ item.min }} </td>
+                <!-- <tr v-if= "selectedSchedule?.includes('Every Few Days') ">
+                  <td colspan="2" class="align-left">{{ selectedInterval }}</td>
+                </tr> -->
+                <tr v-for="(item, index) in scheduleRef?.schedule" :key="index" class="align-left">
+                  <td>{{ item.hour < 10 ? '0' + item.hour : item.hour }}:{{ item.min < 10 ? '0' + item.min : item.min }} </td>
                   <td>{{ item.application > 1? item.application + ' applications' : item.application + ' application'}}</td>          
                 </tr>
                 <tr class="align-left">
-                  <td colspan="2" class="align-left" :style="{ borderTop: '1px solid white', color: 'var(--white-lila-border)' }">Starts on {{ todayDate }}
+                  <td colspan="2" class="align-left" :style="{ borderTop: '1px solid white', color: 'var(--white-lila-dunkel)' }">
+                    Starts on {{ scheduleRef?.startDate }} {{ monthArray[scheduleRef?.startMonth ?? 0]}} {{ scheduleRef?.startYear }}
+                    <div v-if="scheduleRef?.endDate !== null">Ends on {{ scheduleRef?.endDate }} {{ monthArray[scheduleRef?.endMonth ?? 0] }} {{ scheduleRef?.endYear }} </div>
+                    <div v-if="scheduleRef?.endDate !== null">Duration: {{ scheduleRef?.duration }} 
+                      <span v-if="scheduleRef?.duration ?? 0 > 1">days</span>
+                      <span v-else>day</span>
+                    </div>
                   </td>
                 </tr> 
               </tbody>
@@ -472,15 +475,6 @@ const transform = (index: number) => {
   transition-duration: 500ms;
 }
 
-input[type=text],
-.inputNum,
-.radioSelection,
-select, .button,
-.textArea{
-  width: 100%;
-  margin: auto;
-}
-
 .radioSelection{
   display: block;
   margin: auto;
@@ -514,34 +508,8 @@ select, .button,
   transform: translate(0 , 10%);
 }
 
-input[type=radio],
-input[type=checkbox] {
-  opacity: 0;
-  position: absolute;
-}
-
 .radioLabel{
   padding-left: 0.4rem;
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-input[type=text],
-.inputNum,
-select {
-  background-color: var(--white-lila);
-  border: none;
-  border-radius: 0.8rem;
-  height: 2.4rem;
-  font-size: 1rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  outline: none;
-  -moz-appearance: textfield;
 }
 
 .textArea {
@@ -554,25 +522,6 @@ select {
   font-size: 1rem;
 }
 
-.inlineNumInput {
-  -moz-appearance: textfield;
-  background-color: var(--white-lila);
-  border: none;
-  width: 1.3rem;
-  height: 1.2rem;
-  color: var(--main-lila-hell);
-  font-size: 0.96rem;
-}
-
-select{
-  appearance: none;
-  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-  background-repeat: no-repeat;
-  background-position: right 1rem top 50%;
-  background-size: 0.65rem auto;
-  cursor: pointer;
-  color: var(--main-lila-hell)
-}
 
 input[type=text]:focus,
 textarea:focus {
@@ -588,64 +537,9 @@ textarea:focus {
   color: var(--white-lila-border);
 }
 
-.circleIcon {
-  font-size: 1.2rem;
-  cursor: pointer;
-  align-self: center;
-}
-
-.calenderIcon {
-  font-size: 1.2rem;
-  cursor: pointer;
-  color: var(--white-lila-border);
-  margin-right: 0.3rem;
-}
-
-.button {
-  height: 2.6rem;
-  border: none;
-  border-radius: 0.8rem;
-  font-size: 1rem;
-  margin-top: 2rem;
-  margin-bottom: 6rem;
-  cursor: pinter;
-}
-
-.week-wrapper{
-  margin: auto;
-  display: grid;
-  grid-template-columns: repeat(7, auto);
-  height: 2.6rem;
-  border-radius: 0.8rem;
-  overflow: hidden;
-  position: relative;
-  gap: 1px;
-}
-
-.week-label {
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%,-50%);
-  cursor: pointer;
-  font-size: 0.9rem;
-  padding: 1rem;
-}
-
-tr {
-  border-bottom: 1px solid white;
-}
-
 td {
   width: 50%;
   height: 2rem;
-}
-
-.align-left{
-  text-align: left;
-}
-
-.align-right{
-  text-align: right;
 }
 
 .image-wrapper{

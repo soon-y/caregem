@@ -1,16 +1,20 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 
-const scrolledHour = ref<HTMLElement | null>(null);
-const scrolledMin = ref<HTMLElement | null>(null);
+const scrolledHour = ref<HTMLElement | null>(null)
+const scrolledMin = ref<HTMLElement | null>(null)
 const scrollTopHour = ref(0)
 const scrollTopMin = ref(0)
 const finalHour = ref<number>(0)
 const finalMin = ref<number>(0)
-const display = ref<string>("block")
 let hourArray: string[] = []
 let minArray: string[] = []
 let nbsp = "\u00A0"
+
+const props = defineProps<{
+  currentHour: number
+  currentMin: number
+}>()
 
 for(let i:number = 0; i < 2; i++){
     hourArray.push(nbsp)
@@ -25,40 +29,46 @@ for(let i:number = 0; i < 60; i++){
   minArray.push((i < 10) ? '0' + i.toString() : i.toString())
 }
 
-const close = () => {
-  display.value = 'none'
-  console.log(finalHour.value +' '+ finalMin.value)
-}
-
 const onScrollHour = () => {
   if (scrolledHour.value) {
-    scrollTopHour.value = scrolledHour.value.scrollTop;
+    scrollTopHour.value = scrolledHour.value.scrollTop
   }
-  finalHour.value = scrollTopHour.value/32
+  finalHour.value = Math.floor(scrollTopHour.value/32)
 }
 
 const onScrollMin = () => {
   if (scrolledMin.value) {
-    scrollTopMin.value = scrolledMin.value.scrollTop;
+    scrollTopMin.value = scrolledMin.value.scrollTop
   }
-  finalMin.value = scrollTopMin.value/32
+  finalMin.value = Math.floor(scrollTopMin.value/32)
 }
+
+watch(scrolledHour, (newVal) => {
+  if (newVal) {
+    newVal.scrollTop = props.currentHour * 32
+  }
+})
+
+watch(scrolledMin, (newVal) => {
+  if (newVal) {
+    newVal.scrollTop = props.currentMin * 32
+  }
+})
+
+defineExpose({ finalHour, finalMin, scrolledHour, scrolledMin })
 
 </script>
 <template>
-  <div class="container" @click="close"
-  :style="{ backgroundColor:'gray', display: display, top: 0}">
-    <div class="modal-wrapper">
-      <div class='selection-bar'>
+  <div class="modal-wrapper">
+    <div class='selection-bar'>
+    </div>
+    
+    <div class='timePicker-wrapper'>
+      <div class='timePicker' @scroll="onScrollHour" ref="scrolledHour" >
+        <p v-for="(item ,index) in hourArray" :key="index" class="timeArray"> {{ item }} </p>
       </div>
-      
-      <div class='timePicker-wrapper'>
-        <div class='timePicker' @scroll="onScrollHour" ref="scrolledHour" >
-          <p v-for="(item ,index) in hourArray" :key="index" class="timeArray"> {{ item }} </p>
-        </div>
-        <div class='timePicker' @scroll="onScrollMin" ref="scrolledMin" >
-        <p v-for="(item ,index) in minArray" :key="index" class="timeArray"> {{ item }}</p>
-        </div>
+      <div class='timePicker' @scroll="onScrollMin" ref="scrolledMin" >
+      <p v-for="(item ,index) in minArray" :key="index" class="timeArray"> {{ item }}</p>
       </div>
     </div>
   </div>
@@ -77,6 +87,7 @@ const onScrollMin = () => {
   position: absolute;
   transform: translate(-50%,-60%);
   margin: 0;
+  z-index: 100;
 }
 
 .timePicker-wrapper{
@@ -104,6 +115,7 @@ const onScrollMin = () => {
   overflow-y: auto;
   overscroll-behavior-y: contain;
   scroll-snap-type: y mandatory;
+
 }
 
 .timePicker::-webkit-scrollbar {

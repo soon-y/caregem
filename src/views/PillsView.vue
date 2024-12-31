@@ -6,7 +6,7 @@ import Tab from '../components/Tab.vue'
 import Details from './Details.vue'
 import * as medication from '../global_array/medicationInfo'
 import AddMedicationView from './AddMedicationView.vue'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import {
   Chart as ChartJS,
   Title,
@@ -33,6 +33,7 @@ const dataMedicationToday = ref<ChartData<'bar'>>({ datasets: [] })
 const dataMedicationWeek = ref<ChartData<'bar'>>({ datasets: [] })
 const dataMedicationMonth = ref<ChartData<'bar'>>({ datasets: [] })
 const dataMedicationYear = ref<ChartData<'bar'>>({ datasets: [] })
+const addMedicationRef = ref<InstanceType<typeof AddMedicationView> | null>(null)
 
 let myStyles = {
   height: '10rem',
@@ -88,11 +89,11 @@ const medicationStyle = ref<{ transform: string }>({
 })
 
 const enableAddPage = () => {
-  medicationStyle.value = { transform: 'translate(0, 0)' };
+  medicationStyle.value = { transform: 'translate(0, 0)' }
 }
 
 const closeAddPage = () => {
-  medicationStyle.value = { transform: 'translate(0, 100%)' };
+  medicationStyle.value = { transform: 'translate(0, 100%)' }
 }
 
 const detailsStyle = ref<{ transform: string }>({
@@ -145,6 +146,15 @@ const addDataYear = () => {
   return array
 }
 
+watch(
+  () => addMedicationRef.value?.close, 
+  (newValue) => {
+    if (newValue == true) {
+      closeAddPage()
+    }
+  },
+  { immediate: true }
+)
 
 const toDetailPage = (index: number) => {
   detailsStyle.value = { transform: 'translate(0, 0)' };
@@ -288,7 +298,7 @@ const updateDate = (index: number) => {
     </div>
   </div>
 
-  <AddMedicationView :style = medicationStyle>
+  <AddMedicationView :style = medicationStyle ref="addMedicationRef">
     <template v-slot:close>
       <font-awesome-icon icon="fa-xmark" @click="closeAddPage"/>
     </template>
@@ -349,7 +359,6 @@ const updateDate = (index: number) => {
       <span>Started on {{ medication.data[clickedIndex].durationStart }}</span> 
       <span v-if="medication.data[clickedIndex].durationEnd !== ''">. Schedule ends {{ medication.data[clickedIndex].durationEnd }}</span> 
     </template>
-
 
     <template v-slot:strength> {{ medication.data[clickedIndex].strength }} </template>
     <template v-slot:unit> {{ medication.data[clickedIndex].unit }} </template>

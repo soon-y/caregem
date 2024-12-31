@@ -2,21 +2,29 @@
 import { monthArrayFull } from '../chart/global_label'
 import { ref } from 'vue'
 
+const props = defineProps<{
+  startDate: number
+  startMonth: number
+  startYear: number
+  startElapsed: number
+  disable: boolean
+}>()
+
 const days = [  "M", "T", "W", "T", "F", "S", "S",]
 const today = new Date()
-let currentDate: number = today.getDate()
-let currentMonth: number = today.getMonth()
-let currentYear: number = today.getFullYear()
+const todayElapsed:number =  today.getTime()
+const currentDate: number = today.getDate()
+const currentMonth: number = today.getMonth()
+const currentYear: number = today.getFullYear()
 const daysInMonth = ref<string[]>([])
-const month = ref<number>(currentMonth)
-const year = ref<number>(currentYear)
-const theFirstDayOfWeek = ref<number>(0)
+const month = ref<number>(props.startMonth)
+const year = ref<number>(props.startYear)
+const theFirst = new Date(year.value, month.value, 1);
+const theFirstDayOfWeek = ref<number>(theFirst.getDay()== 0? theFirst.getDay()+6 :theFirst.getDay()-1)
 const lastDate = ref<number>(new Date(year.value, month.value + 1, 0).getDate())
-const selectedDateIndex = ref<number|null>(null)
-const selectedDate = ref<number>(0)
-
-
-console.log(today.getDay())
+const selectedDateIndex = ref<number | null>(currentDate + theFirstDayOfWeek.value -1)
+const selectedMonth = ref<number>(month.value)
+const selectedDate = ref<number>(selectedDateIndex.value != null? selectedDateIndex.value - theFirstDayOfWeek.value + 1 : 0)
 
 const previousMonth = () => {
   if (month.value === 0) {
@@ -25,7 +33,6 @@ const previousMonth = () => {
   }  
   month.value--
   updateDateArray()
-  selectedDateIndex.value = null
 }
 
 const nextMonth = () => {
@@ -35,15 +42,12 @@ const nextMonth = () => {
   }
   month.value++
   updateDateArray()
-  selectedDateIndex.value = null
 }
 
 const updateDateArray = () => {
   daysInMonth.value = []
-  const theFirst: Date = new Date()
-  theFirst.setMonth(month.value)
-  theFirst.setFullYear(year.value)
-  theFirstDayOfWeek.value = theFirst.getDay()-2 < 0? theFirst.getDay()+5 :theFirst.getDay()-2
+  const theFirst = new Date(month.value, year.value, 1);
+  theFirstDayOfWeek.value = theFirst.getDay()== 0? theFirst.getDay()+6 :theFirst.getDay()-1
   lastDate.value = new Date(year.value, month.value + 1, 0).getDate()
   let daycount:number = 1
 
@@ -56,54 +60,68 @@ const updateDateArray = () => {
     }
   }
 
-  console.log(theFirstDayOfWeek.value)
-  console.log(selectedDate.value)
+  if(month.value == props.startMonth){
+    selectedDateIndex.value = props.startDate + theFirstDayOfWeek.value - 1
+    selectedDate.value = selectedDateIndex.value - theFirstDayOfWeek.value + 1
+  } else {
+    selectedDateIndex.value = lastDate.value + theFirstDayOfWeek.value - 1
+    selectedDate.value = selectedDateIndex.value - theFirstDayOfWeek.value + 1
+  }
 }
 updateDateArray()
 
 const select = (index: number) => {
-  let i = index - theFirstDayOfWeek.value
-  if( i>= theFirstDayOfWeek.value && i <= lastDate.value){
-    selectedDateIndex.value = index
-  } 
-
-  console.log(selectedDateIndex.value)
+  let date:number = index - theFirstDayOfWeek.value + 1
+  let currentElapsed:number = (new Date(year.value, month.value, date)).getTime()
+  let startElapsed: number = props.startElapsed  <= todayElapsed ? todayElapsed : props.startElapsed 
+  if( index>= theFirstDayOfWeek.value && index <= lastDate.value + theFirstDayOfWeek.value-1){
+    if(props.disable){
+      if( startElapsed <= currentElapsed ){
+        selectedDateIndex.value = index
+        selectedDate.value = selectedDateIndex.value - theFirstDayOfWeek.value + 1
+        selectedMonth.value = month.value
+      }
+    }else {
+      selectedDateIndex.value = index
+      selectedDate.value = selectedDateIndex.value - theFirstDayOfWeek.value + 1
+      selectedMonth.value = month.value
+    }
+  }
 }
+
+defineExpose({ selectedDate, month, year })
 
 </script>
 
 <template>
-  <div class="container" 
-  :style="{ backgroundColor:'gray', top: 0}">
-    <div class="modal-wrapper">
-      <div :style="{ marginBottom: '0.6rem', fontSize: '1.2rem' }">
-        {{ monthArrayFull[month] }} {{ year }}
-        <span :style="{ float: 'right' }">
-          <font-awesome-icon icon="chevron-left" 
-          :style="{ marginRight: '1rem', cursor: 'pointer', color: 'var(--main-lila-hell)'}"
-          v-if="month !== currentMonth" 
-          @click="previousMonth"/>
-          <font-awesome-icon icon="chevron-right" 
-          :style="{ cursor: 'pointer', color: 'var(--main-lila-hell)'}"
-          @click="nextMonth" />
-        </span>
+  <div class="modal-wrapper">
+    <div :style="{ marginBottom: '0.6rem', fontSize: '1.2rem' }">
+      {{ monthArrayFull[month] }} {{ year }}
+      <span :style="{ float: 'right' }">
+        <font-awesome-icon icon="chevron-left" 
+        :style="{ marginRight: '1rem', cursor: 'pointer', color: 'var(--main-lila-hell)'}"
+        v-if="!((month === currentMonth) && (year === currentYear))" 
+        @click="previousMonth"/>
+        <font-awesome-icon icon="chevron-right" 
+        :style="{ cursor: 'pointer', color: 'var(--main-lila-hell)'}"
+        @click="nextMonth" />
+      </span>
+    </div>
+    <div class="calendar-wrapper">
+      <div class="day-wrapper" :style="{ gap: '0.7rem', marginBottom: '0.5rem',
+        textAlign: 'center'}">
+        <p v-for="item in days"> {{ item }} </p>
       </div>
-      <div class="calendar-wrapper">
-        <div class="day-wrapper" :style="{ gap: '0.7rem', marginBottom: '0.5rem',
-          textAlign: 'center', color: 'var(--white-lila-border)'}">
-          <p v-for="item in days"> {{ item }} </p>
-        </div>
 
-        <div class="day-wrapper":style="{ gap: '0.5rem',
-          textAlign: 'center', color: 'var(--white-lila-border)'}">
-          <div class="day-number" v-for="(item ,index) in daysInMonth" 
-          :style="{ 
-            backgroundColor: selectedDateIndex === index? 'var(--main-lila-hell)' : 'var(--white-lila)',
-            color: selectedDateIndex === index? 'white' : 'var(--main-lila-hell)',
-            cursor: 'pointer',
-           }" @click="select(index)">
-            <p> {{ item }} </p>
-          </div>
+      <div class="day-wrapper":style="{ gap: '0.5rem',
+        textAlign: 'center'}">
+        <div class="day-number" v-for="(item ,index) in daysInMonth" 
+        :style="{ 
+          backgroundColor: selectedDateIndex === index? 'var(--main-lila-hell)' : 'var(--white-lila)',
+          color: (selectedDateIndex === index) || (props.disable && (startElapsed > (new Date(year,month,index-theFirstDayOfWeek+1)).getTime()))? 'var(--white-lila-border)' : 'var(--main-lila-hell)',
+          cursor: 'pointer', border: 'none',
+          }" @click="select(index)">
+          <p> {{ item }}</p>
         </div>
       </div>
     </div>
@@ -124,6 +142,7 @@ const select = (index: number) => {
   transform: translate(-50%,-60%);
   padding: 1rem;
   margin: 0;
+  z-index: 100;
 }
 
 .calendar-wrapper{
@@ -144,10 +163,6 @@ const select = (index: number) => {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-@media screen and (max-aspect-ratio: 1) {
-
 }
 
 </style>
