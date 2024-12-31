@@ -69,10 +69,10 @@ const displayTimePicker = (index: number) => {
 
 const closeTimePicker = () => {
   timePickerDisplay.value = 'none'
-  if(timePickerRef.value){
-    schedule.value[scheduleIndex.value].hour = timePickerRef.value.finalHour
-    schedule.value[scheduleIndex.value].min = timePickerRef.value.finalMin
-  }
+  // if(timePickerRef.value){
+  //   schedule.value[scheduleIndex.value].hour = timePickerRef.value.finalHour
+  //   schedule.value[scheduleIndex.value].min = timePickerRef.value.finalMin
+  // }
 }
 
 const displayCalendarStart = () => {
@@ -129,9 +129,7 @@ const reset = () => {
   valid.value = true
   duration.value = 0
   selectedSchedule.value = medication.schedule[0]
-  week.value.forEach((el) => {
-    el.checked = false
-  })
+
   schedule.value = [{ hour: now.getHours(), min: 0, application: 1 }]
 }
 
