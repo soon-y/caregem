@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch } from 'vue'
 
 const scrolledHour = ref<HTMLElement | null>(null)
 const scrolledMin = ref<HTMLElement | null>(null)
@@ -9,7 +9,7 @@ const finalHour = ref<number>(0)
 const finalMin = ref<number>(0)
 let hourArray: string[] = []
 let minArray: string[] = []
-let nbsp = "\u00A0"
+let nbsp: string = "\u00A0"
 
 const props = defineProps<{
   currentHour: number
