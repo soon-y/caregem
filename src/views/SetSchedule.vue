@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import * as medication from '../global_array/medicationInfo'
 import { monthArray } from '../chart/global_label'
-import TimePicker from '../components/TimePicker.vue'
+// import TimePicker from '../components/TimePicker.vue'
 import Calendar from '../components/Calendar.vue'
 import { ref, watch } from 'vue'
 const now = new Date()
@@ -18,7 +18,7 @@ const week = ref<weekItemType[]>([
   { label: 'S', checked: false },
   { label: 'S', checked: false }, 
 ])
-const timePickerRef = ref<InstanceType<typeof TimePicker> | null>(null)
+// const timePickerRef = ref<InstanceType<typeof TimePicker> | null>(null)
 const calendarStartRef = ref<InstanceType<typeof Calendar> | null>(null)
 const calendarEndRef = ref<InstanceType<typeof Calendar> | null>(null)
 const startDate = ref<number>(today.getDate())
@@ -32,7 +32,7 @@ const endElapsed = ref<number>(0)
 const scheduleIndex = ref<number>(0)
 const calendarStartDisplay = ref<string>('none')
 const calendarEndDisplay = ref<string>('none')
-const timePickerDisplay = ref<string>('none')
+// const timePickerDisplay = ref<string>('none')
 const valid = ref<boolean>(true)
 const duration = ref<number>(0)
 interface ScheduleItem {
@@ -63,12 +63,12 @@ const deleteSchedule = (index : number) => {
 }
 
 const displayTimePicker = (index: number) => {
-  timePickerDisplay.value = 'block'
+  // timePickerDisplay.value = 'block'
   scheduleIndex.value = index
 }
 
 const closeTimePicker = () => {
-  timePickerDisplay.value = 'none'
+  // timePickerDisplay.value = 'none'
   // if(timePickerRef.value){
   //   schedule.value[scheduleIndex.value].hour = timePickerRef.value.finalHour
   //   schedule.value[scheduleIndex.value].min = timePickerRef.value.finalMin
@@ -191,13 +191,13 @@ defineExpose({ schedule,selectedSchedule,week,valid,startDate,startMonth,startYe
   </select>
 </div>
 
-<div class="container"
+<!-- <div class="container"
   :style="{  backgroundColor: 'rgba(255,255,255,0.9)', display: timePickerDisplay, top: 0}"
   @click="closeTimePicker"></div>
 <TimePicker ref="timePickerRef" v-if="timePickerDisplay == 'block'"
 :currentHour="Number(schedule[scheduleIndex].hour)"
 :currentMin="Number(schedule[scheduleIndex].min)"
-></TimePicker>
+></TimePicker> -->
 
 <p class="input-subtitle margin-top">At what time</p>
 <div class="table-wrapper">
