@@ -27,7 +27,7 @@ export default defineComponent({
         case 2:
           return 50
         case 3:
-          return aspectRatio.value > 1 ? 75.5 : 74.6
+          return aspectRatio.value > 1 ? 75.5 : 75
       }
     }
 
