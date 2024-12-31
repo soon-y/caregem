@@ -58,7 +58,11 @@ export const data: dataType[] = [
 
 export const types: string[] = ["Capsule", "Tablet", "Liquid", "Topical", "Injection"]
 export const units: string[] = ["mg", "mcg", "g", "ml", "%"]
-export const schedule: string[] = ["Every Day", "On Specific Days of the Week", "Every Few Days"]
+export const schedule: string[] = [
+  "Every Day", 
+  "On Specific Days of the Week", 
+  //"Every Few Days"
+]
 export const intervalDays: string[] = ["Every Other Day"]
 export const shapeImageNames: string[] = [
   "capsule_white_white",
