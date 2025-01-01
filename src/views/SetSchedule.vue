@@ -4,6 +4,13 @@ import { monthArray } from '../chart/global_label'
 import TimePicker from '../components/TimePicker.vue'
 import Calendar from '../components/Calendar.vue'
 import { ref, watch } from 'vue'
+import { useDataStore } from '../stores/data'
+
+const props = defineProps<{
+  index: number
+  edit: boolean
+}>()
+const dataStore = useDataStore()
 const now = new Date()
 const selectedSchedule = ref<string>(medication.schedule[0])
 const selectedInterval = ref<string | null>(medication.intervalDays[0])
@@ -46,7 +53,7 @@ const schedule = ref<ScheduleItem[]>([
 ])
 
 const addNewTime = () => {
-  let data = { hour: now.getHours(), min: now.getMinutes(), application: 1 }
+  let data = { hour: now.getHours(), min: 0, application: 1 }
   if (schedule.value.length > 0) {
     data.hour = schedule.value[schedule.value.length-1].hour + 1 > 23 ? 0 : schedule.value[schedule.value.length-1].hour + 1
     data.min = schedule.value[schedule.value.length-1].min
@@ -88,12 +95,14 @@ const closeCalendarStart = () => {
     const d = new Date(startYear.value, startMonth.value, startDate.value)
     startElapsed.value = d.getTime()
 
-    if(startElapsed.value > endElapsed.value && endDate.value !== null){
+    if(endDate.value !== null){
+      if(startElapsed.value > endElapsed.value){
       endDate.value = startDate.value 
       endMonth.value = startMonth.value 
       endYear.value = startYear.value
       endElapsed.value = d.getTime()
-      duration.value = ((endElapsed.value - startElapsed.value)/(1000 * 3600 * 24))+1
+      }
+      duration.value = Math.ceil((endElapsed.value - startElapsed.value)/(1000 * 3600 * 24))+1
     }
   }
 }
@@ -110,7 +119,7 @@ const closeCalendarEnd = () => {
     endYear.value = calendarEndRef.value.year
     const d = new Date(endYear.value, endMonth.value, endDate.value)
     endElapsed.value = d.getTime()
-    duration.value = ((endElapsed.value - startElapsed.value)/(1000 * 3600 * 24))+1
+    duration.value = Math.ceil((endElapsed.value - startElapsed.value)/(1000 * 3600 * 24))+1
   }
 }
 
@@ -154,6 +163,55 @@ const updateValid = () => {
     }
   }
 }
+
+const updateInitialValue = () => {
+  selectedSchedule.value = dataStore.data[props.index].schedule
+  startDate.value = Number(dataStore.data[props.index].durationStart.split('/')[0])
+  startMonth.value = Number(dataStore.data[props.index].durationStart.split('/')[1])
+  startYear.value = Number(dataStore.data[props.index].durationStart.split('/')[2])
+  endDate.value = dataStore.data[props.index].durationEnd.split('/')[0] === "" ? null : Number(dataStore.data[props.index].durationEnd.split('/')[0])
+  endMonth.value = Number(dataStore.data[props.index].durationEnd.split('/')[1])
+  endYear.value = Number(dataStore.data[props.index].durationEnd.split('/')[2])
+  startElapsed.value = new Date(startYear.value, startMonth.value, startDate.value).getTime()
+  endElapsed.value = endDate.value === null ? 0 : new Date(endYear.value, endMonth.value, endDate.value).getTime()
+
+  schedule.value = []
+  for(let i:number = 0; i < dataStore.data[props.index].time.length; i++){
+    let hour = Number(dataStore.data[props.index].time[i].split(':')[0])
+    let min = Number(dataStore.data[props.index].time[i].split(':')[1])
+    let application = dataStore.data[props.index].application[i]
+    let d = { hour: hour, min: min, application: application }
+    schedule.value.push(d)
+  }
+
+  if(selectedSchedule.value == medication.schedule[1]){
+    for(let i:number = 0; i < dataStore.data[props.index].days.length; i++){
+      if(dataStore.data[props.index].days[i] === 'Mon'){
+        week.value[0].checked = true
+      } else if(dataStore.data[props.index].days[i] === 'Tue'){
+        week.value[1].checked = true
+      } else if(dataStore.data[props.index].days[i] === 'Wed'){
+        week.value[2].checked = true
+      } else if(dataStore.data[props.index].days[i] === 'Thu'){
+        week.value[3].checked = true
+      } else if(dataStore.data[props.index].days[i] === 'Fri'){
+        week.value[4].checked = true
+      } else if(dataStore.data[props.index].days[i] === 'Sat'){
+        week.value[5].checked = true
+      } else if(dataStore.data[props.index].days[i] === 'Sun'){
+        week.value[6].checked = true
+      }
+    }
+  }
+}
+
+watch(() => props.edit, (newVal) => {
+    if (newVal == true) { 
+      updateInitialValue()
+    }
+  },
+  { immediate: true }
+)
 
 defineExpose({ schedule,selectedSchedule,week,valid,startDate,startMonth,startYear,endDate,endMonth,endYear,duration,reset })
 </script>
@@ -212,9 +270,9 @@ defineExpose({ schedule,selectedSchedule,week,valid,startDate,startMonth,startYe
           <font-awesome-icon icon="circle-minus" class="circle-icon" @click="deleteSchedule(index)"
           :style="{color: 'var(--white-lila-border)', marginRight: '0.5rem' }"/>
           <div @click="displayTimePicker(index)"
-          :style="{ backgroundColor: 'var(--white-lila-border)', width: '4rem', height: '1.8rem', cursor: 'pointer',
+          :style="{ backgroundColor: 'var(--white-lila-border)', width: '5rem', height: '1.8rem', cursor: 'pointer',
             borderRadius: '0.4rem', alignItems: 'center', display:'flex' }"> 
-          <span :style="{ display: 'inline-block', margin: 'auto', color: 'var(--main-lila-hell)'}">
+          <span :style="{ display: 'inline-block', margin: 'auto', color: 'var(--main-lila-hell)' }">
             {{ item.hour<10 ? '0'+item.hour : item.hour }} : {{ item.min<10 ? '0'+ item.min : item.min }}
           </span>
           </div>

@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import Medication from '../components/Medication.vue'
-import { today,week,month,year,weekArrayFull,weekNum,weekNumInMonth,monthNum,monthArrayFull,date,weekKurz, weekArray } from '../chart/global_label'
+import { today,week,month,year,weekArrayFull,weekNumInMonth,monthNum,monthArrayFull,date,weekKurz, weekArray, monthArray } from '../chart/global_label'
 import Tabs from '../components/Tabs.vue'
 import Tab from '../components/Tab.vue'
 import Details from './Details.vue'
 import * as medication from '../global_array/medicationInfo'
 import AddMedicationView from './AddMedicationView.vue'
+import { useDataStore } from '../stores/data'
 import { ref, watch } from 'vue'
 import {
   Chart as ChartJS,
@@ -25,6 +26,7 @@ import * as pillYear from '../chart/pillYear'
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
+const dataStore = useDataStore()
 const optionsMedicationToday = pillToday.options
 const optionsMedicationWeek = pillWeek.options
 const optionsMedicationMonth = pillMonth.options
@@ -34,18 +36,19 @@ const dataMedicationWeek = ref<ChartData<'bar'>>({ datasets: [] })
 const dataMedicationMonth = ref<ChartData<'bar'>>({ datasets: [] })
 const dataMedicationYear = ref<ChartData<'bar'>>({ datasets: [] })
 const addMedicationRef = ref<InstanceType<typeof AddMedicationView> | null>(null)
+const detailsRef = ref<InstanceType<typeof Details> | null>(null)
 
 let myStyles = {
   height: '10rem',
 }
-const clickedIndex = ref<number>(0)
+const clickedIndex = ref<number | null>(0)
 
 const datasetsToday = () => ({
   labels: today,
   datasets: [
     {
-      label: medication.data[clickedIndex.value].name,
-      backgroundColor: medication.backgroundColor[medication.data[clickedIndex.value].bgColorIndex],
+      label: dataStore.data[clickedIndex.value ?? 0].name,
+      backgroundColor: medication.backgroundColor[dataStore.data[clickedIndex.value ?? 0].bgColorIndex],
       data: addDataToday(),
     }
   ]
@@ -55,8 +58,8 @@ const datasetsWeek = () => ({
   labels: week,
   datasets: [
     {
-      label: medication.data[clickedIndex.value].name,
-      backgroundColor: medication.backgroundColor[medication.data[clickedIndex.value].bgColorIndex],
+      label: dataStore.data[clickedIndex.value ?? 0].name,
+      backgroundColor: medication.backgroundColor[dataStore.data[clickedIndex.value ?? 0].bgColorIndex],
       data: addDataWeek(),
     }
   ]
@@ -66,8 +69,8 @@ const datasetsMonth = () => ({
   labels: month,
   datasets: [
     {
-      label: medication.data[clickedIndex.value].name,
-      backgroundColor: medication.backgroundColor[medication.data[clickedIndex.value].bgColorIndex],
+      label: dataStore.data[clickedIndex.value ?? 0].name,
+      backgroundColor: medication.backgroundColor[dataStore.data[clickedIndex.value ?? 0].bgColorIndex],
       data: addDataMonth(),
     }
   ]
@@ -77,8 +80,8 @@ const datasetsYear = () => ({
   labels: year,
   datasets: [
     {
-      label: medication.data[clickedIndex.value].name,
-      backgroundColor: medication.backgroundColor[medication.data[clickedIndex.value].bgColorIndex],
+      label: dataStore.data[clickedIndex.value ?? 0].name,
+      backgroundColor: medication.backgroundColor[dataStore.data[clickedIndex.value ?? 0].bgColorIndex],
       data: addDataYear(),
     }
   ]
@@ -105,20 +108,33 @@ const addDataToday = () => {
   for(let i:number = 0; i<24; i++){
     array.push(0)
   }
-  for(let j:number = 0; j< medication.data[clickedIndex.value].application.length; j++){
-    array[Number(medication.data[clickedIndex.value].time[j].split(':')[0])] = medication.data[clickedIndex.value].application[j]
+  for(let j:number = 0; j< dataStore.data[clickedIndex.value ?? 0].application.length; j++){
+    array[Number(dataStore.data[clickedIndex.value ?? 0].time[j].split(':')[0])] = dataStore.data[clickedIndex.value ?? 0].application[j]
   }
   return array
 }
 
 const addDataWeek = () => {
   let array: number[] = []
-  let total: number = medication.data[clickedIndex.value].application.reduce((a, c) => a + c, 0)
-  for(let i:number = 0; i<7; i++){
-    if((medication.data[clickedIndex.value].days.join(',')).includes(week[i])){
-      array.push(total)
+  let total: number = dataStore.data[clickedIndex.value ?? 0].application.reduce((a, c) => a + c, 0)
+  let startElapsed: number = new Date(
+    Number(dataStore.data[clickedIndex.value ?? 0].durationStart.split('/')[2]),
+    Number(dataStore.data[clickedIndex.value ?? 0].durationStart.split('/')[1]),
+    Number(dataStore.data[clickedIndex.value ?? 0].durationStart.split('/')[0])).getTime()
+  let currentElapsed: number = new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate()).getTime()
+
+  if (startElapsed <= currentElapsed){
+    array.unshift(total) 
+  }else {
+    array.unshift(0) 
+  }
+
+  for(let i:number = 0; i<7-1; i++){
+    let currentElapsed: number = new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate()-1).getTime()
+    if((dataStore.data[clickedIndex.value ?? 0].days.join(',')).includes(week[i]) && startElapsed <= currentElapsed){
+      array.unshift(total)
     } else {
-      array.push(0)
+      array.unshift(0)
     }
   }
   return array
@@ -126,12 +142,25 @@ const addDataWeek = () => {
 
 const addDataMonth = () => {
   let array: number[] = []
-  let total: number = medication.data[clickedIndex.value].application.reduce((a, c) => a + c, 0)
-  for(let i:number = 0; i < month.length; i++){
-    if((medication.data[clickedIndex.value].days.join(',')).includes(weekArray[(weekNumInMonth[i])])){
-      array.push(total)
-    } else {
-      array.push(0)
+  let total: number = dataStore.data[clickedIndex.value ?? 0].application.reduce((a, c) => a + c, 0)
+  let startElapsed: number = new Date(
+    Number(dataStore.data[clickedIndex.value ?? 0].durationStart.split('/')[2]),
+    Number(dataStore.data[clickedIndex.value ?? 0].durationStart.split('/')[1]),
+    Number(dataStore.data[clickedIndex.value ?? 0].durationStart.split('/')[0])).getTime()
+  let currentElapsed: number = new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate()).getTime()
+
+  if (startElapsed <= currentElapsed){
+    array.unshift(total) 
+  }else {
+    array.unshift(0) 
+  }
+
+  for(let i:number = 0; i<month.length-1; i++){
+    let currentElapsed: number = new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate()-1).getTime()
+    if (startElapsed <= currentElapsed && (dataStore.data[clickedIndex.value ?? 0].days.join(',')).includes(weekArray[(weekNumInMonth[i])])){
+      array.unshift(total) 
+    }else {
+      array.unshift(0) 
     }
   }
   return array
@@ -139,9 +168,26 @@ const addDataMonth = () => {
 
 const addDataYear = () => {
   let array: number[] = []
-  let total: number = medication.data[clickedIndex.value].application.reduce((a, c) => a + c, 0)
-  for(let i:number = 0; i<12; i++){
-      array.push(total) 
+  let total: number = dataStore.data[clickedIndex.value ?? 0].application.reduce((a, c) => a + c, 0)
+  let startElapsed: number = new Date(
+    Number(dataStore.data[clickedIndex.value ?? 0].durationStart.split('/')[2]),
+    Number(dataStore.data[clickedIndex.value ?? 0].durationStart.split('/')[1]),
+    Number(dataStore.data[clickedIndex.value ?? 0].durationStart.split('/')[0])).getTime()
+  let currentElapsed: number = new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate()).getTime()
+
+  if (startElapsed <= currentElapsed){
+    array.unshift(total)
+  }else {
+    array.unshift(0) 
+  }
+
+  for(let i:number = 0; i<11; i++){
+    let currentElapsed: number = new Date(todayDate.getFullYear(), todayDate.getMonth()-1, todayDate.getDate()).getTime()
+    if (startElapsed <= currentElapsed){
+      array.unshift(total) 
+    }else {
+      array.unshift(0) 
+    }
   }
   return array
 }
@@ -156,29 +202,42 @@ watch(
   { immediate: true }
 )
 
+watch(
+  () => detailsRef.value?.close, 
+  (newValue) => {
+    if (newValue == true) {
+      closeDetailpage()
+      dataStore.deleteArray(clickedIndex.value ?? 0)
+      clickedIndex.value = null
+      detailsRef.value?.updateClose()
+    }
+  }
+)
+
 const toDetailPage = (index: number) => {
-  detailsStyle.value = { transform: 'translate(0, 0)' };
+  detailsStyle.value = { transform: 'translate(0, 0)' }
   clickedIndex.value = index
-  optionsMedicationToday.scales.y.max = medication.data[index].application.reduce((a, c) => a + c, 0)
-  optionsMedicationWeek.scales.y.max = medication.data[index].application.reduce((a, c) => a + c, 0)
-  optionsMedicationMonth.scales.y.max = medication.data[index].application.reduce((a, c) => a + c, 0)
-  optionsMedicationYear.scales.y.max = medication.data[index].application.reduce((a, c) => a + c, 0)
+  optionsMedicationToday.scales.y.max = dataStore.data[index].application.reduce((a, c) => a + c, 0)
+  optionsMedicationWeek.scales.y.max = dataStore.data[index].application.reduce((a, c) => a + c, 0)
+  optionsMedicationMonth.scales.y.max = dataStore.data[index].application.reduce((a, c) => a + c, 0)
+  optionsMedicationYear.scales.y.max = dataStore.data[index].application.reduce((a, c) => a + c, 0)
 
   dataMedicationToday.value = datasetsToday()
   dataMedicationWeek.value = datasetsWeek()
   dataMedicationMonth.value = datasetsMonth()
   dataMedicationYear.value = datasetsYear()
+  detailsRef.value?.updateAlldata(index)
 }
 
 const closeDetailpage = () => {
-  detailsStyle.value = { transform: 'translate(100%, 0)' };
+  detailsStyle.value = { transform: 'translate(100%, 0)' }
 }
 
 const totalNum = () => {
   let num: number = 0
-  for(let i:number = 0; i< medication.data.length; i++){
-    for(let j:number = 0; j< medication.data[i].time.length; j++){
-      if(medication.data[i].schedule.includes('Every') || (medication.data[i].days.join(',')).includes(week[selectedDay.value]))
+  for(let i:number = 0; i< dataStore.data.length; i++){
+    for(let j:number = 0; j< dataStore.data[i].time.length; j++){
+      if(dataStore.data[i].schedule.includes('Every') || (dataStore.data[i].days.join(',')).includes(week[selectedDay.value]))
       num++
     }
   }
@@ -187,10 +246,10 @@ const totalNum = () => {
 
 const takenNum = () => {
   let num: number = 0
-  for(let i:number = 0; i < medication.data.length; i++){
-    for(let j:number = 0; j < medication.data[i].time.length; j++){
-      if( todayDate.getHours() > Number(medication.data[i].time[j].split(':')[0])){
-        if(medication.data[i].schedule.includes('Every') || (medication.data[i].days.join(',')).includes(week[selectedDay.value]))
+  for(let i:number = 0; i < dataStore.data.length; i++){
+    for(let j:number = 0; j < dataStore.data[i].time.length; j++){
+      if( todayDate.getHours() > Number(dataStore.data[i].time[j].split(':')[0])){
+        if(dataStore.data[i].schedule.includes('Every') || (dataStore.data[i].days.join(',')).includes(week[selectedDay.value]))
         num++
       }
     }
@@ -246,21 +305,28 @@ const updateDate = (index: number) => {
     </div>
     
     <div class="schedule-wrapper">
-      <p class="input-subtitle"> Log </p>
+      <p class="input-subtitle" :style="{margin:0}"> Log </p>
       <div>
-        <div v-for="(item ,index) in medication.data" :key="'same' + index" v-if="selectedDay < 6">   
-          <div v-for="(time, itemIndex) in item.time" :key="itemIndex" v-if="medication.data[index].schedule.includes('Every') || (medication.data[index].days.join(',')).includes(week[selectedDay])">
-            <span :style="{ display: 'inline-block', width: '1.6rem', color: 'var(--main-lila-hell)' }"><font-awesome-icon icon="check" /></span> 
+        <div v-for="(item ,index) in dataStore.history" :key="'same' + index" v-if="selectedDay < 6">
+          <div v-for="(time, itemIndex) in item.time" :key="itemIndex" v-if="(dataStore.history[index].days.join(',')).includes(week[selectedDay])">
+            <span class="check-icon"><font-awesome-icon icon="check" /></span> 
             <span :style="{ display: 'inline-block', width: '7rem'}">{{ item.name }}</span> 
             <span :style="{ display: 'inline-block', width: '1rem'}">{{ item.application[itemIndex] }}</span> 
             <span :style="{ display: 'inline-block', width: '7.4rem'}">application</span> 
-            <span :style="{ display: 'inline-block', width: 'calc(100% - 17rem)', textAlign: 'right' }">{{ time }}</span> 
+            <span :style="{ display: 'inline-block', width: 'calc(100% - 17rem)', textAlign: 'right' }">{{ time }} </span>
+          </div>
+          <div :style="{ 
+            borderBottom: '2px solid var(--white-lila-border)', 
+            width: '100%', height: '0.5rem',
+            marginBottom: '0.3rem' 
+            }" v-if="(index < dataStore.history.length - 1) && (dataStore.history[index+1].days.join(',')).includes(week[selectedDay])">
           </div>
         </div>
 
-        <div v-for="(item ,index) in medication.data" :key="index" v-if="selectedDay === 6">   
-          <div v-for="(time, itemIndex) in item.time" :key="itemIndex" v-if="medication.data[index].schedule.includes('Every') || (medication.data[index].days.join(',')).includes(week[selectedDay])">
-            <span :style="{ display: 'inline-block', width: '1.6rem', color: 'var(--main-lila-hell)'}" v-if="todayDate.getHours() > Number(time.split(':')[0]) ">
+        <div v-for="(item, index) in dataStore.data" :key="index" v-if="selectedDay === 6">   
+          <div v-for="(time, itemIndex) in item.time" :key="itemIndex" 
+          v-if="(dataStore.data[index].days.join(',')).includes(week[selectedDay])">
+            <span class="check-icon" v-if="todayDate.getHours() >= Number(time.split(':')[0]) ">
               <font-awesome-icon icon="check" />
             </span> 
             <span :style="{ display: 'inline-block', width: '1.6rem', color: 'var(--white-lila-border)' }" v-else>
@@ -272,13 +338,19 @@ const updateDate = (index: number) => {
             <span :style="{ display: 'inline-block', width: '7.4rem'}" v-else >applications</span> 
             <span :style="{ display: 'inline-block', width: 'calc(100% - 17rem)', textAlign: 'right' }">{{ time }}</span> 
           </div>
+          <div :style="{ 
+            borderBottom: '2px solid var(--white-lila-border)', 
+            width: '100%', height: '0.5rem',
+            marginBottom: '0.3rem' 
+            }" v-if="(index < dataStore.history.length - 1) && (dataStore.history[index+1].days.join(',')).includes(week[selectedDay])">
+          </div>
         </div>
       </div>
     </div>
 
     <p class="input-subtitle margin-top"> Medications </p>
-    <div class="box-wrapper">
-      <Medication v-for="(item ,index) in medication.data" :key="index" 
+    <div class="box-wrapper" v-if="dataStore.data.length > 0">
+      <Medication v-for="(item ,index) in dataStore.data" :key="index" 
       @click="toDetailPage(index)" :style="{cursor: 'pointer'}"> 
         <template v-slot:image>
           <img v-bind:src="'/pill/'+ item.shape + '_' + item.colorLeft + '_' + item.colorRight +'.png'" 
@@ -304,11 +376,11 @@ const updateDate = (index: number) => {
     </template>
   </AddMedicationView>
 
-  <Details :style = detailsStyle>
+  <Details :style = detailsStyle ref="detailsRef" :index = clickedIndex v-if="dataStore.data.length > 0">
     <template v-slot:close>
       <font-awesome-icon icon="fa-xmark" @click="closeDetailpage"/>
     </template>
-    <template v-slot:name> {{ medication.data[clickedIndex].name }} </template>
+    <template v-slot:name v-if='clickedIndex !== null'> {{ dataStore.data[clickedIndex].name }} </template>
 
     <template v-slot:tab>
       <Tabs>
@@ -336,36 +408,49 @@ const updateDate = (index: number) => {
     </template>
 
     <template v-slot:image>
-      <img v-bind:src="'/pill/'+ medication.data[clickedIndex].shape + '_' + medication.data[clickedIndex].colorLeft + '_' + medication.data[clickedIndex].colorRight +'.png'" 
-      :style="{ 'background-color': medication.backgroundColor[medication.data[clickedIndex].bgColorIndex] }" />
+      <img v-if='clickedIndex !== null' v-bind:src="'/pill/'+ dataStore.data[clickedIndex].shape + '_' + dataStore.data[clickedIndex].colorLeft + '_' + dataStore.data[clickedIndex].colorRight +'.png'" 
+      :style="{ 'background-color': medication.backgroundColor[dataStore.data[clickedIndex].bgColorIndex] }" />
     </template>
 
-    <template v-slot:dose> {{ medication.data[clickedIndex].strength + medication.data[clickedIndex].unit }} </template>
+    <template v-if='clickedIndex !== null' v-slot:dose> {{ dataStore.data[clickedIndex].strength + dataStore.data[clickedIndex].unit }} </template>
 
     <template v-slot:schedule>
-      <div v-if="medication.data[clickedIndex].schedule.includes('Every')">
-        {{ medication.data[clickedIndex].schedule }}
+      <div v-if="clickedIndex !== null && dataStore.data[clickedIndex].schedule.includes('Every')">
+        {{ dataStore.data[clickedIndex].schedule }}
       </div>
-      <div v-else>
-        {{ medication.data[clickedIndex].days.join(", ") }}
+      <div v-if="clickedIndex !== null && dataStore.data[clickedIndex].schedule.includes('Specific')">
+        {{ dataStore.data[clickedIndex].days.join(", ") }}
       </div>
-      <div v-for="(time, index) in medication.data[clickedIndex].time" :key="index">
-        <span :style="{ display: 'inline-block', width: '1rem'}">{{ medication.data[clickedIndex].application[index] }}</span> 
+      <div v-if='clickedIndex !== null' v-for="(time, index) in dataStore.data[clickedIndex].time" :key="index">
+        <span :style="{ display: 'inline-block', width: '1rem'}">{{ dataStore.data[clickedIndex].application[index] }}</span> 
         <span :style="{ display: 'inline-block', width: '7rem'}">application</span> 
         <span :style="{ display: 'inline-block', width: 'calc(100% - 8rem)', textAlign: 'right' }">{{ time }}</span> 
       </div>
     </template>
     <template v-slot:scheduleDate>
-      <span>Started on {{ medication.data[clickedIndex].durationStart }}</span> 
-      <span v-if="medication.data[clickedIndex].durationEnd !== ''">. Schedule ends {{ medication.data[clickedIndex].durationEnd }}</span> 
+      <span v-if='clickedIndex !== null' >Started on 
+        {{ dataStore.data[clickedIndex].durationStart.split('/')[0] }}
+        {{ monthArray[Number(dataStore.data[clickedIndex].durationStart.split('/')[1])] }}
+        {{ dataStore.data[clickedIndex].durationStart.split('/')[2] }}
+      </span> 
+      <span v-if="clickedIndex !== null && dataStore.data[clickedIndex].durationEnd !== ''">, ends 
+        {{ dataStore.data[clickedIndex].durationEnd.split('/')[0] }}
+        {{ monthArray[Number(dataStore.data[clickedIndex].durationEnd.split('/')[1])] }}
+        {{ dataStore.data[clickedIndex].durationEnd.split('/')[2] }}
+      </span> 
+      <span v-if="clickedIndex !== null && dataStore.data[clickedIndex].durationEnd !== ''">. 
+        {{ dataStore.data[clickedIndex].duration }}
+        <span v-if="dataStore.data[clickedIndex].duration > 1">days</span>
+        <span v-else>day</span>
+      </span>
     </template>
 
-    <template v-slot:strength> {{ medication.data[clickedIndex].strength }} </template>
-    <template v-slot:unit> {{ medication.data[clickedIndex].unit }} </template>
-    <template v-slot:type> {{ medication.data[clickedIndex].type }} </template>
-    <template v-slot:application> {{ medication.data[clickedIndex].application[0] }} application</template>
-    <template v-slot:memo v-if="medication.data[clickedIndex].memo ===''"> {{ medication.data[clickedIndex].memo }} </template>
-    <template v-slot:empty v-else"> Nothing </template>
+    <template v-if='clickedIndex !== null' v-slot:strength> {{ dataStore.data[clickedIndex].strength }} </template>
+    <template v-if='clickedIndex !== null' v-slot:unit> {{ dataStore.data[clickedIndex].unit }} </template>
+    <template v-if='clickedIndex !== null' v-slot:type> {{ dataStore.data[clickedIndex].type }} </template>
+    <template v-if='clickedIndex !== null' v-slot:application> {{ dataStore.data[clickedIndex].application[0] }} application</template>
+    <template v-slot:memo v-if="( clickedIndex !== null && dataStore.data[clickedIndex].memo !=='')"> {{ dataStore.data[clickedIndex].memo }} </template>
+    <template v-slot:empty v-if="( clickedIndex !== null && dataStore.data[clickedIndex].memo ==='')"> Nothing </template>
   </Details>
 
 </template>

@@ -275,6 +275,12 @@ input::-webkit-inner-spin-button {
   cursor: pinter;
 }
 
+.check-icon {
+  display: inline-block;
+  width: 1.6rem;
+  color: var(--main-lila-hell);
+}
+
 @media screen and (max-aspect-ratio: 1) {
   .container {
     width: 100vw;

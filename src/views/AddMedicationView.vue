@@ -3,7 +3,8 @@ import * as medication from '../global_array/medicationInfo'
 import { ref } from 'vue'
 import setSchedule from './SetSchedule.vue'
 import { monthArray } from '../chart/global_label'
-
+import { useDataStore } from '../stores/data'
+const dataStore = useDataStore()
 const scheduleRef = ref<InstanceType<typeof setSchedule> | null>(null)
 const selectedDays = ref<string[]>([])
 let step = ref<number>(0)
@@ -151,16 +152,16 @@ const done = ()=> {
     application: applicationArray,
     durationStart: scheduleRef.value?.startDate+'/'+scheduleRef.value?.startMonth+'/'+scheduleRef.value?.startYear,
     durationEnd: scheduleRef.value?.endDate === null? "" : scheduleRef.value?.endDate+'/'+scheduleRef.value?.endMonth+'/'+scheduleRef.value?.endYear,
+    duration: scheduleRef.value?.duration ?? 0,
     shape: selectedShape.value ?? "",
     colorLeft: selectedColorLeft.value,
     colorRight: selectedColorRight.value,
     bgColorIndex: selectedBgIndex.value,
     memo: memo.value
   }
-  data.push(d)
+  dataStore.addNewArray(d)
   close.value = true
   reset()
-  console.log(data)
 }
 
 const transform = (index: number) => {
@@ -294,8 +295,9 @@ defineExpose({ close, data })
         <div class="content-wrapper">
           <img src="/icons/calendar.png" class="guide-img" >
           <p class="inputTitle">Set a Schedule</p>
-          <setSchedule ref="scheduleRef"></setSchedule>
-
+          <setSchedule ref="scheduleRef"
+          :index="0"
+          :edit="false"></setSchedule>
           <button class="button" @click="nextStep"
           :disabled="!(scheduleRef?.valid)"
           :style="{
@@ -418,7 +420,7 @@ defineExpose({ close, data })
                 <tr class="align-left">
                   <td colspan="2" class="align-left" :style="{ borderTop: '1px solid white', color: 'var(--white-lila-dunkel)' }">
                     Starts on {{ scheduleRef?.startDate }} {{ monthArray[scheduleRef?.startMonth ?? 0]}} {{ scheduleRef?.startYear }}
-                    <div v-if="scheduleRef?.endDate !== null">Ends on {{ scheduleRef?.endDate }} {{ monthArray[scheduleRef?.endMonth ?? 0] }} {{ scheduleRef?.endYear }} </div>
+                    <div v-if="scheduleRef?.endDate !== null">Ends {{ scheduleRef?.endDate }} {{ monthArray[scheduleRef?.endMonth ?? 0] }} {{ scheduleRef?.endYear }} </div>
                     <div v-if="scheduleRef?.endDate !== null">Duration: {{ scheduleRef?.duration }} 
                       <span v-if="scheduleRef?.duration ?? 0 > 1">days</span>
                       <span v-else>day</span>

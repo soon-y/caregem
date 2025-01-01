@@ -1,60 +1,4 @@
-
 export const index: number = 0
-
-interface dataType {
-  name: string
-  type: string
-  strength: number
-  unit: string
-  schedule: string
-  days: string[]
-  time: string[]
-  application: number[]
-  durationStart: string
-  durationEnd: string
-  shape: string
-  colorLeft: string
-  colorRight: string
-  bgColorIndex: number
-  memo: string
-}
-
-export const data: dataType[] = [
-  {
-    name: "Metformin",
-    type: "tablet",
-    strength: 500,
-    unit: "mg",
-    schedule: "Every Day",
-    days: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-    time: ["8:00", "18:00"],
-    application: [1,1],
-    durationStart: "12/1/23",
-    durationEnd: "",
-    shape: "tablet",
-    colorLeft: "round",
-    colorRight: "white",
-    bgColorIndex: 8,
-    memo: ""
-  },
-  {
-    name: "Carbimazole",
-    type: "capsule",
-    strength: 10,
-    unit: "mg",
-    schedule: "On Specific Days of the Week",
-    days: ["Tue", "Wed", "Thu", "Fri", "Sun"],
-    time: ["8:00", "12:00", "17:00"],
-    application: [1,1,1],
-    durationStart: "12/1/23",
-    durationEnd: "",
-    shape: "capsule",
-    colorLeft: "white",
-    colorRight: "sky",
-    bgColorIndex: 11,
-    memo: ""
-  },
-]
 
 export const types: string[] = ["Capsule", "Tablet", "Liquid", "Topical", "Injection"]
 export const units: string[] = ["mg", "mcg", "g", "ml", "%"]
@@ -91,7 +35,7 @@ export const chooseColor: string[] = [
 ]
 
 export const backgroundColor: string[] = [
-  "rgb(248, 246, 249)",
+  "#f6f1f8",
   "#8a808f",
   "#ffcf00",
   "#b89227",
