@@ -108,12 +108,13 @@ const addDataToday = () => {
   for(let i:number = 0; i<24; i++){
     array.push(0)
   }
+
   if((dataStore.data[clickedIndex.value ?? 0].days.join(',')).includes(weekArray[todayDate.getDay()])){
     for(let j:number = 0; j< dataStore.data[clickedIndex.value ?? 0].application.length; j++){
       array[Number(dataStore.data[clickedIndex.value ?? 0].time[j].split(':')[0])] = dataStore.data[clickedIndex.value ?? 0].application[j]
     }
-    return array
   }
+  return array
 }
 
 const addDataWeek = () => {
