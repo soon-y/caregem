@@ -158,7 +158,7 @@ a {
 .table-wrapper,
 .schedule-wrapper {
   background-color: var(--white-lila);
-  padding: 0.4rem 0.6rem;
+  padding: 0.2rem 0.6rem;
   border-radius: 0.8rem;
 }
 
@@ -216,7 +216,7 @@ input[type=text],
 .radioSelection,
 select,
 .button,
-.textArea {
+.text-area {
   width: 100%;
   margin: auto;
 }

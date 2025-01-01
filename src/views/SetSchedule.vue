@@ -287,12 +287,14 @@ defineExpose({ schedule,selectedSchedule,week,valid,startDate,startMonth,startYe
     </tbody>
   </table>
   <div :style="{ 
-    textAlign: 'left', 
+    textAlign: 'left', padding: '0.4rem 0',
     marginLeft: '0.2rem',
     display: 'flex', cursor: 'pointer',
     }"> 
     <font-awesome-icon icon="circle-plus" class="circle-icon" @click="addNewTime" :style="{
-      color: 'var(--main-lila-hell)', marginRight: '0.56em' }" />
+      color: 'var(--main-lila-hell)', 
+      marginRight: '0.56em'
+      }" />
       <span @click="addNewTime"> Add a Time </span>
   </div>
 </div>
