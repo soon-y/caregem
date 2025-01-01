@@ -254,7 +254,7 @@ defineExpose({ close, data })
           <p class="inputTitle margin-top">Medication Type</p>
           <div>
             <label v-for="type in medication.types" class="radioSelection radioType">
-              <span class="radioLabel">{{type}}</span>
+              <span class="radioLabel">{{ type }}</span>
               <input type="radio" :name="'medication_type'" :value="type" v-model="selectedType" >
               <font-awesome-icon icon="check" class="checkmark" v-if="selectedType === type"/>
             </label>
@@ -418,7 +418,9 @@ defineExpose({ close, data })
                   <td>{{ item.application > 1? item.application + ' applications' : item.application + ' application'}}</td>          
                 </tr>
                 <tr class="align-left">
-                  <td colspan="2" class="align-left" :style="{ borderTop: '1px solid white', color: 'var(--white-lila-dunkel)' }">
+                  <td colspan="2" class="align-left" :style="{ 
+                    color: 'var(--white-lila-dunkel)'
+                    }">
                     Starts on {{ scheduleRef?.startDate }} {{ monthArray[scheduleRef?.startMonth ?? 0]}} {{ scheduleRef?.startYear }}
                     <div v-if="scheduleRef?.endDate !== null">Ends {{ scheduleRef?.endDate }} {{ monthArray[scheduleRef?.endMonth ?? 0] }} {{ scheduleRef?.endYear }} </div>
                     <div v-if="scheduleRef?.endDate !== null">Duration: {{ scheduleRef?.duration }} 
@@ -432,7 +434,7 @@ defineExpose({ close, data })
           </div>
           
           <p class="input-subtitle margin-top">Optional Details</p>
-          <textarea class="textArea" name="memo" rows="4" cols="50" v-model="memo" placeholder="Notes"></textarea>
+          <textarea class="text-area" name="memo" rows="4" cols="50" v-model="memo" placeholder="Notes"></textarea>
           
           <button class="button" @click="done" :style="{ backgroundColor: 'var(--main-lila-hell)', color: 'white' }">Done</button>
         </div>
@@ -484,7 +486,7 @@ defineExpose({ close, data })
   background-color: var(--white-lila);
   position: relative;
   text-align: left;
-  border-bottom: 1px solid white;
+  border-bottom: 2px solid white;
   cursor: pointer;
 }
 
@@ -514,11 +516,11 @@ defineExpose({ close, data })
   padding-left: 0.4rem;
 }
 
-.textArea {
+.text-area {
   border: none;
   border-radius: 0.8rem;
   background-color: var(--white-lila);
-  padding: 1rem;
+  padding: 0.5rem 0.8rem;
   line-height: 1.5rem;
   font-family: var(--font);
   font-size: 1rem;

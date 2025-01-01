@@ -232,7 +232,7 @@ defineExpose({ close, updateAlldata, updateClose })
 }
 
 .scheduleDate{
-  color: var(--white-lila-border);
+  color: var(--white-lila-dunkel);
   margin: 0.6rem 1rem 0 1rem;
   line-height: 1rem;
 }
