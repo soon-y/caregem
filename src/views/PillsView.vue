@@ -108,10 +108,12 @@ const addDataToday = () => {
   for(let i:number = 0; i<24; i++){
     array.push(0)
   }
-  for(let j:number = 0; j< dataStore.data[clickedIndex.value ?? 0].application.length; j++){
-    array[Number(dataStore.data[clickedIndex.value ?? 0].time[j].split(':')[0])] = dataStore.data[clickedIndex.value ?? 0].application[j]
+  if((dataStore.data[clickedIndex.value ?? 0].days.join(',')).includes(weekArray[todayDate.getDay()])){
+    for(let j:number = 0; j< dataStore.data[clickedIndex.value ?? 0].application.length; j++){
+      array[Number(dataStore.data[clickedIndex.value ?? 0].time[j].split(':')[0])] = dataStore.data[clickedIndex.value ?? 0].application[j]
+    }
+    return array
   }
-  return array
 }
 
 const addDataWeek = () => {
@@ -123,7 +125,7 @@ const addDataWeek = () => {
     Number(dataStore.data[clickedIndex.value ?? 0].durationStart.split('/')[0])).getTime()
   let currentElapsed: number = new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate()).getTime()
 
-  if (startElapsed <= currentElapsed){
+  if ((dataStore.data[clickedIndex.value ?? 0].days.join(',')).includes(weekArray[todayDate.getDay()]) && startElapsed <= currentElapsed){
     array.unshift(total) 
   }else {
     array.unshift(0) 
@@ -149,7 +151,7 @@ const addDataMonth = () => {
     Number(dataStore.data[clickedIndex.value ?? 0].durationStart.split('/')[0])).getTime()
   let currentElapsed: number = new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate()).getTime()
 
-  if (startElapsed <= currentElapsed){
+  if ((dataStore.data[clickedIndex.value ?? 0].days.join(',')).includes(weekArray[todayDate.getDay()]) && startElapsed <= currentElapsed){
     array.unshift(total) 
   }else {
     array.unshift(0) 
@@ -342,7 +344,7 @@ const updateDate = (index: number) => {
             borderBottom: '2px solid var(--white-lila-border)', 
             width: '100%', height: '0.5rem',
             marginBottom: '0.3rem' 
-            }" v-if="(index < dataStore.history.length - 1) && (dataStore.history[index+1].days.join(',')).includes(week[selectedDay])">
+            }" v-if="(index < dataStore.data.length - 1) && (dataStore.data[index+1].days.join(',')).includes(week[selectedDay])">
           </div>
         </div>
       </div>
