@@ -44,10 +44,6 @@ a {
   top: 0;
 }
 
-.container::-webkit-scrollbar {
-  display: none;
-}
-
 .margin-top {
   margin-top: 2rem;
 }
@@ -78,10 +74,48 @@ a {
   right: 0.4rem;
 }
 
+.container::-webkit-scrollbar,
+.content-wrapper::-webkit-scrollbar,
+.scroll-wrapper::-webkit-scrollbar,
+.scroll-wrapper-full::-webkit-scrollbar {
+  display: none;
+}
+
 .content-wrapper {
   width: 50%;
+  height: 100vh;
   margin: auto;
   position: relative;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+}
+
+
+.scroll-wrapper {
+  background-color: white;
+  padding: 1rem;
+  position: fixed;
+  width: calc(100vw - 11.4rem);
+  height: 100vh;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+}
+
+.scroll-wrapper-full {
+  margin: auto;
+  background-color: white;
+  padding: 0 1rem 1rem 1rem;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
 }
 
 .slider-wrapper {
@@ -180,31 +214,6 @@ table {
   transform: translate(-50%, 0);
   text-align: center;
   font-weight: 600;
-}
-
-.scroll-wrapper {
-  background-color: white;
-  padding: 1rem;
-  position: fixed;
-  width: calc(100vw - 11.4rem);
-  height: 100vh;
-  overflow-y: scroll;
-  -ms-overflow-style: none;
-  /* IE and Edge */
-  scrollbar-width: none;
-}
-
-.scroll-wrapper-full {
-  margin: auto;
-  background-color: white;
-  padding: 0 1rem 1rem 1rem;
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  overflow-y: scroll;
-  -ms-overflow-style: none;
-  /* IE and Edge */
-  scrollbar-width: none;
 }
 
 ul {
