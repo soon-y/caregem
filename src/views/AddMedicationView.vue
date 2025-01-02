@@ -247,7 +247,7 @@ defineExpose({ close, data })
     <div class="form-wrapper">
       <div class="form scroll-wrapper-full" :style="{transform: step === 0 ? 'translate(0, 0)' : 'translate(-100%, 0)'}">
         <div class="content-wrapper">
-          <img src="/icons/default.png" class="guide-img">
+          <img src="/icons/pillName.png" class="guide-img">
           <p class="inputTitle" > Medication Name</p>
           <input type="text" placeholder="Add Medication Name" v-model="selectedName"/>
 
@@ -270,7 +270,7 @@ defineExpose({ close, data })
 
       <div class="form scroll-wrapper-full" :style="{ transform: transform(1)}">
         <div class="content-wrapper">
-          <img src="/icons/default.png" class="guide-img" >
+          <img src="/icons/strength.png" class="guide-img" >
           <p class="inputTitle">Medication Strength</p>
           <p class="input-subtitle">Strength </p>
           <input type="number" placeholder="Add Strength" v-model="selectedStrength" min="1" class="inputNum">
