@@ -46,7 +46,7 @@ const nextMonth = () => {
 
 const updateDateArray = () => {
   daysInMonth.value = []
-  const theFirst = new Date(month.value, year.value, 1);
+  const theFirst = new Date(year.value, month.value, 1);
   theFirstDayOfWeek.value = theFirst.getDay()== 0? theFirst.getDay()+6 :theFirst.getDay()-1
   lastDate.value = new Date(year.value, month.value + 1, 0).getDate()
   let daycount:number = 1
