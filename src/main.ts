@@ -8,21 +8,21 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { 
   faPlus, faXmark, faCheck, faCircleMinus, faCirclePlus, faCircleXmark,
   faCalendarDay, faCalendar,
-  faPills,
-  faChartColumn,
-  faHeartPulse,
-  faBed, 
-  faShoePrints,
+  faPills, faChartColumn, faHeartPulse, faBed, faShoePrints,
   faPersonWalkingDashedLineArrowRight,
   faChevronRight,faChevronLeft,
-  faPersonArrowUpFromLine,faWeightScale
+  faPersonArrowUpFromLine,faWeightScale,
+  faBatteryFull,faBatteryThreeQuarters,faBatteryHalf,faBatteryQuarter,
+  faRotate,
 } from '@fortawesome/free-solid-svg-icons'
 
 /* add each imported icon to the library */
 library.add(faCircleMinus, faCirclePlus,faChevronLeft,faCheck,faXmark,faChevronRight,
   faPlus,faCalendarDay,faCalendar,faCircleXmark,
   faPersonArrowUpFromLine,faWeightScale,
-  faPills,faChartColumn,faHeartPulse,faBed,faShoePrints,faPersonWalkingDashedLineArrowRight)
+  faPills,faChartColumn,faHeartPulse,faBed,faShoePrints,faPersonWalkingDashedLineArrowRight,
+  faBatteryFull,faBatteryThreeQuarters,faBatteryHalf,faBatteryQuarter,
+  faRotate,)
 
 const app = createApp(App)
 
