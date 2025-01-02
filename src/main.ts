@@ -15,11 +15,13 @@ import {
   faShoePrints,
   faPersonWalkingDashedLineArrowRight,
   faChevronRight,faChevronLeft,
+  faPersonArrowUpFromLine,faWeightScale
 } from '@fortawesome/free-solid-svg-icons'
 
 /* add each imported icon to the library */
 library.add(faCircleMinus, faCirclePlus,faChevronLeft,faCheck,faXmark,faChevronRight,
   faPlus,faCalendarDay,faCalendar,faCircleXmark,
+  faPersonArrowUpFromLine,faWeightScale,
   faPills,faChartColumn,faHeartPulse,faBed,faShoePrints,faPersonWalkingDashedLineArrowRight)
 
 const app = createApp(App)
