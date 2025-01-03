@@ -173,7 +173,7 @@ defineExpose({ close, updateAlldata, updateClose })
         Show All data
       </button>
       <button @click="deleteData"
-      class="button"  :style="{ margin: '0 0 5rem 0', backgroundColor: 'var(--white-lila)', color: 'var(--main-lila-hell)' }">
+      class="button"  :style="{ margin: '0 0 6rem 0', backgroundColor: 'var(--white-lila)', color: 'var(--main-lila-hell)' }">
         Delete Medication
       </button>  
     
