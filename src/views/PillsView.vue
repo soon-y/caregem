@@ -312,11 +312,19 @@ const updateDate = (index: number) => {
       <div>
         <div v-for="(item ,index) in dataStore.history" :key="'same' + index" v-if="selectedDay < 6">
           <div v-for="(time, itemIndex) in item.time" :key="itemIndex" v-if="(dataStore.history[index].days.join(',')).includes(week[selectedDay])">
-            <span class="check-icon"><font-awesome-icon icon="check" /></span> 
-            <span :style="{ display: 'inline-block', width: '7rem'}">{{ item.name }}</span> 
-            <span :style="{ display: 'inline-block', width: '1rem'}">{{ item.application[itemIndex] }}</span> 
-            <span :style="{ display: 'inline-block', width: '7.4rem'}">application</span> 
-            <span :style="{ display: 'inline-block', width: 'calc(100% - 17rem)', textAlign: 'right' }">{{ time }} </span>
+            <span class="check-icon" v-if="todayDate.getHours() >= Number(time.split(':')[0]) ">
+              <font-awesome-icon icon="check" />
+            </span> 
+            <span class="check-icon"  :style="{ color: 'var(--white-lila-border)' }" v-else>
+              <font-awesome-icon icon="xmark" />
+            </span> 
+            <span :style="{ display: 'inline-block', width: '8rem'}">{{ item.name }}</span> 
+            <div :style="{ display: 'inline-block', width: '50%'}">
+              <span :style="{ marginRight:'0.2rem'}">{{ item.application[itemIndex] }}</span>
+              <span v-if="item.application[itemIndex] > 1">applications</span> 
+              <span v-else>application</span> 
+            </div>
+            <span :style="{ display: 'inline-block', width: 'calc(50% - 9.6rem)', textAlign: 'right' }">{{ time }} </span>
           </div>
           <div :style="{ 
             borderBottom: '2px solid var(--white-lila-border)', 
@@ -332,14 +340,16 @@ const updateDate = (index: number) => {
             <span class="check-icon" v-if="todayDate.getHours() >= Number(time.split(':')[0]) ">
               <font-awesome-icon icon="check" />
             </span> 
-            <span :style="{ display: 'inline-block', width: '1.6rem', color: 'var(--white-lila-border)' }" v-else>
+            <span class="check-icon"  :style="{ color: 'var(--white-lila-border)' }" v-else>
               <font-awesome-icon icon="xmark" />
             </span> 
-            <span :style="{ display: 'inline-block', width: '7rem'}">{{ item.name }}</span> 
-            <span :style="{ display: 'inline-block', width: '1rem'}">{{ item.application[itemIndex] }}</span> 
-            <span :style="{ display: 'inline-block', width: '7.4rem'}" v-if=" item.application[itemIndex] === 1 ">application</span> 
-            <span :style="{ display: 'inline-block', width: '7.4rem'}" v-else >applications</span> 
-            <span :style="{ display: 'inline-block', width: 'calc(100% - 17rem)', textAlign: 'right' }">{{ time }}</span> 
+            <span :style="{ display: 'inline-block', width: '8rem'}">{{ item.name }}</span> 
+            <div :style="{ display: 'inline-block', width: '30%'}">
+              <span :style="{ marginRight:'0.2rem'}">{{ item.application[itemIndex] }}</span>
+              <span v-if="item.application[itemIndex] > 1">applications</span> 
+              <span v-else>application</span> 
+            </div>
+            <span :style="{ display: 'inline-block', width: 'calc(70% - 9.6rem)', textAlign: 'right' }">{{ time }} </span>
           </div>
           <div :style="{ 
             borderBottom: '2px solid var(--white-lila-border)', 
@@ -425,9 +435,12 @@ const updateDate = (index: number) => {
         {{ dataStore.data[clickedIndex].days.join(", ") }}
       </div>
       <div v-if='clickedIndex !== null' v-for="(time, index) in dataStore.data[clickedIndex].time" :key="index">
-        <span :style="{ display: 'inline-block', width: '1rem'}">{{ dataStore.data[clickedIndex].application[index] }}</span> 
-        <span :style="{ display: 'inline-block', width: '7rem'}">application</span> 
-        <span :style="{ display: 'inline-block', width: 'calc(100% - 8rem)', textAlign: 'right' }">{{ time }}</span> 
+        <div :style="{ display: 'inline-block', width: '50%'}">
+          <span :style="{ display: 'inline-block', marginRight: '0.2rem'}">{{ dataStore.data[clickedIndex].application[index] }}</span> 
+          <span :style="{ display: 'inline-block'}" v-if="dataStore.data[clickedIndex].application[index] > 1">applications</span> 
+          <span :style="{ display: 'inline-block'}" v-else>application</span> 
+        </div>
+        <span :style="{ display: 'inline-block', width: '50%', textAlign: 'right' }">{{ time }}</span> 
       </div>
     </template>
     <template v-slot:scheduleDate>

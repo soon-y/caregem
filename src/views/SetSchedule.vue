@@ -265,21 +265,21 @@ defineExpose({ schedule,selectedSchedule,week,valid,startDate,startMonth,startYe
     <tbody>
       <tr v-for="(item, index) in schedule" :key="index" >
         <td class="align-left" :style="{
-            display: 'flex', alignItems: 'center',
+            display: 'flex', alignItems: 'center'
         }">
           <font-awesome-icon icon="circle-minus" class="circle-icon" @click="deleteSchedule(index)"
           :style="{color: 'var(--white-lila-border)', marginRight: '0.5rem' }"/>
           <div @click="displayTimePicker(index)"
-          :style="{ backgroundColor: 'var(--white-lila-border)', width: '5rem', height: '1.8rem', cursor: 'pointer',
+          :style="{ backgroundColor: 'var(--white-lila-border)', height: '1.8rem', cursor: 'pointer',
             borderRadius: '0.4rem', alignItems: 'center', display:'flex' }"> 
-          <span :style="{ display: 'inline-block', margin: 'auto', color: 'var(--main-lila-hell)' }">
-            {{ item.hour<10 ? '0'+item.hour : item.hour }} : {{ item.min<10 ? '0'+ item.min : item.min }}
+          <span :style="{ display: 'inline-block', margin: 'auto', color: 'var(--main-lila-hell)', width: '4.5rem', textAlign: 'center'}">
+            {{ item.hour < 10 ? '0'+item.hour : item.hour }} : {{ item.min < 10 ? '0'+ item.min : item.min }}
           </span>
           </div>
           </td>
         <td class="align-right" :style="{color: 'var(--main-lila-hell)'}">
           <input type="number" v-model="item.application" min="1" class="inlineNumInput"
-          :style="{ textAlign: 'right' }"/>
+          :style="{ textAlign: 'right', width: '40%' }"/>
           <span v-if="item.application > 1"> applications</span>
           <span v-else> application</span>
         </td>
