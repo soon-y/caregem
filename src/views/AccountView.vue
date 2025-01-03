@@ -78,7 +78,7 @@ calcBattery()
           <table :style="{  margin: '1rem auto', borderCollapse: 'collapse' }">
             <tbody>
               <tr>
-                <td class="td-height">Syncing <font-awesome-icon icon="rotate" class="icon"/></td>
+                <td class="td-height" :style="{ color: 'var(--white-lila-dunkel)' }">Syncing <font-awesome-icon icon="rotate" class="icon"/></td>
                 <td class="td-height align-right" :style="{ color: 'var(--white-lila-dunkel)' }">
                   Updated 1 min ago
                 </td>
@@ -102,11 +102,11 @@ calcBattery()
 
       <button class="button" :style="{ 
         marginBottom: '0rem', backgroundColor: 'var(--white-lila)', color: 'var(--white-lila-dunkel)',
-        borderRadius: '0.8rem 0.8rem 0 0', borderBottom: '2px solid white'
+        borderRadius: '0.8rem 0.8rem 0 0', borderBottom: '2px solid white', fontSize: '0.94rem'
         }">Add Account</button>
       <button class="button" :style="{ 
         marginTop: '0rem', backgroundColor: 'var(--white-lila)', color: 'var(--white-lila-dunkel)',
-        borderRadius: '0 0 0.8rem 0.8rem'
+        borderRadius: '0 0 0.8rem 0.8rem', fontSize: '0.94rem'
         }">Switch Account</button>
     </div>
   </div>
@@ -149,7 +149,8 @@ calcBattery()
 
   .value{
     margin-top:1rem;
-    font-size: 2rem;
+    font-size: 1.8rem;
+    color: var(--main-lila-hell);
   }
 
   .unit{
