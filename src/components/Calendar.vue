@@ -60,15 +60,28 @@ const updateDateArray = () => {
     }
   }
 
-  if(month.value == props.startMonth){
+  if(!(props.disable) && currentYear === props.startYear && month.value === props.startMonth){
     selectedDateIndex.value = props.startDate + theFirstDayOfWeek.value - 1
     selectedDate.value = selectedDateIndex.value - theFirstDayOfWeek.value + 1
+  } else if(props.disable && currentYear === today.getFullYear() && month.value === today.getMonth()){
+    selectedDateIndex.value = today.getDate() + theFirstDayOfWeek.value - 1
   } else {
     selectedDateIndex.value = lastDate.value + theFirstDayOfWeek.value - 1
     selectedDate.value = selectedDateIndex.value - theFirstDayOfWeek.value + 1
   }
 }
-updateDateArray()
+
+const initial = () => {
+    // when start date < current date for end date setting
+  let elapsed: number = new Date(props.startYear,props.startMonth, props.startDate).getTime()
+  if(props.disable && elapsed < todayElapsed){
+    year.value = today.getFullYear()
+    month.value = today.getMonth()
+  }
+  updateDateArray()
+}
+
+initial()
 
 const select = (index: number) => {
   let date:number = index - theFirstDayOfWeek.value + 1
@@ -118,7 +131,10 @@ defineExpose({ selectedDate, month, year })
         <div class="day-number" v-for="(item ,index) in daysInMonth" 
         :style="{ 
           backgroundColor: selectedDateIndex === index? 'var(--main-lila-hell)' : 'var(--white-lila)',
-          color: (selectedDateIndex === index) || (props.disable && (startElapsed > (new Date(year,month,index-theFirstDayOfWeek+1)).getTime()))? 'var(--white-lila-border)' : 'var(--main-lila-hell)',
+          color: (selectedDateIndex === index) || 
+          (props.disable && (todayElapsed > (new Date(year,month,index-theFirstDayOfWeek+1)).getTime())) ||
+          (props.disable && (startElapsed > (new Date(year,month,index-theFirstDayOfWeek+1)).getTime()))? 
+          'var(--white-lila-border)' : 'var(--main-lila-hell)',
           cursor: 'pointer', border: 'none',
           }" @click="select(index)">
           <p> {{ item }}</p>
