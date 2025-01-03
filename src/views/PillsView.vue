@@ -319,12 +319,12 @@ const updateDate = (index: number) => {
               <font-awesome-icon icon="xmark" />
             </span> 
             <span :style="{ display: 'inline-block', width: '8rem'}">{{ item.name }}</span> 
-            <div :style="{ display: 'inline-block', width: '50%'}">
+            <div :style="{ display: 'inline-block', width: '30%'}">
               <span :style="{ marginRight:'0.2rem'}">{{ item.application[itemIndex] }}</span>
               <span v-if="item.application[itemIndex] > 1">applications</span> 
               <span v-else>application</span> 
             </div>
-            <span :style="{ display: 'inline-block', width: 'calc(50% - 9.6rem)', textAlign: 'right' }">{{ time }} </span>
+            <span :style="{ display: 'inline-block', width: 'calc(70% - 9.6rem)', textAlign: 'right' }">{{ time }} </span>
           </div>
           <div :style="{ 
             borderBottom: '2px solid var(--white-lila-border)', 
