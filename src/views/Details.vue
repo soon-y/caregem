@@ -149,7 +149,7 @@ defineExpose({ close, updateAlldata, updateClose })
           color: 'var(--main-lila-hell)', cursor:'pointer', 
           borderTop: '2px solid var(--white-lila-border)', paddingTop: '0.4rem', marginTop: '0.5rem' }" 
         @click="editSchedule">Edit</div>
-      </div>
+        </div>
       <div class="scheduleDate"><slot name="scheduleDate"></slot></div>
 
       <p class="input-subtitle margin-top">Details </p>
