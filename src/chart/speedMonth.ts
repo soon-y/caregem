@@ -78,7 +78,7 @@ export const options = {
             }else {
               month = monthNum - 1 < 0 ? monthNum - 1 + 12 : monthNum - 1
             }
-            const text = document.createTextNode(monthArray[month] + " " + title)
+            const text = document.createTextNode(Number(title) === date ? 'Today' : monthArray[month] + " " + title)
             th.appendChild(text);
             tr.appendChild(th);
             tableHead.appendChild(tr);

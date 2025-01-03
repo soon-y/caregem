@@ -73,13 +73,15 @@ export const options = {
             th.style.fontSize = '14px'
             th.style.letterSpacing = '-0.5px'
 
+            console.log(date)
+
             let month: number = 0
             if(Number(title) <= date) {
               month = monthNum
             }else {
               month = monthNum - 1 < 0 ? monthNum - 1 + 12 : monthNum - 1
             }
-            const text = document.createTextNode(monthArray[month] + " " + title)
+            const text = document.createTextNode( Number(title) === date ? 'Today' : monthArray[month] + " " + title)
             th.appendChild(text)
             tr.appendChild(th)
             tableHead.appendChild(tr)
