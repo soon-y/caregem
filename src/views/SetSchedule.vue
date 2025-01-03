@@ -174,6 +174,7 @@ const updateInitialValue = () => {
   endYear.value = Number(dataStore.data[props.index].durationEnd.split('/')[2])
   startElapsed.value = new Date(startYear.value, startMonth.value, startDate.value).getTime()
   endElapsed.value = endDate.value === null ? 0 : new Date(endYear.value, endMonth.value, endDate.value).getTime()
+  duration.value = dataStore.data[props.index].duration
 
   schedule.value = []
   for(let i:number = 0; i < dataStore.data[props.index].time.length; i++){
@@ -342,7 +343,7 @@ defineExpose({ schedule,selectedSchedule,week,valid,startDate,startMonth,startYe
   </table>
 </div>
 <div :style="{color: 'var(--white-lila-dunkel)', marginLeft:'0.8rem', textAlign: 'left'}"> 
-  <div v-if="(startElapsed <= endElapsed) && (endDate !== null)">{{duration}} 
+  <div v-if="(startElapsed <= endElapsed) && (endDate !== null)">{{ duration }} 
     <span v-if="duration > 1">days</span>
     <span v-if="duration == 1">day</span>
   </div> 
