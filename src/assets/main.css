@@ -28,6 +28,7 @@ a {
   position: fixed;
   left: 11.4rem;
   overflow-y: scroll;
+  overflow-x: hidden;
   z-index: 0;
   -ms-overflow-style: none;
   /* IE and Edge */
@@ -86,10 +87,6 @@ a {
   height: 100vh;
   margin: auto;
   position: relative;
-  overflow-y: scroll;
-  -ms-overflow-style: none;
-  /* IE and Edge */
-  scrollbar-width: none;
 }
 
 
@@ -100,6 +97,7 @@ a {
   width: calc(100vw - 11.4rem);
   height: 100vh;
   overflow-y: scroll;
+  overflow-x: hidden;
   -ms-overflow-style: none;
   /* IE and Edge */
   scrollbar-width: none;
@@ -113,6 +111,7 @@ a {
   width: 100vw;
   height: 100vh;
   overflow-y: scroll;
+  overflow-x: hidden;
   -ms-overflow-style: none;
   /* IE and Edge */
   scrollbar-width: none;
