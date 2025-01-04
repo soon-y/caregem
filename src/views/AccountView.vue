@@ -46,7 +46,28 @@ calcBattery()
         </div>
       </div>
 
-      <p class="input-subtitle margin-top"> Device </p>
+      <p class="input-subtitle margin-top"> Emergency Contact 
+        <font-awesome-icon icon="star-of-life" class="heart-pulse"/>
+      </p>
+      <div class="card-wrapper contact">
+        <font-awesome-icon icon="user" class="icon" />
+        <span>Jane Deo</span>
+        <font-awesome-icon icon="chevron-right" class="box-arrowRight"/>
+        <div>
+          <span :style="{ color:'var(--white-lila-dunkel)' }">+49 1354 321354</span>
+        </div>
+      </div>
+
+      <div class="card-wrapper contact">
+        <font-awesome-icon icon="user-doctor" class="icon"/>
+        <span>Dr. Smith</span>
+        <font-awesome-icon icon="chevron-right" class="box-arrowRight"/>
+        <div>
+          <span :style="{ color:'var(--white-lila-dunkel)' }">+49 654 31535</span>
+        </div>
+      </div>
+
+      <p class="input-subtitle margin-top"> Device Info</p>
       <div>
         <div class="table-wrapper" :style="{ padding: '.6rem 1rem 0.1rem 1rem' }">
           <div :style="{ textAlign: 'right', verticalAlign: 'top'}">
@@ -140,6 +161,10 @@ calcBattery()
     border-radius: 0.8rem;
     margin-bottom: 1rem;
     padding: 1rem 0 0.4rem 1rem;
+  }
+
+  .contact {
+    padding: 1rem 0 1rem 1rem;
   }
 
   .watch{

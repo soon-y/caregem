@@ -13,7 +13,7 @@ import {
   faChevronRight,faChevronLeft,
   faPersonArrowUpFromLine,faWeightScale,
   faBatteryFull,faBatteryThreeQuarters,faBatteryHalf,faBatteryQuarter,
-  faRotate,
+  faRotate, faStarOfLife,faUserDoctor,faUser,
 } from '@fortawesome/free-solid-svg-icons'
 
 /* add each imported icon to the library */
@@ -22,7 +22,7 @@ library.add(faCircleMinus, faCirclePlus,faChevronLeft,faCheck,faXmark,faChevronR
   faPersonArrowUpFromLine,faWeightScale,
   faPills,faChartColumn,faHeartPulse,faBed,faShoePrints,faPersonWalkingDashedLineArrowRight,
   faBatteryFull,faBatteryThreeQuarters,faBatteryHalf,faBatteryQuarter,
-  faRotate,)
+  faRotate,faStarOfLife,faUserDoctor,faUser)
 
 const app = createApp(App)
 
