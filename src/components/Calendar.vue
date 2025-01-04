@@ -22,7 +22,8 @@ const year = ref<number>(props.startYear)
 const theFirst = new Date(year.value, month.value, 1);
 const theFirstDayOfWeek = ref<number>(theFirst.getDay()== 0? theFirst.getDay()+6 :theFirst.getDay()-1)
 const lastDate = ref<number>(new Date(year.value, month.value + 1, 0).getDate())
-const selectedDateIndex = ref<number | null>(currentDate + theFirstDayOfWeek.value -1)
+const selectedDateIndex = ref<number | null>(currentDate + theFirstDayOfWeek.value - 1)
+const selectedYear = ref<number>(year.value)
 const selectedMonth = ref<number>(month.value)
 const selectedDate = ref<number>(selectedDateIndex.value != null? selectedDateIndex.value - theFirstDayOfWeek.value + 1 : 0)
 
@@ -60,19 +61,16 @@ const updateDateArray = () => {
     }
   }
 
-  if(!(props.disable) && currentYear === props.startYear && month.value === props.startMonth){
+  if(month.value === selectedMonth.value && year.value === selectedYear.value){
     selectedDateIndex.value = props.startDate + theFirstDayOfWeek.value - 1
     selectedDate.value = selectedDateIndex.value - theFirstDayOfWeek.value + 1
-  } else if(props.disable && currentYear === today.getFullYear() && month.value === today.getMonth()){
-    selectedDateIndex.value = today.getDate() + theFirstDayOfWeek.value - 1
   } else {
-    selectedDateIndex.value = lastDate.value + theFirstDayOfWeek.value - 1
-    selectedDate.value = selectedDateIndex.value - theFirstDayOfWeek.value + 1
+    selectedDateIndex.value = null
   }
 }
 
 const initial = () => {
-    // when start date < current date for end date setting
+  // set today date when start date < current date for end date setting
   let elapsed: number = new Date(props.startYear,props.startMonth, props.startDate).getTime()
   if(props.disable && elapsed < todayElapsed){
     year.value = today.getFullYear()
@@ -93,11 +91,13 @@ const select = (index: number) => {
         selectedDateIndex.value = index
         selectedDate.value = selectedDateIndex.value - theFirstDayOfWeek.value + 1
         selectedMonth.value = month.value
+        selectedYear.value = year.value
       }
     }else {
       selectedDateIndex.value = index
       selectedDate.value = selectedDateIndex.value - theFirstDayOfWeek.value + 1
       selectedMonth.value = month.value
+      selectedYear.value = year.value
     }
   }
 }
@@ -113,7 +113,7 @@ defineExpose({ selectedDate, month, year })
       <span :style="{ float: 'right' }">
         <font-awesome-icon icon="chevron-left" 
         :style="{ marginRight: '1rem', cursor: 'pointer', color: 'var(--main-lila-hell)'}"
-        v-if="!((month === currentMonth) && (year === currentYear))" 
+        v-if="!((month === currentMonth) && (year === currentYear) && props.disable)" 
         @click="previousMonth"/>
         <font-awesome-icon icon="chevron-right" 
         :style="{ cursor: 'pointer', color: 'var(--main-lila-hell)'}"
