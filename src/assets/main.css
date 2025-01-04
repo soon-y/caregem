@@ -24,7 +24,7 @@ a {
 
 .container {
   width: calc(100vw - 11.4rem);
-  min-height: 100vh;
+  height: 100vh;
   position: fixed;
   left: 11.4rem;
   overflow-y: scroll;

@@ -127,7 +127,7 @@ calcBattery()
         }">Add Account</button>
       <button class="button" :style="{ 
         marginTop: '0rem', backgroundColor: 'var(--white-lila)', color: 'var(--white-lila-dunkel)',
-        borderRadius: '0 0 0.8rem 0.8rem', fontSize: '0.94rem'
+        borderRadius: '0 0 0.8rem 0.8rem', fontSize: '0.94rem', marginBottom: '2rem'
         }">Switch Account</button>
     </div>
   </div>
