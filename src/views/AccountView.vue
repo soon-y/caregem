@@ -54,7 +54,7 @@ calcBattery()
         <span>Jane Deo</span>
         <font-awesome-icon icon="chevron-right" class="box-arrowRight"/>
         <div>
-          <span :style="{ color:'var(--white-lila-dunkel)' }">+49 1354 321354</span>
+          <span :style="{ color:'var(--white-lila-dunkel)', textDecoration: 'none' }">+49 1354 321354</span>
         </div>
       </div>
 
@@ -63,7 +63,7 @@ calcBattery()
         <span>Dr. Smith</span>
         <font-awesome-icon icon="chevron-right" class="box-arrowRight"/>
         <div>
-          <span :style="{ color:'var(--white-lila-dunkel)' }">+49 654 31535</span>
+          <span :style="{ color:'var(--white-lila-dunkel)', textDecoration: 'none' }">+49 654 31535</span>
         </div>
       </div>
 
@@ -127,7 +127,7 @@ calcBattery()
         }">Add Account</button>
       <button class="button" :style="{ 
         marginTop: '0rem', backgroundColor: 'var(--white-lila)', color: 'var(--white-lila-dunkel)',
-        borderRadius: '0 0 0.8rem 0.8rem', fontSize: '0.94rem', marginBottom: '2rem'
+        borderRadius: '0 0 0.8rem 0.8rem', fontSize: '0.94rem', 
         }">Switch Account</button>
     </div>
   </div>
