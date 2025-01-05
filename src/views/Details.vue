@@ -13,7 +13,7 @@ const edit = ref<boolean>(false)
 const clickedIndex = ref<number | null>(props.index) 
 const close = ref<boolean>(false)
 const allDataStyle = ref<{ transform: string }>({ transform: 'translate(100%, 0)'})
-const scheduleStyle = ref<{ transform: string }>({transform: 'translate(100%, 0)'})
+const scheduleStyle = ref<string>('translate(100%, 0)')
 watch(() => props.index, (newVal) => {
   clickedIndex.value = newVal
 })
@@ -66,12 +66,12 @@ const closeAllData = () => {
 }
 
 const editSchedule = () => {
-  scheduleStyle.value = { transform: 'translate(0, 0)' }
+  scheduleStyle.value = 'translate(0, 0)'
   edit.value= true
 }
 
 const closeSchedule = () => {
-  scheduleStyle.value = { transform: 'translate(100%, 0)' }
+  scheduleStyle.value = 'translate(100%, 0)'
   edit.value= false
 }
 
@@ -136,65 +136,75 @@ defineExpose({ close, updateAlldata, updateClose })
         <span class="top-title" :style="{marginTop:'1rem'}"><slot name="name"></slot></span>
     </div>
 
-    <div class="scroll-wrapper-full">
-    <div class="content-wrapper">
-      <div class="tabs">
-        <slot name="tab"></slot>
-      </div>
-
-      <p class="input-subtitle margin-top">Schedule </p>
-      <div class="schedule-wrapper">
-        <div><slot name="schedule"></slot></div>
-        <div :style="{ 
-          color: 'var(--main-lila-hell)', cursor:'pointer', 
-          borderTop: '2px solid var(--white-lila-border)', paddingTop: '0.4rem', marginTop: '0.5rem' }" 
-        @click="editSchedule">Edit</div>
+    <div class="scroll-wrapper-full" :style="{marginTop: '4rem'}">
+      <div class="content-wrapper">
+        <div class="tabs">
+          <slot name="tab"></slot>
         </div>
-      <div class="scheduleDate"><slot name="scheduleDate"></slot></div>
 
-      <p class="input-subtitle margin-top">Details </p>
-      <div class="box">
-        <slot name="image"></slot>
-        <div class="box-text">
-          <div class="box-name"><slot name="name"></slot></div>
-          <div><slot name="type"></slot></div>
-          <div><slot name="strength"></slot> <slot name="unit"></slot></div>
+        <p class="input-subtitle margin-top">Schedule </p>
+        <div class="schedule-wrapper">
+          <div><slot name="schedule"></slot></div>
+          <div :style="{ 
+            color: 'var(--main-lila-hell)', cursor:'pointer', 
+            borderTop: '2px solid var(--white-lila-border)', paddingTop: '0.4rem', marginTop: '0.5rem' }" 
+          @click="editSchedule">Edit</div>
+          </div>
+        <div class="scheduleDate"><slot name="scheduleDate"></slot></div>
+
+        <p class="input-subtitle margin-top">Details </p>
+        <div class="box">
+          <slot name="image"></slot>
+          <div class="box-text">
+            <div class="box-name"><slot name="name"></slot></div>
+            <div><slot name="type"></slot></div>
+            <div><slot name="strength"></slot> <slot name="unit"></slot></div>
+          </div>
         </div>
-      </div>
 
-      <p class="input-subtitle margin-top">Memo </p>
-      <div class="schedule-wrapper" :style=" { minHeight: '6rem' }">
-        <slot name="memo"></slot>
-        <span :style="{ color: 'var(--white-lila-border)' }"><slot name="empty"></slot></span>
-      </div>
+        <p class="input-subtitle margin-top">Memo </p>
+        <div class="schedule-wrapper" :style=" { minHeight: '6rem' }">
+          <slot name="memo"></slot>
+          <span :style="{ color: 'var(--white-lila-border)' }"><slot name="empty"></slot></span>
+        </div>
 
-      <button @click="showAllData"
-      class="button"  :style="{ margin: '1rem 0', backgroundColor: 'var(--white-lila)', color: 'var(--main-lila-hell)' }">
-        Show All data
-      </button>
-      <button @click="deleteData"
-      class="button"  :style="{ margin: '0 0 6rem 0', backgroundColor: 'var(--white-lila)', color: 'var(--main-lila-hell)' }">
-        Delete Medication
-      </button>  
-    
+        <button @click="showAllData"
+        class="button"  :style="{ margin: '1rem 0', backgroundColor: 'var(--white-lila)', color: 'var(--main-lila-hell)' }">
+          Show All data
+        </button>
+        <button @click="deleteData"
+        class="button"  :style="{ margin: '0 0 6rem 0', backgroundColor: 'var(--white-lila)', color: 'var(--main-lila-hell)' }">
+          Delete Medication
+        </button>  
       </div>
     </div>
 
-    <div class="container-full" :style="scheduleStyle">
+    <div class="container-full" :style="{ 
+      position: 'fixed', 
+      transform: scheduleStyle,
+      overflowY: 'scroll',
+      overflowX: 'hidden',
+      }">
+
       <span class="top-title">Edit Schedule</span>
       <span class="closeIcon topIcon">
         <font-awesome-icon icon="fa-xmark" @click="closeSchedule"/>
       </span>
-      <div class="content-wrapper" :style="{margin: '4rem auto'}">
+
+      <div class="content-wrapper" :style="{ 
+        paddingTop: '4rem',
+        }">
         <setSchedule ref="scheduleRef"
         :index="clickedIndex ?? 0"
         :edit=edit
         ></setSchedule>
         <button class="button" @click="updateData" :disabled="!(scheduleRef?.valid)"
+        v-if="!(scheduleRef?.modelOpened)"
         :style="{
           backgroundColor: !(scheduleRef?.valid) ? 'var(--divider-light-2)' : 'var(--main-lila-hell)',
-          color: !(scheduleRef?.valid) ? 'var(--divider-light-1)' : 'white'
-          }">Done</button>
+          color: !(scheduleRef?.valid) ? 'var(--divider-light-1)' : 'white',
+          marginTop: '2rem',
+          }">Done</button> 
       </div>
     </div>
 
@@ -203,19 +213,21 @@ defineExpose({ close, updateAlldata, updateClose })
       <span class="closeIcon topIcon">
         <font-awesome-icon icon="fa-xmark" @click="closeAllData"/>
       </span>
-      <div class="scroll-wrapper-full" :style="{margin: '3rem auto'}">
-        <div class="table-wrapper" :style="{marginBottom: '3rem'}">
-          <table>
-            <tbody>
-              <tr v-for="(item, index) in allData" :key="index" :value="item">
-                <td>
-                  <span v-if="item.checked"><font-awesome-icon icon="check" class="check-icon"/>Taken</span>
-                  <span v-else><font-awesome-icon icon="xmark" class="check-icon"/>Not Taken</span>
-                </td>
-                <td :style="{color: 'var(--white-lila-dunkel)'}">{{ item.date }} at {{ item.time }}</td>
-              </tr>
-            </tbody>
-          </table>
+      <div class="scroll-wrapper-full" :style="{margin: '3rem auto' }">
+        <div class="content-wrapper">
+          <div class="table-wrapper" :style="{marginBottom: '4rem'}">
+            <table>
+              <tbody>
+                <tr v-for="(item, index) in allData" :key="index" :value="item">
+                  <td>
+                    <span v-if="item.checked"><font-awesome-icon icon="check" class="check-icon"/>Taken</span>
+                    <span v-else><font-awesome-icon icon="xmark" class="check-icon"/>Not Taken</span>
+                  </td>
+                  <td :style="{color: 'var(--white-lila-dunkel)'}">{{ item.date }} at {{ item.time }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

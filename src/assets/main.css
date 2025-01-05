@@ -67,7 +67,7 @@ a {
   padding: 0.5rem 0.5rem 0 0.5rem;
   position: fixed;
   cursor: pointer;
-  z-index: 100;
+  z-index: 1;
 }
 
 .closeIcon {
@@ -78,17 +78,17 @@ a {
 .container::-webkit-scrollbar,
 .content-wrapper::-webkit-scrollbar,
 .scroll-wrapper::-webkit-scrollbar,
-.scroll-wrapper-full::-webkit-scrollbar {
+.scroll-wrapper-full::-webkit-scrollbar,
+.container-full::-webkit-scrollbar {
   display: none;
 }
 
 .content-wrapper {
   width: 50%;
-  height: 100vh;
+  height: auto;
   margin: auto;
   position: relative;
 }
-
 
 .scroll-wrapper {
   background-color: white;
@@ -115,10 +115,21 @@ a {
   -ms-overflow-style: none;
   /* IE and Edge */
   scrollbar-width: none;
+  top: 0;
 }
 
 .slider-wrapper {
   position: absolute;
+}
+
+.modal-container {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 1);
+  z-index: 100;
 }
 
 .info-comp .head {
@@ -279,7 +290,7 @@ input::-webkit-inner-spin-button {
   border-radius: 0.8rem;
   font-size: 1rem;
   margin-top: 2rem;
-  margin-bottom: 6rem;
+  margin-bottom: 2rem;
   cursor: pinter;
 }
 
