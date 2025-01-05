@@ -164,10 +164,10 @@ defineExpose({ selectedDate, month, year })
   height: 22rem;
   border-radius: 0.8rem;
   background-color: var(--white-lila);
-  top: 50%;
+  top: 50vh;
   left: 50%;
   position: absolute;
-  transform: translate(-50%,-60%);
+  transform: translate(-50%,-50%);
   padding: 1rem;
   margin: 0;
   z-index: 100;

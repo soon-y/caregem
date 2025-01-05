@@ -82,11 +82,10 @@ defineExpose({ finalHour, finalMin, scrolledHour, scrolledMin })
   height: auto;
   border-radius: 0.8rem;
   background-color: var(--white-lila);
-  top: 50%;
+  top: 50vh;
   left: 50%;
   position: absolute;
-  transform: translate(-50%,-60%);
-  margin: 0;
+  transform: translate(-50%,-50%);
   z-index: 100;
 }
 
