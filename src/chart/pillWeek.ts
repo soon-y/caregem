@@ -17,6 +17,12 @@ export const options = {
         const tooltipEl = getOrCreateTooltip(chart)
         const lineHeight: string  = '15px'
 
+        // Hide if no tooltip
+        if (tooltip.opacity === 0) {
+          tooltipEl.style.opacity = '0'
+          return
+        }
+
         // Set Text
         if (tooltip.body) {
           const titleLines = tooltip.title || []
