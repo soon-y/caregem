@@ -14,6 +14,7 @@ const dataStore = useDataStore()
 const now = new Date()
 const selectedSchedule = ref<string>(medication.schedule[0])
 const selectedInterval = ref<string | null>(medication.intervalDays[0])
+const modelOpened = ref<boolean>(false)
 const today = new Date()
 export interface weekItemType { label: string, checked: boolean }
 const week = ref<weekItemType[]>([
@@ -72,10 +73,12 @@ const deleteSchedule = (index : number) => {
 const displayTimePicker = (index: number) => {
   timePickerDisplay.value = 'block'
   scheduleIndex.value = index
+  modelOpened.value = true
 }
 
 const closeTimePicker = () => {
   timePickerDisplay.value = 'none'
+  modelOpened.value = false
   if(timePickerRef.value){
     schedule.value[scheduleIndex.value].hour = timePickerRef.value.finalHour
     schedule.value[scheduleIndex.value].min = timePickerRef.value.finalMin
@@ -84,10 +87,12 @@ const closeTimePicker = () => {
 
 const displayCalendarStart = () => {
   calendarStartDisplay.value = 'block'
+  modelOpened.value = true
 }
 
 const closeCalendarStart = () => {
   calendarStartDisplay.value = 'none'
+  modelOpened.value = false
   if(calendarStartRef.value){
     startDate.value = calendarStartRef.value.selectedDate
     startMonth.value = calendarStartRef.value.month
@@ -109,10 +114,12 @@ const closeCalendarStart = () => {
 
 const displayCalendarEnd = () => {
   calendarEndDisplay.value = 'block'
+  modelOpened.value = true
 }
 
 const closeCalendarEnd = () => {
   calendarEndDisplay.value = 'none'
+  modelOpened.value = false
   if(calendarEndRef.value){
     endDate.value = calendarEndRef.value.selectedDate
     endMonth.value = calendarEndRef.value.month
@@ -214,10 +221,17 @@ watch(() => props.edit, (newVal) => {
   { immediate: true }
 )
 
-defineExpose({ schedule,selectedSchedule,week,valid,startDate,startMonth,startYear,endDate,endMonth,endYear,duration,reset })
+const validateApplication = (item: { application: number | null }) => {
+  if (item.application === 0 || item.application === null) {
+    item.application = 1
+  }
+}
+
+defineExpose({ modelOpened,schedule,selectedSchedule,week,valid,startDate,startMonth,startYear,endDate,endMonth,endYear,duration,reset })
 </script>
 
 <template>
+<div v-if="!modelOpened">
 <p class="input-subtitle">When will you take this? </p>
 <select v-model="selectedSchedule">
   <option v-for="(item, index) in medication.schedule" :key="index" :value="item">
@@ -225,7 +239,7 @@ defineExpose({ schedule,selectedSchedule,week,valid,startDate,startMonth,startYe
   </option>
 </select>
 
-<div v-if="selectedSchedule === medication.schedule[1]">
+<div v-if="(selectedSchedule === medication.schedule[1])">
   <p class="input-subtitle margin-top">On these days:</p>
   <div class="week-wrapper">
     <div v-for="(item, index) in week" :key="index" class="week-div"
@@ -243,7 +257,7 @@ defineExpose({ schedule,selectedSchedule,week,valid,startDate,startMonth,startYe
   </div>
 </div>
 
-<div v-if="selectedSchedule === medication.schedule[2]">
+<div v-if="(selectedSchedule === medication.schedule[2])">
   <p class="input-subtitle margin-top">Interval</p>
   <select v-model="selectedInterval">
     <option v-for="(item, index) in medication.intervalDays" :key="index" :value="item">
@@ -252,52 +266,45 @@ defineExpose({ schedule,selectedSchedule,week,valid,startDate,startMonth,startYe
   </select>
 </div>
 
-<div class="container"
-  :style="{  backgroundColor: 'rgba(255,255,255,0.9)', display: timePickerDisplay, top: 0}"
-  @click="closeTimePicker"></div>
-<TimePicker ref="timePickerRef" v-if="timePickerDisplay == 'block'"
-:currentHour="Number(schedule[scheduleIndex].hour)"
-:currentMin="Number(schedule[scheduleIndex].min)"
-></TimePicker>
-
 <p class="input-subtitle margin-top">At what time</p>
-<div class="table-wrapper">
-  <table>
-    <tbody>
-      <tr v-for="(item, index) in schedule" :key="index" >
-        <td class="align-left" :style="{
-            display: 'flex', alignItems: 'center'
-        }">
-          <font-awesome-icon icon="circle-minus" class="circle-icon" @click="deleteSchedule(index)"
-          :style="{color: 'var(--white-lila-border)', marginRight: '0.5rem' }"/>
-          <div @click="displayTimePicker(index)"
-          :style="{ backgroundColor: 'var(--white-lila-border)', height: '1.8rem', cursor: 'pointer',
-            borderRadius: '0.4rem', alignItems: 'center', display:'flex' }"> 
-          <span :style="{ display: 'inline-block', margin: 'auto', color: 'var(--main-lila-hell)', width: '4.5rem', textAlign: 'center'}">
-            {{ item.hour < 10 ? '0'+item.hour : item.hour }} : {{ item.min < 10 ? '0'+ item.min : item.min }}
-          </span>
-          </div>
+  <div class="table-wrapper">
+    <table>
+      <tbody>
+        <tr v-for="(item, index) in schedule" :key="index" >
+          <td class="align-left" :style="{
+              display: 'flex', alignItems: 'center'
+          }">
+            <font-awesome-icon icon="circle-minus" class="circle-icon" @click="deleteSchedule(index)"
+            :style="{color: 'var(--white-lila-border)', marginRight: '0.5rem' }"/>
+            <div @click="displayTimePicker(index)"
+            :style="{ backgroundColor: 'var(--white-lila-border)', height: '1.8rem', cursor: 'pointer',
+              borderRadius: '0.4rem', alignItems: 'center', display:'flex' }"> 
+            <span :style="{ display: 'inline-block', margin: 'auto', color: 'var(--main-lila-hell)', width: '4.5rem', textAlign: 'center'}">
+              {{ item.hour < 10 ? '0'+item.hour : item.hour }} : {{ item.min < 10 ? '0'+ item.min : item.min }}
+            </span>
+            </div>
+            </td>
+          <td class="align-right" :style="{color: 'var(--main-lila-hell)'}">
+            <input type="number" v-model="item.application" min="1" class="inlineNumInput" 
+            @input="validateApplication(item)"
+            :style="{ textAlign: 'right', width: 'calc(50% - 3rem)' }"/>
+            <span v-if="item.application > 1"> applications</span>
+            <span v-else> application</span>
           </td>
-        <td class="align-right" :style="{color: 'var(--main-lila-hell)'}">
-          <input type="number" v-model="item.application" min="1" class="inlineNumInput"
-          :style="{ textAlign: 'right', width: '40%' }"/>
-          <span v-if="item.application > 1"> applications</span>
-          <span v-else> application</span>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <div :style="{ 
-    textAlign: 'left', padding: '0.4rem 0',
-    marginLeft: '0.2rem',
-    display: 'flex', cursor: 'pointer',
-    }"> 
-    <font-awesome-icon icon="circle-plus" class="circle-icon" @click="addNewTime" :style="{
-      color: 'var(--main-lila-hell)', 
-      marginRight: '0.56em'
-      }" />
-      <span @click="addNewTime"> Add a Time </span>
-  </div>
+        </tr>
+      </tbody>
+    </table>
+    <div :style="{ 
+      textAlign: 'left', padding: '0.4rem 0',
+      marginLeft: '0.2rem',
+      display: 'flex', cursor: 'pointer',
+      }"> 
+      <font-awesome-icon icon="circle-plus" class="circle-icon" @click="addNewTime" :style="{
+        color: 'var(--main-lila-hell)', 
+        marginRight: '0.56em'
+        }" />
+        <span @click="addNewTime"> Add a Time </span>
+    </div>
 </div>
 
 <p class="input-subtitle margin-top">Duration</p>
@@ -310,28 +317,10 @@ defineExpose({ schedule,selectedSchedule,week,valid,startDate,startMonth,startYe
       </tr>
       <tr>
         <td class="align-left">
-          <div class="container"
-          :style="{  backgroundColor: 'rgba(255,255,255,0.9)', display: calendarStartDisplay, top: 0}"
-          @click="closeCalendarStart"></div>
-            <Calendar ref="calendarStartRef" v-if="calendarStartDisplay === 'block'"
-            :startDate = "startDate" 
-            :startMonth="startMonth" 
-            :startYear="startYear"
-            :startElapsed="startElapsed" 
-            :disable="false"></Calendar>
           <font-awesome-icon icon="calendar" class="calender-icon" @click='displayCalendarStart'/>
           {{ startDate }} {{ monthArray[startMonth] }} {{ startYear }}
         </td>
         <td class="align-left">
-          <div class="container"
-          :style="{  backgroundColor: 'rgba(255,255,255,0.9)', display: calendarEndDisplay, top: 0}"
-          @click="closeCalendarEnd"></div> 
-            <Calendar ref="calendarEndRef" v-if="calendarEndDisplay === 'block'"
-            :startDate="endDate === null? startDate : endDate" 
-            :startMonth="endDate === null? startMonth : endMonth" 
-            :startYear="endDate === null? startYear : endYear"
-            :startElapsed="startElapsed" 
-            :disable="true"></Calendar>
           <font-awesome-icon icon="calendar" class="calender-icon" @click='displayCalendarEnd'/>
           <span v-if="endDate === null">&nbsp;None</span>
           <span v-else>&nbsp;{{ endDate }} {{ monthArray[endMonth] }} {{ endYear }}
@@ -349,7 +338,35 @@ defineExpose({ schedule,selectedSchedule,week,valid,startDate,startMonth,startYe
   </div> 
   <div v-else>&nbsp;</div>
 </div>
+</div>
 
+<div class="modal-container"
+  :style="{ display: timePickerDisplay }"
+  @click="closeTimePicker"></div>
+  <TimePicker ref="timePickerRef" v-if="timePickerDisplay == 'block'"
+  :currentHour="Number(schedule[scheduleIndex].hour)"
+  :currentMin="Number(schedule[scheduleIndex].min)"
+  ></TimePicker>
+
+<div class="modal-container"
+:style="{ display: calendarStartDisplay }"
+@click="closeCalendarStart"></div>
+  <Calendar ref="calendarStartRef" v-if="calendarStartDisplay === 'block'"
+  :startDate = "startDate" 
+  :startMonth="startMonth" 
+  :startYear="startYear"
+  :startElapsed="startElapsed" 
+    :disable="false"></Calendar>
+
+<div class="modal-container"
+:style="{ display: calendarEndDisplay }"
+@click="closeCalendarEnd"></div>
+  <Calendar ref="calendarEndRef" v-if="calendarEndDisplay === 'block'"
+  :startDate="endDate === null? startDate : endDate" 
+  :startMonth="endDate === null? startMonth : endMonth" 
+  :startYear="endDate === null? startYear : endYear"
+  :startElapsed="startElapsed" 
+  :disable="true"></Calendar>
 
 </template>
 
@@ -409,6 +426,7 @@ defineExpose({ schedule,selectedSchedule,week,valid,startDate,startMonth,startYe
   height: 1.2rem;
   color: var(--main-lila-hell);
   font-size: 0.96rem;
+  padding: 0;
 }
 
 td {

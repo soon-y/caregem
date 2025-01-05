@@ -234,13 +234,14 @@ defineExpose({ close, data })
 
 <template>
   <div class="container-full">
-    <div class="fixed">
+    <div v-if="!(scheduleRef?.modelOpened)"
+    :style="{ backgroundColor: 'white', width: '100vw', height: '3rem', zIndex: '100', position: 'relative' }">
       <span class="closeIcon topIcon" @click="reset"><slot name="close"></slot></span>
       <span class="backIcon topIcon" @click="backStep" v-if="step !== 0">
         <font-awesome-icon icon="fa-solid fa-chevron-left"/>
         <span>Back</span>
       </span>
-      <span class="nav-title">{{guideText}}</span>
+      <span class="nav-title" v-if="!(scheduleRef?.modelOpened)">{{guideText}}</span>
       <span class="top-title" v-if="step === 5">Review Details</span>
     </div>
 
@@ -299,6 +300,7 @@ defineExpose({ close, data })
           :index="0"
           :edit="false"></setSchedule>
           <button class="button" @click="nextStep"
+          v-if="!(scheduleRef?.modelOpened)"
           :disabled="!(scheduleRef?.valid)"
           :style="{
             backgroundColor: !(scheduleRef?.valid) ? 'var(--divider-light-2)' : 'var(--main-lila-hell)',
@@ -446,6 +448,7 @@ defineExpose({ close, data })
 <style scope>
 .guide-img{
   width: 30%;
+  margin-top: 4rem;
 }
 
 .nav-title {
