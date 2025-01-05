@@ -12,10 +12,10 @@ const props = defineProps<{
 
 const days = [  "M", "T", "W", "T", "F", "S", "S",]
 const today = new Date()
-const todayElapsed:number =  today.getTime()
 const currentDate: number = today.getDate()
 const currentMonth: number = today.getMonth()
 const currentYear: number = today.getFullYear()
+const todayElapsed:number =  new Date(currentYear, currentMonth, currentDate).getTime()
 const daysInMonth = ref<string[]>([])
 const month = ref<number>(props.startMonth)
 const year = ref<number>(props.startYear)
@@ -26,6 +26,7 @@ const selectedDateIndex = ref<number | null>(currentDate + theFirstDayOfWeek.val
 const selectedYear = ref<number>(year.value)
 const selectedMonth = ref<number>(month.value)
 const selectedDate = ref<number>(selectedDateIndex.value != null? selectedDateIndex.value - theFirstDayOfWeek.value + 1 : 0)
+const wasNull = ref<boolean>(false)
 
 const previousMonth = () => {
   if (month.value === 0) {
@@ -60,12 +61,20 @@ const updateDateArray = () => {
       daysInMonth.value[i] = ""
     }
   }
-
-  if(month.value === selectedMonth.value && year.value === selectedYear.value){
-    selectedDateIndex.value = props.startDate + theFirstDayOfWeek.value - 1
-    selectedDate.value = selectedDateIndex.value - theFirstDayOfWeek.value + 1
-  } else {
-    selectedDateIndex.value = null
+  if(wasNull.value){
+    if(month.value === selectedMonth.value && year.value === selectedYear.value){
+      selectedDateIndex.value = today.getDate() +  theFirstDayOfWeek.value - 1
+      selectedDate.value = selectedDateIndex.value - theFirstDayOfWeek.value + 1
+    } else {
+      selectedDateIndex.value = null
+    }
+  }else {
+    if(month.value === selectedMonth.value && year.value === selectedYear.value){
+      selectedDateIndex.value = props.startDate + theFirstDayOfWeek.value - 1
+      selectedDate.value = selectedDateIndex.value - theFirstDayOfWeek.value + 1
+    } else {
+      selectedDateIndex.value = null
+    }
   }
 }
 
@@ -75,6 +84,9 @@ const initial = () => {
   if(props.disable && elapsed < todayElapsed){
     year.value = today.getFullYear()
     month.value = today.getMonth()
+    selectedMonth.value = month.value
+    selectedYear.value = year.value
+    wasNull.value = true
   }
   updateDateArray()
 }
