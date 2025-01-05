@@ -21,13 +21,13 @@ export default defineComponent({
     const selectionBarLeft = () => {
       switch(selectedIndex.value) {
         case 0:
-          return aspectRatio.value > 1 ? 0.5 : 1
+          return '0.5rem'
         case 1:
-          return 25
+          return 'calc(25% + 0.25rem)'
         case 2:
-          return 50
+          return 'calc(50% + 0.25rem)'
         case 3:
-          return aspectRatio.value > 1 ? 75.5 : 75
+          return 'calc(75% )'
       }
     }
 
@@ -51,7 +51,7 @@ export default defineComponent({
 <template>
   <div class="tabWrapper">
     <ul class="tabs">
-      <div class="selectionBar" :style="{left: `calc(${selectionBarLeft()}% `}"></div>
+      <div class="selectionBar" :style="{ left: selectionBarLeft() }"></div>
       <li v-for="(title, index) in tabTitles" :key="title" class="tab" @click="setSelected(index, title)">
         <font-awesome-icon :icon="title" class="icon" v-if="title.includes('fa')"
         :class="selectedTitle === title ? title.replace('fa-', '') : 'icon'"></font-awesome-icon>
@@ -90,6 +90,7 @@ export default defineComponent({
   align-items: center;
   cursor: pointer;
   position: relative;
+  padding: 0 0.5rem;
 }
 
 .tab {
@@ -130,11 +131,11 @@ export default defineComponent({
 
 .selectionBar {
   background-color: rgb(255, 255, 255);
-  width: 24%;
+  width: calc(25% - 0.5rem);
   margin: 0;
-  height: calc( var(--height) - 0.6rem);
+  height: calc( var(--height) - 0.8rem);
   position: absolute;
-  top: 0.3rem;
+  top: 0.4rem;
   border-radius: 0.6rem;
   transition-duration: 500ms;
 }
