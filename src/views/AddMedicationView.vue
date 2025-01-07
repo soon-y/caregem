@@ -415,9 +415,9 @@ defineExpose({ close, data })
                 <!-- <tr v-if= "selectedSchedule?.includes('Every Few Days') ">
                   <td colspan="2" class="align-left">{{ selectedInterval }}</td>
                 </tr> -->
-                <tr v-for="(item, index) in scheduleRef?.schedule" :key="index" class="align-left">
-                  <td>{{ item.hour < 10 ? '0' + item.hour : item.hour }}:{{ item.min < 10 ? '0' + item.min : item.min }} </td>
-                  <td>{{ item.application > 1? item.application + ' applications' : item.application + ' application'}}</td>          
+                <tr v-for="(item, index) in scheduleRef?.schedule" :key="index">
+                  <td class="align-left">{{ item.hour < 10 ? '0' + item.hour : item.hour }}:{{ item.min < 10 ? '0' + item.min : item.min }} </td>
+                  <td class="align-right">{{ item.application > 1? item.application + ' applications' : item.application + ' application'}}</td>          
                 </tr>
                 <tr class="align-left">
                   <td colspan="2" class="align-left" :style="{ 

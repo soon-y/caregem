@@ -311,50 +311,73 @@ const updateDate = (index: number) => {
       <p class="input-subtitle" :style="{margin:0}"> Log </p>
       <div>
         <div v-for="(item ,index) in dataStore.history" :key="'same' + index" v-if="selectedDay < 6">
-          <div v-for="(time, itemIndex) in item.time" :key="itemIndex" v-if="(dataStore.history[index].days.join(',')).includes(week[selectedDay])">
-            <span class="check-icon" v-if="todayDate.getHours() >= Number(time.split(':')[0]) ">
-              <font-awesome-icon icon="check" />
-            </span> 
-            <span class="check-icon"  :style="{ color: 'var(--white-lila-border)' }" v-else>
-              <font-awesome-icon icon="xmark" />
-            </span> 
-            <span :style="{ display: 'inline-block', width: '8rem'}">{{ item.name }}</span> 
-            <div :style="{ display: 'inline-block', width: '30%'}">
-              <span :style="{ marginRight:'0.2rem'}">{{ item.application[itemIndex] }}</span>
-              <span v-if="item.application[itemIndex] > 1">applications</span> 
-              <span v-else>application</span> 
-            </div>
-            <span :style="{ display: 'inline-block', width: 'calc(70% - 9.6rem)', textAlign: 'right' }">{{ time }} </span>
-          </div>
+          <table
+            :style="{ borderCollapse: 'collapse' }">
+            <tbody>
+              <tr v-for="(time, itemIndex) in item.time" :key="itemIndex" v-if="(dataStore.history[index].days.join(',')).includes(week[selectedDay])">
+                <td class="td-height" :style="{ width: '8rem'}">
+                  <span class="check-icon" v-if="todayDate.getHours() >= Number(time.split(':')[0]) ">
+                    <font-awesome-icon icon="check" />
+                  </span> 
+                  <span class="check-icon"  :style="{ color: 'var(--white-lila-border)' }" v-else>
+                    <font-awesome-icon icon="xmark" />
+                  </span> 
+                  <span>{{ item.name }}</span> 
+                </td>
+
+                <td class="td-height" :style="{width: 'auto'}">
+                  <span :style="{ marginRight:'0.2rem'}">{{ item.application[itemIndex] }}</span>
+                  <span v-if="item.application[itemIndex] > 1">applications</span>
+                  <span v-else>application</span> 
+                </td>
+
+                <td class="td-height" :style="{ width: 'auto', textAlign: 'right' }">
+                  <span>{{ time }} </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
           <div :style="{ 
             borderBottom: '2px solid var(--white-lila-border)', 
-            width: '100%', height: '0.5rem',
-            marginBottom: '0.3rem' 
+            width: '100%', height: '0.1rem',
+            margin: '0.3rem 0' 
             }" v-if="(index < dataStore.history.length - 1) && (dataStore.history[index+1].days.join(',')).includes(week[selectedDay])">
           </div>
         </div>
+        
+        <div v-for="(item, index) in dataStore.data" :key="index" v-if="selectedDay === 6" >
+          <table
+            :style="{ borderCollapse: 'collapse' }">
+              <tbody>
+                <tr v-for="(time, itemIndex) in item.time" :key="itemIndex" 
+                v-if="(dataStore.data[index].days.join(',')).includes(week[selectedDay])">
+                  <td class="td-height" :style="{ width: '8rem'}">
+                    <span class="check-icon" v-if="todayDate.getHours() >= Number(time.split(':')[0]) ">
+                      <font-awesome-icon icon="check" />
+                    </span> 
+                    <span class="check-icon"  :style="{ color: 'var(--white-lila-border)' }" v-else>
+                      <font-awesome-icon icon="xmark" />
+                    </span> 
+                    <span>{{ item.name }}</span> 
+                  </td>
 
-        <div v-for="(item, index) in dataStore.data" :key="index" v-if="selectedDay === 6">   
-          <div v-for="(time, itemIndex) in item.time" :key="itemIndex" 
-          v-if="(dataStore.data[index].days.join(',')).includes(week[selectedDay])">
-            <span class="check-icon" v-if="todayDate.getHours() >= Number(time.split(':')[0]) ">
-              <font-awesome-icon icon="check" />
-            </span> 
-            <span class="check-icon"  :style="{ color: 'var(--white-lila-border)' }" v-else>
-              <font-awesome-icon icon="xmark" />
-            </span> 
-            <span :style="{ display: 'inline-block', width: '8rem'}">{{ item.name }}</span> 
-            <div :style="{ display: 'inline-block', width: '30%'}">
-              <span :style="{ marginRight:'0.2rem'}">{{ item.application[itemIndex] }}</span>
-              <span v-if="item.application[itemIndex] > 1">applications</span> 
-              <span v-else>application</span> 
-            </div>
-            <span :style="{ display: 'inline-block', width: 'calc(70% - 9.6rem)', textAlign: 'right' }">{{ time }} </span>
-          </div>
-          <div :style="{ 
+                  <td class="td-height" :style="{width: 'auto'}">
+                    <span :style="{ marginRight:'0.2rem'}">{{ item.application[itemIndex] }}</span>
+                    <span v-if="item.application[itemIndex] > 1">applications</span>
+                    <span v-else>application</span> 
+                  </td>
+
+                  <td class="td-height" :style="{ width: 'auto', textAlign: 'right' }">
+                    <span>{{ time }} </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div :style="{ 
             borderBottom: '2px solid var(--white-lila-border)', 
-            width: '100%', height: '0.5rem',
-            marginBottom: '0.3rem' 
+            width: '100%', height: '0.1rem',
+            margin: '0.3rem 0' 
             }" v-if="(index < dataStore.data.length - 1) && (dataStore.data[index+1].days.join(',')).includes(week[selectedDay])">
           </div>
         </div>

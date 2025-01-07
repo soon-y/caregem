@@ -144,11 +144,6 @@ calcBattery()
     display: block;
   }
 
-  .td-height {
-  height: 1.8rem;
-  line-height: 1;
-  }
-
   .icon{
     color: var(--white-lila-dunkel);
     margin: 0 0.4rem 0 0.2rem;

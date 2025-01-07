@@ -304,6 +304,11 @@ input::-webkit-inner-spin-button {
   text-align: center;
 }
 
+.td-height {
+  height: 1.8rem;
+  line-height: 1;
+}
+
 @media screen and (max-aspect-ratio: 1) {
   .container {
     width: 100vw;

@@ -272,7 +272,7 @@ defineExpose({ modelOpened,schedule,selectedSchedule,week,valid,startDate,startM
       <tbody>
         <tr v-for="(item, index) in schedule" :key="index" >
           <td class="align-left" :style="{
-              display: 'flex', alignItems: 'center'
+              display: 'flex', alignItems: 'center', width: '7rem'
           }">
             <font-awesome-icon icon="circle-minus" class="circle-icon" @click="deleteSchedule(index)"
             :style="{color: 'var(--white-lila-border)', marginRight: '0.5rem' }"/>
@@ -284,12 +284,12 @@ defineExpose({ modelOpened,schedule,selectedSchedule,week,valid,startDate,startM
             </span>
             </div>
             </td>
-          <td class="align-right" :style="{color: 'var(--main-lila-hell)'}">
+          <td class="align-right" :style="{color: 'var(--main-lila-hell)', width: 'auto'}">
             <input type="number" v-model="item.application" min="1" class="inlineNumInput" 
             @input="validateApplication(item)"
-            :style="{ textAlign: 'right', width: 'calc(50% - 3rem)' }"/>
-            <span v-if="item.application > 1"> applications</span>
-            <span v-else> application</span>
+            :style="{ textAlign: 'right', width: 'auto' }"/>
+            <span :style="{ color: 'var(--white-lila-dunkel)' }" v-if="item.application > 1"> applications</span>
+            <span :style="{ color: 'var(--white-lila-dunkel)' }" v-else> application</span>
           </td>
         </tr>
       </tbody>
@@ -427,6 +427,7 @@ defineExpose({ modelOpened,schedule,selectedSchedule,week,valid,startDate,startM
   color: var(--main-lila-hell);
   font-size: 0.96rem;
   padding: 0;
+  outline: none;
 }
 
 td {
