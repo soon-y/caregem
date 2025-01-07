@@ -26,7 +26,7 @@ export default defineComponent({
         case 2:
           return 'calc(50% + 0.25rem)'
         case 3:
-          return 'calc(75% - 0.5rem)'
+          return 'calc(75%)'
       }
     }
 
