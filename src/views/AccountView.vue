@@ -31,7 +31,7 @@ calcBattery()
         <span :style="{ color: 'var(--white-lila-dunkel)' }">Height</span>
         <font-awesome-icon icon="chevron-right" class="box-arrowRight"/>
         <div>
-          <span class="value">180</span>
+          <span class="value-text">180</span>
           <span class="unit">cm</span>
         </div>
       </div>
@@ -41,7 +41,7 @@ calcBattery()
         <span :style="{ color: 'var(--white-lila-dunkel)' }">Weight</span>
         <font-awesome-icon icon="chevron-right" class="box-arrowRight"/>
         <div>
-          <span class="value">68</span>
+          <span class="value-text">68</span>
           <span class="unit">kg</span>
         </div>
       </div>
@@ -172,7 +172,7 @@ calcBattery()
     margin: auto;
   }
 
-  .value{
+  .value-text{
     margin-top:1rem;
     font-size: 1.8rem;
     color: var(--main-lila-hell);
