@@ -6,7 +6,6 @@ export default defineComponent({
   setup(props, { slots }) {
     const gap: number = 0.2
     const margin: number = 0.6
-    const aspectRatio = ref<number>(window.innerWidth / window.innerHeight)
 
     // Define the type for the `tabTitles` ref, which is an array of strings
     const tabTitles = ref<string[]>(slots.default ? slots.default().map((tab: any) => tab.props.title) : [])  
@@ -27,7 +26,7 @@ export default defineComponent({
         case 2:
           return 'calc(50% + 0.25rem)'
         case 3:
-          return 'calc(75% )'
+          return 'calc(75% - 0.5rem)'
       }
     }
 
@@ -138,11 +137,5 @@ export default defineComponent({
   top: 0.4rem;
   border-radius: 0.6rem;
   transition-duration: 500ms;
-}
-
-@media screen and (max-aspect-ratio: 1) {
-  .selectionBar {
-    width: 24%;
-  }
 }
 </style>
