@@ -229,6 +229,15 @@ const data: dataType[] = [
   },
 ]
 
+const validateValue = (val: number | null ) => {
+  if (val){
+    if (val === 0 || val === null || isNaN(Number(val)) || val.toString() === '' || val < 0) {
+      val = null
+      selectedStrength.value = null
+    }
+  }
+}
+
 defineExpose({ close, data })
 </script>
 
@@ -274,7 +283,7 @@ defineExpose({ close, data })
           <img src="/icons/strength.png" class="guide-img" >
           <p class="inputTitle">Medication Strength</p>
           <p class="input-subtitle">Strength </p>
-          <input type="number" placeholder="Add Strength" v-model="selectedStrength" min="1" class="inputNum">
+          <input type="number" placeholder="Add Strength" v-model="selectedStrength" min="1" class="inputNum" @input="validateValue(selectedStrength)">
 
           <p class="input-subtitle margin-top">Units</p>
           <div>
