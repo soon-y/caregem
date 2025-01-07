@@ -222,7 +222,7 @@ watch(() => props.edit, (newVal) => {
 )
 
 const validateApplication = (item: { application: number | null }) => {
-  if (item.application === 0 || item.application === null) {
+  if (item.application === 0 || item.application === null || isNaN(Number(item.application)) || item.application.toString() === '' ) {
     item.application = 1
   }
 }
