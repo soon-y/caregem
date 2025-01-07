@@ -219,11 +219,15 @@ defineExpose({ close, updateAlldata, updateClose })
             <table>
               <tbody>
                 <tr v-for="(item, index) in allData" :key="index" :value="item">
-                  <td>
-                    <span v-if="item.checked"><font-awesome-icon icon="check" class="check-icon"/>Taken</span>
-                    <span v-else><font-awesome-icon icon="xmark" class="check-icon"/>Not Taken</span>
+                  <td :style="{ width : 'auto'}">
+                    <span :style="{ marginLeft: '0.3rem' }">
+                      {{ item.date }} at {{ item.time }}
+                    </span>
                   </td>
-                  <td :style="{color: 'var(--white-lila-dunkel)'}">{{ item.date }} at {{ item.time }}</td>
+                  <td :style="{ width: '7rem', textAlign:'right' }">
+                    <span v-if="item.checked">Taken<font-awesome-icon icon="check" class="check-icon"/></span>
+                    <span v-else>Not Taken<font-awesome-icon icon="xmark" class="check-icon"/></span>
+                  </td>
                 </tr>
               </tbody>
             </table>
