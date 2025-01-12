@@ -4,6 +4,7 @@ import { ref } from 'vue'
 const now = new Date()
 const battery = ref<number>(100)
 const status = ref<string>("In Use")
+const age = ref<number>(0)
 
 const calcBattery = () => {
   battery.value = 100 - ((now.getHours() - 7) * 5)
@@ -13,7 +14,20 @@ const calcBattery = () => {
     status.value = "charging"
   }
 }
+
+const calcAge = () => {
+  const birthDate = new Date(1950,9,10)
+  const today = new Date()
+  
+  age.value = today.getFullYear() - birthDate.getFullYear()
+  const monthDifference = today.getMonth() - birthDate.getMonth()
+  
+  if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+    age.value--
+  }
+}
 calcBattery()
+calcAge()
 </script>
 
 <template>
@@ -24,6 +38,16 @@ calcBattery()
       </div>
       <div>
         <h1 class="center" :style="{ padding: '1rem 0' }">John Deo</h1>
+      </div>
+
+      <div class="card-wrapper">
+        <font-awesome-icon icon="calendar-day" class="icon" />
+        <span :style="{ color: 'var(--white-lila-dunkel)' }">Birth date</span>
+        <font-awesome-icon icon="chevron-right" class="box-arrowRight"/>
+        <div>
+          <span class="value-text">10 Sep 1950</span>
+          <span class="unit">{{ age }} years</span>
+        </div>
       </div>
 
       <div class="card-wrapper">
@@ -91,7 +115,7 @@ calcBattery()
             </div>
           </div>
           <div :style="{ textAlign: 'center' }">
-            <img src="/watch.png" class="watch"/>
+            <img src="/watch.jpg" class="watch"/>
           </div>
           <div :style="{ textAlign: 'center' }">
             <span class="box-name" :style="{ textAlign: 'center' }">Caregem Pro </span>
@@ -171,6 +195,7 @@ calcBattery()
     margin-top:1rem;
     font-size: 1.8rem;
     color: var(--main-lila-hell);
+    line-height: 1.2;
   }
 
   .unit{
