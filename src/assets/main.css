@@ -326,7 +326,18 @@ input::-webkit-inner-spin-button {
     width: 90%;
   }
 
-  .info-comp th {
+  .info-comp .head {
     width: 5em;
+  }
+}
+
+@media screen and (max-aspect-ratio: 0.5) {
+  .info-comp .head {
+    width: 4.5em;
+  }
+
+  .info-comp .value {
+    font-size: 2.2rem;
+    line-height: 1;
   }
 }
