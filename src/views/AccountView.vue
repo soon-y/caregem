@@ -42,11 +42,11 @@ calcAge()
 
       <div class="card-wrapper">
         <font-awesome-icon icon="calendar-day" class="icon" />
-        <span :style="{ color: 'var(--white-lila-dunkel)' }">Birth date</span>
+        <span :style="{ color: 'var(--white-lila-dunkel)' }">Age</span>
         <font-awesome-icon icon="chevron-right" class="box-arrowRight"/>
         <div>
-          <span class="value-text">10 Sep 1950</span>
-          <span class="unit">{{ age }} years</span>
+          <span class="value-text">{{ age }}</span>
+          <span class="unit">years</span>
         </div>
       </div>
 
@@ -195,7 +195,6 @@ calcAge()
     margin-top:1rem;
     font-size: 1.8rem;
     color: var(--main-lila-hell);
-    line-height: 1.2;
   }
 
   .unit{
