@@ -286,8 +286,7 @@ defineExpose({ modelOpened,schedule,selectedSchedule,week,valid,startDate,startM
             </td>
           <td class="align-right" :style="{color: 'var(--main-lila-hell)', width: 'auto'}">
             <input type="number" v-model="item.application" min="1" class="inlineNumInput" 
-            @input="validateApplication(item)"
-            :style="{ textAlign: 'right', width: 'auto' }"/>
+            @input="validateApplication(item)"/>
             <span :style="{ color: 'var(--white-lila-dunkel)' }" v-if="item.application > 1"> applications</span>
             <span :style="{ color: 'var(--white-lila-dunkel)' }" v-else> application</span>
           </td>
@@ -422,12 +421,13 @@ defineExpose({ modelOpened,schedule,selectedSchedule,week,valid,startDate,startM
   -moz-appearance: textfield;
   background-color: var(--white-lila-hell);
   border: none;
-  width: 2rem;
+  width: calc(100% - 5.8rem);
   height: 1.2rem;
   color: var(--main-lila-hell);
   font-size: 0.96rem;
   padding: 0;
   outline: none;
+  text-align: right;
 }
 
 td {
