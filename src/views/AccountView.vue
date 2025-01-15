@@ -7,7 +7,7 @@ const status = ref<string>("In Use")
 const age = ref<number>(0)
 
 const calcBattery = () => {
-  battery.value = 100 - ((now.getHours() - 7) * 5)
+  battery.value = now.getHours() > 6 ? 100 - ((now.getHours() - 7) * 5) : 100
   if (now.getHours() ){
     status.value = "In Use"
   }else {
