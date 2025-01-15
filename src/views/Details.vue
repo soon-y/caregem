@@ -226,7 +226,8 @@ defineExpose({ close, updateAlldata, updateClose })
                   </td>
                   <td :style="{ width: '7rem', textAlign:'right' }">
                     <span v-if="item.checked">Taken<font-awesome-icon icon="check" class="check-icon"/></span>
-                    <span v-else>Not Taken<font-awesome-icon icon="xmark" class="check-icon"/></span>
+                    <span v-else :style="{color: 'var(--white-lila-border)'}">Not Taken<font-awesome-icon icon="xmark" class="check-icon" :style="{color: 'var(--white-lila-border)'}"/>
+                    </span>
                   </td>
                 </tr>
               </tbody>
