@@ -258,10 +258,10 @@ defineExpose({ close, data })
       <div class="form scroll-wrapper-full" :style="{transform: step === 0 ? 'translate(0, 0)' : 'translate(-100%, 0)'}">
         <div class="content-wrapper">
           <img src="/icons/pillName.png" class="guide-img">
-          <p class="inputTitle" > Medication Name</p>
+          <p class="input-title" > Medication Name</p>
           <input type="text" placeholder="Add Medication Name" v-model="selectedName"/>
 
-          <p class="inputTitle margin-top">Medication Type</p>
+          <p class="input-title margin-top">Medication Type</p>
           <div>
             <label v-for="type in medication.types" class="radioSelection radioType">
               <span class="radioLabel">{{ type }}</span>
@@ -281,7 +281,7 @@ defineExpose({ close, data })
       <div class="form scroll-wrapper-full" :style="{ transform: transform(1)}">
         <div class="content-wrapper">
           <img src="/icons/strength.png" class="guide-img" >
-          <p class="inputTitle">Medication Strength</p>
+          <p class="input-title">Medication Strength</p>
           <p class="input-subtitle">Strength </p>
           <input type="number" placeholder="Add Strength" v-model="selectedStrength" min="1" class="inputNum" @input="validateValue(selectedStrength)">
 
@@ -304,7 +304,7 @@ defineExpose({ close, data })
       <div class="form scroll-wrapper-full" :style="{ transform: transform(2)}">
         <div class="content-wrapper">
           <img src="/icons/calendar.png" class="guide-img" >
-          <p class="inputTitle">Set a Schedule</p>
+          <p class="input-title">Set a Schedule</p>
           <setSchedule ref="scheduleRef"
           :index="0"
           :edit="false"></setSchedule>
@@ -323,7 +323,7 @@ defineExpose({ close, data })
           <img v-bind:src="selectedShapeIndex === null ? '/icons/default.png' : '/pill/' + medication.shapeImageNames[selectedShapeIndex] + '.png'" 
           class="guide-img default-img"/>
 
-          <p class="inputTitle">Choose the Shape</p>
+          <p class="input-title">Choose the Shape</p>
           <div class="image-wrapper">
             <img v-for="(name, index) in medication.shapeImageNames" :key="index" 
             :src="'/pill/' + name +'.png'" class="shape-img" 
@@ -351,7 +351,7 @@ defineExpose({ close, data })
           '/pill/' + selectedShape + '_' + selectedColorLeft + '_' + selectedColorRight + '.png'" 
           class="guide-img default-img"/>
 
-          <p class="inputTitle">Choose Colors</p>
+          <p class="input-title">Choose Colors</p>
           <div v-if="selectedShapeIndex !== null && medication.shapeImageNames[selectedShapeIndex].includes('capsule')">
             <p class="input-subtitle palette-title">Left Side</p>
             <div class="palette-wrapper">
@@ -408,28 +408,28 @@ defineExpose({ close, data })
           v-bind:src="'/pill/' + selectedShape + '_' + selectedColorLeft + '_' + selectedColorRight + '.png'" 
           class="guide-img default-img"/>
 
-          <p class="inputTitle"> {{ selectedName }} </p>
+          <p class="input-title"> {{ selectedName }} </p>
           {{ selectedType }}, {{ selectedStrength }} {{ selectedUnit }}
 
           <p class="input-subtitle margin-top">Schedule</p>
-          <div class="table-wrapper">
-            <table>
+          <div class="table-wrapper" :style="{ padding: '0.5rem 1rem' }">
+            <table :style="{ borderCollapse: 'collapse' }">
               <tbody>
                 <tr v-if= "scheduleRef?.selectedSchedule?.includes('Every Day') ">
-                  <td colspan="2" class="align-left">{{ scheduleRef?.selectedSchedule }}</td>
+                  <td colspan="2" class="align-left td-height">{{ scheduleRef?.selectedSchedule }}</td>
                 </tr>
                 <tr v-if= "scheduleRef?.selectedSchedule?.includes('Specific') ">
-                  <td colspan="2" class="align-left">{{ selectedDays.join(', ') }}</td>
+                  <td colspan="2" class="align-left td-height">{{ selectedDays.join(', ') }}</td>
                 </tr>
                 <!-- <tr v-if= "selectedSchedule?.includes('Every Few Days') ">
                   <td colspan="2" class="align-left">{{ selectedInterval }}</td>
                 </tr> -->
                 <tr v-for="(item, index) in scheduleRef?.schedule" :key="index">
-                  <td class="align-left">{{ item.hour < 10 ? '0' + item.hour : item.hour }}:{{ item.min < 10 ? '0' + item.min : item.min }} </td>
-                  <td class="align-right">{{ item.application > 1? item.application + ' applications' : item.application + ' application'}}</td>          
+                  <td class="align-left td-height">{{ item.hour < 10 ? '0' + item.hour : item.hour }}:{{ item.min < 10 ? '0' + item.min : item.min }} </td>
+                  <td class="align-right td-height">{{ item.application > 1? item.application + ' applications' : item.application + ' application'}}</td>          
                 </tr>
                 <tr class="align-left">
-                  <td colspan="2" class="align-left" :style="{ 
+                  <td colspan="2" class="align-left td-height" :style="{ 
                     color: 'var(--white-lila-dunkel)'
                     }">
                     Starts on {{ scheduleRef?.startDate }} {{ monthArray[scheduleRef?.startMonth ?? 0]}} {{ scheduleRef?.startYear }}
