@@ -115,7 +115,7 @@ calcAge()
             </div>
           </div>
           <div :style="{ textAlign: 'center' }">
-            <img src="/watch.jpg" class="watch"/>
+            <img src="/watch.png" class="watch"/>
           </div>
           <div :style="{ textAlign: 'center' }">
             <span class="box-name" :style="{ textAlign: 'center' }">Caregem Pro </span>
