@@ -1,5 +1,5 @@
 # caregem
-<a href="https://caregem.vercel.app/">
+<a href="https://caregem.vercel.app/" target="_blank">
 <img src="public/favicon.ico" alt="App Screenshot" width="70"/><br>
 </a> 
 
