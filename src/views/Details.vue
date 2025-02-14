@@ -12,7 +12,7 @@ const props = defineProps<{index: number | null}>()
 const edit = ref<boolean>(false)
 const clickedIndex = ref<number | null>(props.index) 
 const close = ref<boolean>(false)
-const allDataStyle = ref<{ transform: string }>({ transform: 'translate(100%, 0)'})
+const allDataStyle = ref<{ transform: string, marginTop: number }>({ transform: 'translate(100%, 0)', marginTop: 0 })
 const scheduleStyle = ref<string>('translate(100%, 0)')
 watch(() => props.index, (newVal) => {
   clickedIndex.value = newVal
@@ -58,11 +58,11 @@ const updateAlldata = (index: number) => {
 }
 
 const showAllData = () => {
-  allDataStyle.value = { transform: 'translate(0, 0)' }
+  allDataStyle.value = { transform: 'translate(0, 0)', marginTop: 0 }
 }
 
 const closeAllData = () => {
-  allDataStyle.value = { transform: 'translate(100%, 0)' }
+  allDataStyle.value = { transform: 'translate(100%, 0)', marginTop: 0 }
 }
 
 const editSchedule = () => {
