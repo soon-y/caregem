@@ -91,10 +91,10 @@ nav a.router-link-exact-active:hover {
 
 @media screen and (max-aspect-ratio: 1) {
   nav {
-    padding: 0.6rem 0 ;
+    padding: 0.6rem 0;
     bottom: 0;
     width: 100%;
-    height: 4rem;
+    height: 5rem;
     text-align: center; 
     grid-template-columns: auto auto auto auto;
     border: none;

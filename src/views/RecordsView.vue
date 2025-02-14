@@ -80,7 +80,7 @@ const arraySpeedMonth6 = speedMonth6.array()
 const arraySpeedYear = speedYear.array()
 
 let myStyles = {
-  height: window.innerWidth/window.innerHeight > 1? `calc(100vh - 14rem)` :  `calc(100vh - 24rem)`,
+  height: window.innerWidth/window.innerHeight > 1? `calc(100vh - 14rem)` :  `calc(100vh - 27.5rem)`,
 }
 
 let currentBPM = ref(arrayHeartWeek[arrayHeartWeek.length-1])

@@ -502,7 +502,7 @@ const updateDate = (index: number) => {
   border-radius: 50%;
   display: flex;
   position: fixed;
-  bottom: 1rem;
+  top: calc(100vh - 6rem - 3rem);
   right: 1rem;
   justify-content: center;
   z-index: 1;

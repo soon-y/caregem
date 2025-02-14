@@ -37,7 +37,7 @@ const arrayHeart = heartToday.array()
 const arraySpeed = speedToday.array()
 
 let myStyles = {
-  height: window.innerWidth/window.innerHeight > 1? `calc(100vh - 14.5rem)` :  `calc(100vh - 22rem)`,
+  height: window.innerWidth/window.innerHeight > 1? `calc(100vh - 14.5rem)` :  `calc(100vh - 24.5rem)`,
 }
 
 let currentBPM = ref(arrayHeart[arrayHeart.length-1])
@@ -206,7 +206,7 @@ onMounted(() => {
   }
 
   .graph{
-    top: 17.2rem;
+    top: 19rem;
     width: calc(100vw - 2rem);
   }
 }
